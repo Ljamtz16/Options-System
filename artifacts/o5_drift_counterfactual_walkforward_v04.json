@@ -1,0 +1,26 @@
+{
+  "original": {
+    "gated_sessions": 145,
+    "robust_call_sessions": 35,
+    "robust_put_sessions": 0,
+    "both": 0,
+    "mean_call_ev": 28.030359674073182,
+    "mean_put_ev": null
+  },
+  "centered": {
+    "gated_sessions": 145,
+    "robust_call_sessions": 0,
+    "robust_put_sessions": 0,
+    "both": 0,
+    "mean_call_ev": null,
+    "mean_put_ev": null
+  },
+  "inverted": {
+    "gated_sessions": 145,
+    "robust_call_sessions": 0,
+    "robust_put_sessions": 84,
+    "both": 0,
+    "mean_call_ev": null,
+    "mean_put_ev": 32.12624373205701
+  }
+}

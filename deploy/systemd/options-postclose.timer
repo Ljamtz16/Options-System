@@ -1,0 +1,10 @@
+[Unit]
+Description=Run Options System post-close pipeline daily
+
+[Timer]
+OnCalendar=*-*-* 23:30:00 UTC
+Persistent=true
+Unit=options-postclose.service
+
+[Install]
+WantedBy=timers.target

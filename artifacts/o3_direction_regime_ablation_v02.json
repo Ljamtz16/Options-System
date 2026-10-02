@@ -1,0 +1,177 @@
+{
+  "base": {
+    "features": [
+      "ret1",
+      "ret2",
+      "ret5",
+      "ret10",
+      "ret20",
+      "gap"
+    ],
+    "train": {
+      "n": 303,
+      "up_rate": 0.594059405940594,
+      "mean_p": 0.5940569298985714,
+      "delta_brier": 0.002888647554991769,
+      "delta_logloss": 0.006506390605716672
+    },
+    "validation": {
+      "n": 501,
+      "up_rate": 0.5329341317365269,
+      "mean_p": 0.6140221490709478,
+      "delta_brier": -0.014446503751073814,
+      "delta_logloss": -0.03307805959841714
+    },
+    "inspected_2024_2026": {
+      "n": 666,
+      "up_rate": 0.5900900900900901,
+      "mean_p": 0.6002326501710055,
+      "delta_brier": -0.003997708230282143,
+      "delta_logloss": -0.008128449442338481
+    }
+  },
+  "base_trend": {
+    "features": [
+      "ret1",
+      "ret2",
+      "ret5",
+      "ret10",
+      "ret20",
+      "gap",
+      "sma20",
+      "sma50",
+      "drawdown60"
+    ],
+    "train": {
+      "n": 303,
+      "up_rate": 0.594059405940594,
+      "mean_p": 0.5939582955084999,
+      "delta_brier": 0.010761851199932754,
+      "delta_logloss": 0.02274463685977557
+    },
+    "validation": {
+      "n": 501,
+      "up_rate": 0.5329341317365269,
+      "mean_p": 0.7160717656968578,
+      "delta_brier": -0.045296145749111116,
+      "delta_logloss": -0.15043779168957172
+    },
+    "inspected_2024_2026": {
+      "n": 666,
+      "up_rate": 0.5900900900900901,
+      "mean_p": 0.6223390266113603,
+      "delta_brier": -0.016000679630714026,
+      "delta_logloss": -0.0421078607775196
+    }
+  },
+  "base_volatility": {
+    "features": [
+      "ret1",
+      "ret2",
+      "ret5",
+      "ret10",
+      "ret20",
+      "gap",
+      "vol5",
+      "vol20",
+      "vol60",
+      "atr14",
+      "prev_range"
+    ],
+    "train": {
+      "n": 303,
+      "up_rate": 0.594059405940594,
+      "mean_p": 0.5940286641542033,
+      "delta_brier": 0.008282122024553529,
+      "delta_logloss": 0.01809430746812346
+    },
+    "validation": {
+      "n": 501,
+      "up_rate": 0.5329341317365269,
+      "mean_p": 0.682531762132924,
+      "delta_brier": -0.03742715346246922,
+      "delta_logloss": -0.10597588513376954
+    },
+    "inspected_2024_2026": {
+      "n": 666,
+      "up_rate": 0.5900900900900901,
+      "mean_p": 0.6011196369711779,
+      "delta_brier": -0.0034157844698087525,
+      "delta_logloss": -0.01652958702480356
+    }
+  },
+  "base_micro": {
+    "features": [
+      "ret1",
+      "ret2",
+      "ret5",
+      "ret10",
+      "ret20",
+      "gap",
+      "prev_intraday",
+      "volume_ratio"
+    ],
+    "train": {
+      "n": 303,
+      "up_rate": 0.594059405940594,
+      "mean_p": 0.5940442544896531,
+      "delta_brier": 0.003350524870398497,
+      "delta_logloss": 0.007539598222884414
+    },
+    "validation": {
+      "n": 501,
+      "up_rate": 0.5329341317365269,
+      "mean_p": 0.6105345091448289,
+      "delta_brier": -0.014013881596596667,
+      "delta_logloss": -0.03243904494711536
+    },
+    "inspected_2024_2026": {
+      "n": 666,
+      "up_rate": 0.5900900900900901,
+      "mean_p": 0.5994522662381413,
+      "delta_brier": -0.004989717791959225,
+      "delta_logloss": -0.010273860995256845
+    }
+  },
+  "all": {
+    "features": [
+      "ret1",
+      "ret2",
+      "ret5",
+      "ret10",
+      "ret20",
+      "gap",
+      "sma20",
+      "sma50",
+      "drawdown60",
+      "vol5",
+      "vol20",
+      "vol60",
+      "atr14",
+      "prev_range",
+      "prev_intraday",
+      "volume_ratio"
+    ],
+    "train": {
+      "n": 303,
+      "up_rate": 0.594059405940594,
+      "mean_p": 0.5938589073190977,
+      "delta_brier": 0.01807557139952673,
+      "delta_logloss": 0.03871336355178279
+    },
+    "validation": {
+      "n": 501,
+      "up_rate": 0.5329341317365269,
+      "mean_p": 0.708785023772587,
+      "delta_brier": -0.04506149174583801,
+      "delta_logloss": -0.13791404717604994
+    },
+    "inspected_2024_2026": {
+      "n": 666,
+      "up_rate": 0.5900900900900901,
+      "mean_p": 0.612778555183515,
+      "delta_brier": -0.016493960676332214,
+      "delta_logloss": -0.050202583939066625
+    }
+  }
+}

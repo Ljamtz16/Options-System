@@ -1,0 +1,12 @@
+[Unit]
+Description=Run SPY prospective collector every 5 minutes
+
+[Timer]
+OnBootSec=3min
+OnUnitActiveSec=5min
+AccuracySec=10s
+Persistent=true
+Unit=options-spy-collector.service
+
+[Install]
+WantedBy=timers.target

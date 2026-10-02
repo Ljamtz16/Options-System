@@ -1,0 +1,13 @@
+[Unit]
+Description=Options System SPY prospective collector
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=ljamtz
+WorkingDirectory=/home/ljamtz/options-system
+EnvironmentFile=/home/ljamtz/options-system/.env
+Environment=PYTHONPATH=/home/ljamtz/options-system/src
+ExecStart=/home/ljamtz/options-system/.venv/bin/python scripts/collect_spy_options_snapshot.py
+Nice=5

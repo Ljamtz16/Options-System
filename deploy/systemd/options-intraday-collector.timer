@@ -1,0 +1,12 @@
+[Unit]
+Description=Run intraday options collector every 5 minutes
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=5min
+AccuracySec=10s
+Persistent=true
+Unit=options-intraday-collector.service
+
+[Install]
+WantedBy=timers.target

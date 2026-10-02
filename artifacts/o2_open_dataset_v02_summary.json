@@ -1,0 +1,26 @@
+{
+  "rows": 1472,
+  "first": "2020-10-20",
+  "last": "2026-08-31",
+  "features": [
+    "ret_1",
+    "ret_2",
+    "ret_5",
+    "ret_10",
+    "ret_20",
+    "ret_60",
+    "gap",
+    "prev_intraday",
+    "prev_range",
+    "atr_14",
+    "vol_5",
+    "vol_20",
+    "vol_60",
+    "close_sma20",
+    "close_sma50",
+    "drawdown_60",
+    "volume_ratio"
+  ],
+  "decision_time": "OPEN",
+  "status": "CAUSAL_DATASET_V02"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "O3_DOWNSIDE_V05",
+  "status": "NOT_SUPPORTED",
+  "target": "P(MAE_H3 <= -1% | OPEN-causal state)",
+  "decision_time": "OPEN",
+  "validation_aggregate": {
+    "delta_brier": 0.02318588244047365,
+    "delta_logloss": 0.045672981584003236
+  },
+  "year_stability": {
+    "2022": {"delta_brier": 0.04901742953891153, "delta_logloss": 0.0970615129131347},
+    "2023": {"delta_brier": -0.002748990846358046, "delta_logloss": -0.005921103870444977}
+  },
+  "diagnostic_2024_2026": "negative in all three inspected years",
+  "put_authorization": false,
+  "reason": "Fails predeclared year-stability requirement; no tuning on inspected validation is accepted as evidence."
+}

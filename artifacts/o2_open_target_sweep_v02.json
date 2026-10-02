@@ -1,0 +1,146 @@
+{
+  "terminal_abs_05bp_h1": {
+    "train_n": 303,
+    "validation_n": 501,
+    "train_rate": 0.40264026402640263,
+    "validation_rate": 0.5748502994011976,
+    "mean_model_p": 0.5122658921773441,
+    "delta_brier": 0.020008676008771376,
+    "delta_logloss": 0.021055655435349707
+  },
+  "path_abs_05bp_h1": {
+    "train_n": 303,
+    "validation_n": 501,
+    "train_rate": 0.6600660066006601,
+    "validation_rate": 0.8483033932135728,
+    "mean_model_p": 0.8663353650299147,
+    "delta_brier": 0.05366360876540009,
+    "delta_logloss": 0.1545631071837339
+  },
+  "terminal_abs_10bp_h1": {
+    "train_n": 303,
+    "validation_n": 501,
+    "train_rate": 0.11221122112211221,
+    "validation_rate": 0.29141716566866266,
+    "mean_model_p": 0.1534252968920156,
+    "delta_brier": 0.006826563990657342,
+    "delta_logloss": -0.023786183139940964
+  },
+  "path_abs_10bp_h1": {
+    "train_n": 303,
+    "validation_n": 501,
+    "train_rate": 0.23102310231023102,
+    "validation_rate": 0.48502994011976047,
+    "mean_model_p": 0.45486494885018186,
+    "delta_brier": 0.09240587429183605,
+    "delta_logloss": 0.1734826685173566
+  },
+  "terminal_abs_05bp_h3": {
+    "train_n": 303,
+    "validation_n": 501,
+    "train_rate": 0.6633663366336634,
+    "validation_rate": 0.7544910179640718,
+    "mean_model_p": 0.8541326450863619,
+    "delta_brier": -0.007371503218247616,
+    "delta_logloss": -0.16945866440694812
+  },
+  "path_abs_05bp_h3": {
+    "train_n": 303,
+    "validation_n": 501,
+    "train_rate": 0.9504950495049505,
+    "validation_rate": 0.9920159680638723,
+    "mean_model_p": 0.9746142247363498,
+    "delta_brier": 0.0008571861623837759,
+    "delta_logloss": 0.02609615384473276
+  },
+  "terminal_abs_10bp_h3": {
+    "train_n": 303,
+    "validation_n": 501,
+    "train_rate": 0.42244224422442245,
+    "validation_rate": 0.562874251497006,
+    "mean_model_p": 0.7412873837760318,
+    "delta_brier": -0.010181717640570964,
+    "delta_logloss": -0.2680256806438339
+  },
+  "path_abs_10bp_h3": {
+    "train_n": 303,
+    "validation_n": 501,
+    "train_rate": 0.6798679867986799,
+    "validation_rate": 0.872255489021956,
+    "mean_model_p": 0.8819800419417985,
+    "delta_brier": 0.05456477505556133,
+    "delta_logloss": 0.18377482412019913
+  },
+  "terminal_abs_05bp_h5": {
+    "train_n": 303,
+    "validation_n": 501,
+    "train_rate": 0.7854785478547854,
+    "validation_rate": 0.844311377245509,
+    "mean_model_p": 0.909398504823546,
+    "delta_brier": -0.005236502353655914,
+    "delta_logloss": -0.12318639507579904
+  },
+  "path_abs_05bp_h5": {
+    "train_n": 303,
+    "validation_n": 501,
+    "train_rate": 0.9966996699669967,
+    "validation_rate": 1.0,
+    "mean_model_p": 0.9740760366374656,
+    "delta_brier": -0.0006916005989278344,
+    "delta_logloss": -0.02297615983562051
+  },
+  "terminal_abs_10bp_h5": {
+    "train_n": 303,
+    "validation_n": 501,
+    "train_rate": 0.5313531353135313,
+    "validation_rate": 0.6706586826347305,
+    "mean_model_p": 0.7770315495124297,
+    "delta_brier": -0.006573044010344087,
+    "delta_logloss": -0.221348382023695
+  },
+  "path_abs_10bp_h5": {
+    "train_n": 303,
+    "validation_n": 501,
+    "train_rate": 0.8745874587458746,
+    "validation_rate": 0.9540918163672655,
+    "mean_model_p": 0.9563750965937369,
+    "delta_brier": 0.007397075191798622,
+    "delta_logloss": 0.07012673941958905
+  },
+  "terminal_abs_05bp_h10": {
+    "train_n": 303,
+    "validation_n": 501,
+    "train_rate": 0.8514851485148515,
+    "validation_rate": 0.9121756487025948,
+    "mean_model_p": 0.926000178769133,
+    "delta_brier": 0.00656700349317621,
+    "delta_logloss": 0.018935776029936346
+  },
+  "path_abs_05bp_h10": {
+    "train_n": 303,
+    "validation_n": 501,
+    "train_rate": 1.0,
+    "validation_rate": 1.0,
+    "mean_model_p": 0.9710399464818211,
+    "delta_brier": -0.0008386846997757842,
+    "delta_logloss": -0.029387672007882233
+  },
+  "terminal_abs_10bp_h10": {
+    "train_n": 303,
+    "validation_n": 501,
+    "train_rate": 0.6633663366336634,
+    "validation_rate": 0.8143712574850299,
+    "mean_model_p": 0.8475149890969894,
+    "delta_brier": 0.018635945576484292,
+    "delta_logloss": -0.058267022378122424
+  },
+  "path_abs_10bp_h10": {
+    "train_n": 303,
+    "validation_n": 501,
+    "train_rate": 0.9801980198019802,
+    "validation_rate": 0.9960079840319361,
+    "mean_model_p": 0.9715788940570206,
+    "delta_brier": -0.00041066834941047483,
+    "delta_logloss": -0.00537163912159281
+  }
+}

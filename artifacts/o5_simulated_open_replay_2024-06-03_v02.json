@@ -1,0 +1,73 @@
+{
+  "mode": "SIMULATED_OPEN_CAUSAL_REPLAY_V02",
+  "decision_date": "2024-06-03",
+  "decision_time": "OPEN",
+  "spot_reference_open": 529.05,
+  "development_n": 968,
+  "probability_method": "expanding pre-decision historical event frequency; simulation baseline, NOT O3 production model",
+  "p_event": 0.5,
+  "p_conservative": 0.45,
+  "actual_h3_terminal_return_revealed_after_evaluation": 0.010585010868537914,
+  "top5": [
+    {
+      "symbol": "SIM-CALL-518-3D",
+      "type": "call",
+      "strike": 518.0,
+      "dte": 3,
+      "entry_fill": 12.007819361801426,
+      "ev_conservative": 8.681266404356553,
+      "p_profit_conservative": 0.503099173553719,
+      "robust_positive_count": 9,
+      "stress_count": 9,
+      "worst_stress_ev": 19.699158710177105
+    },
+    {
+      "symbol": "SIM-PUT-518-3D",
+      "type": "put",
+      "strike": 518.0,
+      "dte": 3,
+      "entry_fill": 0.5631405160529083,
+      "ev_conservative": -5.233689609966418,
+      "p_profit_conservative": 0.0771694214876033,
+      "robust_positive_count": 9,
+      "stress_count": 9,
+      "worst_stress_ev": 0.5645947328807325
+    },
+    {
+      "symbol": "SIM-CALL-518-5D",
+      "type": "call",
+      "strike": 518.0,
+      "dte": 5,
+      "entry_fill": 12.758590847890332,
+      "ev_conservative": -10.01759677772148,
+      "p_profit_conservative": 0.47014462809917357,
+      "robust_positive_count": 8,
+      "stress_count": 9,
+      "worst_stress_ev": -12.534879182078893
+    },
+    {
+      "symbol": "SIM-CALL-540-10D",
+      "type": "call",
+      "strike": 540.0,
+      "dte": 10,
+      "entry_fill": 3.1134923288939573,
+      "ev_conservative": -11.807879870507527,
+      "p_profit_conservative": 0.3303719008264463,
+      "robust_positive_count": 5,
+      "stress_count": 9,
+      "worst_stress_ev": -65.58630167032604
+    },
+    {
+      "symbol": "SIM-CALL-524-3D",
+      "type": "call",
+      "strike": 524.0,
+      "dte": 3,
+      "entry_fill": 7.114705563011682,
+      "ev_conservative": -12.905730547994455,
+      "p_profit_conservative": 0.43150826446280993,
+      "robust_positive_count": 9,
+      "stress_count": 9,
+      "worst_stress_ev": 6.923108072136107
+    }
+  ]
+}

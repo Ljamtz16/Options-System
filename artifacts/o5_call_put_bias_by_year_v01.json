@@ -1,0 +1,29 @@
+{
+  "2024": {
+    "n": 252,
+    "actual_mean_h3": 0.001823110632829028,
+    "actual_up_rate": 0.5992063492063492,
+    "positive_ev_rate": 0.5357142857142857,
+    "best_call_rate": 1.0,
+    "positive_call": 135,
+    "positive_put": 0
+  },
+  "2025": {
+    "n": 250,
+    "actual_mean_h3": 0.0016552645666747354,
+    "actual_up_rate": 0.592,
+    "positive_ev_rate": 0.08,
+    "best_call_rate": 0.672,
+    "positive_call": 20,
+    "positive_put": 0
+  },
+  "2026": {
+    "n": 164,
+    "actual_mean_h3": 0.0017121470597019277,
+    "actual_up_rate": 0.573170731707317,
+    "positive_ev_rate": 0.3902439024390244,
+    "best_call_rate": 0.5121951219512195,
+    "positive_call": 64,
+    "positive_put": 0
+  }
+}

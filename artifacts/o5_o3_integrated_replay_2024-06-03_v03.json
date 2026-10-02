@@ -1,0 +1,99 @@
+{
+  "mode": "SIMULATED_OPEN_CAUSAL_REPLAY_O3_TO_O5_V03",
+  "decision_date": "2024-06-03",
+  "spot_open": 529.05,
+  "development_n": 907,
+  "probability": {
+    "raw": 0.8882587728610641,
+    "calibrated": 0.8376896397749329,
+    "conservative": 0.7394445429998054,
+    "reliability_bin": {
+      "lo": 0.8,
+      "hi": 0.9,
+      "n": 65,
+      "mean_p": 0.8539271537131264,
+      "event_rate": 0.8461538461538461,
+      "conservative": 0.7394445429998054
+    }
+  },
+  "actual_revealed_after_decision": {
+    "path_event_1pct_h3": true,
+    "terminal_return": 0.010585010868537914,
+    "mfe": 0.010613363576221557,
+    "mae": -0.012012097155278179
+  },
+  "top5": [
+    {
+      "symbol": "SIM-CALL-518-3D",
+      "type": "call",
+      "strike": 518.0,
+      "dte": 3,
+      "entry_fill": 12.007819361801426,
+      "ev_raw": 13.59401835082837,
+      "ev_calibrated": 10.200029886040912,
+      "ev_conservative": 3.606230371843607,
+      "p_profit_conservative": 0.5053321276366117,
+      "robust_positive_count": 3,
+      "stress_count": 3
+    },
+    {
+      "symbol": "SIM-PUT-518-3D",
+      "type": "put",
+      "strike": 518.0,
+      "dte": 3,
+      "entry_fill": 0.5631405160529083,
+      "ev_raw": 7.705871412380487,
+      "ev_calibrated": 3.9983141132275453,
+      "ev_conservative": -3.20468311897988,
+      "p_profit_conservative": 0.08250427258017355,
+      "robust_positive_count": 0,
+      "stress_count": 3
+    },
+    {
+      "symbol": "SIM-CALL-524-3D",
+      "type": "call",
+      "strike": 524.0,
+      "dte": 3,
+      "entry_fill": 7.114705563011682,
+      "ev_raw": 12.23838647950145,
+      "ev_calibrated": 3.169129501469591,
+      "ev_conservative": -14.45051266181685,
+      "p_profit_conservative": 0.4329126489999513,
+      "robust_positive_count": 0,
+      "stress_count": 3
+    },
+    {
+      "symbol": "SIM-CALL-518-5D",
+      "type": "call",
+      "strike": 518.0,
+      "dte": 5,
+      "entry_fill": 12.758590847890332,
+      "ev_raw": -0.6014450859202367,
+      "ev_calibrated": -5.415078309061937,
+      "ev_conservative": -14.766946395114324,
+      "p_profit_conservative": 0.47033489237459797,
+      "robust_positive_count": 1,
+      "stress_count": 3
+    },
+    {
+      "symbol": "SIM-CALL-540-10D",
+      "type": "call",
+      "strike": 540.0,
+      "dte": 10,
+      "entry_fill": 3.1134923288939573,
+      "ev_raw": -2.70041304794129,
+      "ev_calibrated": -7.409033503736491,
+      "ev_conservative": -16.556884062476087,
+      "p_profit_conservative": 0.3330327398604641,
+      "robust_positive_count": 1,
+      "stress_count": 3
+    }
+  ],
+  "note": "Synthetic contracts/IV/spreads; diagnostic research only. O3 predicts path excursion magnitude, not direction.",
+  "activity_gate": {
+    "threshold": 0.8,
+    "p_conservative": 0.7394445429998054,
+    "activity_pass": false,
+    "decision": "NO_TRADE_ACTIVITY_GATE"
+  }
+}

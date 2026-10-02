@@ -1,0 +1,27 @@
+{
+  "target": "P(UP | abs(H3 OPEN terminal return)>=1%)",
+  "train": {
+    "n": 128,
+    "up_rate": 0.6328125,
+    "baseline_p": 0.6328125,
+    "delta_brier": 0.023860746117339404,
+    "delta_logloss": 0.05444752650167839,
+    "mean_model_p": 0.6327082087845883
+  },
+  "validation": {
+    "n": 282,
+    "up_rate": 0.5319148936170213,
+    "baseline_p": 0.6328125,
+    "delta_brier": -0.08145815568956616,
+    "delta_logloss": -0.3860058491597276,
+    "mean_model_p": 0.7960112912015482
+  },
+  "inspected_2024_2026_diagnostic": {
+    "n": 279,
+    "up_rate": 0.5949820788530465,
+    "baseline_p": 0.6328125,
+    "delta_brier": -0.01843315979141283,
+    "delta_logloss": -0.09830582900469564,
+    "mean_model_p": 0.6502483045371588
+  }
+}

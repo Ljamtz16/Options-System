@@ -1,0 +1,14 @@
+INTRADAY_UNIVERSE = (
+    "SPY", "QQQ", "IWM",
+    "AAPL", "NVDA", "MSFT",
+    "AMZN", "META", "TSLA",
+)
+
+INTRADAY_HORIZONS_MIN = (5, 15, 30, 60)
+
+INTRADAY_CHAIN_DTE_MIN = 0
+INTRADAY_CHAIN_DTE_MAX = 7
+INTRADAY_CHAIN_WIDTH_PCT = 0.03
+
+# Research only. No paper/live order authorization.
+INTRADAY_TRADING_ENABLED = False

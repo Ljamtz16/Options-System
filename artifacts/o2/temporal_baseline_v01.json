@@ -1,0 +1,27 @@
+{
+  "source_rows": 1533,
+  "usable": 1473,
+  "train": {
+    "n": 0,
+    "up": 0,
+    "down": 0,
+    "up_rate": null
+  },
+  "validation": {
+    "n": 294,
+    "up": 174,
+    "down": 120,
+    "up_rate": 0.5918367346938775
+  },
+  "oos": {
+    "n": 1159,
+    "up": 639,
+    "down": 520,
+    "up_rate": 0.551337359792925
+  },
+  "boundaries": {
+    "train_end": "2019-12-31",
+    "validation_end": "2021-12-31",
+    "purge_horizon": 10
+  }
+}

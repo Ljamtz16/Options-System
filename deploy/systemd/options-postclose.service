@@ -1,0 +1,13 @@
+[Unit]
+Description=Options System post-close dataset and report pipeline
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=ljamtz
+WorkingDirectory=/home/ljamtz/options-system
+EnvironmentFile=/home/ljamtz/options-system/.env
+Environment=PYTHONPATH=/home/ljamtz/options-system/src
+ExecStart=/home/ljamtz/options-system/.venv/bin/python scripts/vps_postclose.py
+Nice=5

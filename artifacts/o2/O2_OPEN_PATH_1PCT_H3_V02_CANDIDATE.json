@@ -1,0 +1,12 @@
+{
+ "id":"O2_OPEN_PATH_1PCT_H3_V02_CANDIDATE",
+ "status":"RESEARCH_CANDIDATE",
+ "decision_time":"OPEN",
+ "target":"max(MFE_H3,-MAE_H3)>=0.01",
+ "horizon_definition":"sessions t through t+2 inclusive",
+ "validation":{"delta_brier":0.05456477505556133,"delta_logloss":0.18377482412019913},
+ "stability":{"2022":{"delta_brier":0.08776097798310573,"delta_logloss":0.2841021241759496},"2023":{"delta_brier":0.021235787316306737,"delta_logloss":0.08304621486422559}},
+ "directional_claim":false,
+ "o6_unlocked":false,
+ "final_confirmation":"requires future untouched/prospective period"
+}

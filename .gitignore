@@ -1,0 +1,28 @@
+.venv/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+.env
+.env.*
+!.env.example
+
+# Expanded market data stays out of Git.
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Runtime / temporary files.
+artifacts/collector.log
+artifacts/ssh_debug.txt
+*.log
+
+# Keep research artifacts and the curated seed bundle versioned.
+# Exclude generated code bundle because Git itself is the code source.
+artifacts/options-system-code-vps.tar.gz
+
+# OS/editor noise.
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

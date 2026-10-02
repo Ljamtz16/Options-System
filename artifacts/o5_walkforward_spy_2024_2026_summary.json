@@ -1,0 +1,19 @@
+{
+  "mode": "SIMULATED_OPEN_WALK_FORWARD",
+  "sessions": 666,
+  "positive_best_ev_sessions": 619,
+  "positive_rate": 0.9294294294294294,
+  "fully_robust_positive_sessions": 619,
+  "fully_robust_rate": 0.9294294294294294,
+  "best_type_counts": {
+    "call": 665,
+    "put": 1
+  },
+  "positive_type_counts": {
+    "call": 619,
+    "put": 0
+  },
+  "actual_event_rate": 0.4189189189189189,
+  "mean_best_ev": 8.451642145356969,
+  "important": "Synthetic option prices/IV/spreads; diagnostic only, not historical option P&L."
+}

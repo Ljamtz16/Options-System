@@ -1,0 +1,10 @@
+{
+  "ready": false,
+  "labeled_days": 0,
+  "up_days": 0,
+  "down_days": 0,
+  "reasons": [
+    "INSUFFICIENT_LABELED_DAYS",
+    "INSUFFICIENT_DIRECTION_EVENTS"
+  ]
+}

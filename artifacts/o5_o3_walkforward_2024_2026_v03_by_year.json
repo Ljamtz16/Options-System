@@ -1,0 +1,41 @@
+{
+  "2024": {
+    "sessions": 252,
+    "activity_pass": 23,
+    "activity_pass_rate": 0.09126984126984126,
+    "activity_event_rate": 0.8695652173913043,
+    "robust_sessions": 15,
+    "robust_rate_all": 0.05952380952380952,
+    "best_type_counts": {
+      "call": 15,
+      "put": 0
+    },
+    "mean_best_ev": 21.149146190507626
+  },
+  "2025": {
+    "sessions": 250,
+    "activity_pass": 93,
+    "activity_pass_rate": 0.372,
+    "activity_event_rate": 0.9247311827956989,
+    "robust_sessions": 15,
+    "robust_rate_all": 0.06,
+    "best_type_counts": {
+      "call": 15,
+      "put": 0
+    },
+    "mean_best_ev": 29.98361311392006
+  },
+  "2026": {
+    "sessions": 164,
+    "activity_pass": 29,
+    "activity_pass_rate": 0.17682926829268292,
+    "activity_event_rate": 1.0,
+    "robust_sessions": 5,
+    "robust_rate_all": 0.03048780487804878,
+    "best_type_counts": {
+      "call": 5,
+      "put": 0
+    },
+    "mean_best_ev": 42.81423980522921
+  }
+}

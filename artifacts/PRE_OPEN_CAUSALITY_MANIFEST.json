@@ -1,0 +1,13 @@
+{
+  "status": "SUPERSEDED_DIAGNOSTIC_ONLY",
+  "reason": "Legacy predictive artifacts used same-session close/high/low/volume while the decision anchor is OPEN.",
+  "invalid_for_predictive_claims": [
+    "artifacts/o2/O2_H3_MAGNITUDE_V01_FROZEN.json",
+    "artifacts/o2/O2_H3_MAGNITUDE_V01_OOS_RESULT.json",
+    "artifacts/o3/o3_calibration_v01.json",
+    "artifacts/o3/o3_reliability_gate_v01.json",
+    "artifacts/o4_empirical_distribution_v01.json"
+  ],
+  "preservation": "Files retained for audit history; do not delete or cite as causal predictive evidence.",
+  "replacement": "OPEN-causal v0.2 pipeline using spy_open_features.py and open_outcomes.py"
+}

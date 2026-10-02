@@ -1,0 +1,32 @@
+{
+  "0.5": {
+    "gated": 145,
+    "robust_put_sessions": 0,
+    "robust_call_sessions": 0
+  },
+  "0.55": {
+    "gated": 145,
+    "robust_put_sessions": 50,
+    "robust_call_sessions": 0
+  },
+  "0.6": {
+    "gated": 145,
+    "robust_put_sessions": 145,
+    "robust_call_sessions": 0
+  },
+  "0.65": {
+    "gated": 145,
+    "robust_put_sessions": 145,
+    "robust_call_sessions": 0
+  },
+  "0.7": {
+    "gated": 145,
+    "robust_put_sessions": 145,
+    "robust_call_sessions": 0
+  },
+  "0.75": {
+    "gated": 145,
+    "robust_put_sessions": 145,
+    "robust_call_sessions": 0
+  }
+}

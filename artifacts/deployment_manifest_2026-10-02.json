@@ -1,0 +1,11 @@
+{
+    "created_utc":  "2026-10-02T21:50:41.2510497Z",
+    "code_file":  "options-system-code-vps.tar.gz",
+    "code_sha256":  "E8ACA2BB95B0A5FE26655AC5AB99A389FF0ABC9836809503CAADE71AA1F70D3F",
+    "data_file":  "options-system-data-seed-2026-10-02.tar.gz",
+    "data_sha256":  "A143B303FB975DA7636C2EC2A2FE33AE6F287A9AF21CFA5B4196E8F3A2DFCBC8",
+    "secrets_included":  false,
+    "target":  "/home/ljamtz/options-system",
+    "compileall":  "PASS",
+    "targeted_tests":  "21 PASS"
+}

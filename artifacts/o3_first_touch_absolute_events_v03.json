@@ -1,0 +1,122 @@
+{
+  "sym_05": {
+    "UP": {
+      "train_rate": 0.4521452145214521,
+      "validation_rate": 0.41317365269461076,
+      "mean_p": 0.4599279722398163,
+      "delta_brier": -0.002605762334686401,
+      "delta_logloss": -0.005681102852822972
+    },
+    "DOWN": {
+      "train_rate": 0.40594059405940597,
+      "validation_rate": 0.3912175648702595,
+      "mean_p": 0.425317466245732,
+      "delta_brier": -0.00959688409545123,
+      "delta_logloss": -0.020160459072293135
+    },
+    "NEITHER": {
+      "train_rate": 0.04950495049504951,
+      "validation_rate": 0.007984031936127744,
+      "mean_p": 0.03647272594062864,
+      "delta_brier": 0.0005549263369927053,
+      "delta_logloss": 0.01823820518506304
+    },
+    "AMBIGUOUS_SAME_SESSION": {
+      "train_rate": 0.0924092409240924,
+      "validation_rate": 0.18762475049900199,
+      "mean_p": 0.2318528601058757,
+      "delta_brier": 0.012750283761630787,
+      "delta_logloss": 0.05272976137925617
+    }
+  },
+  "up10_dn05": {
+    "UP": {
+      "train_rate": 0.2508250825082508,
+      "validation_rate": 0.2874251497005988,
+      "mean_p": 0.38700539722659244,
+      "delta_brier": -0.043593076124235186,
+      "delta_logloss": -0.10257914719988503
+    },
+    "DOWN": {
+      "train_rate": 0.5379537953795379,
+      "validation_rate": 0.5449101796407185,
+      "mean_p": 0.5900135843295257,
+      "delta_brier": -0.022042612235365244,
+      "delta_logloss": -0.05204024431704202
+    },
+    "NEITHER": {
+      "train_rate": 0.1848184818481848,
+      "validation_rate": 0.0658682634730539,
+      "mean_p": 0.08009190519087768,
+      "delta_brier": 0.02116069073624601,
+      "delta_logloss": 0.11596900715696953
+    },
+    "AMBIGUOUS_SAME_SESSION": {
+      "train_rate": 0.026402640264026403,
+      "validation_rate": 0.10179640718562874,
+      "mean_p": 0.1366959044401423,
+      "delta_brier": 0.004505620371293387,
+      "delta_logloss": 0.06928237665952758
+    }
+  },
+  "up05_dn10": {
+    "UP": {
+      "train_rate": 0.6138613861386139,
+      "validation_rate": 0.5868263473053892,
+      "mean_p": 0.7500138404226161,
+      "delta_brier": -0.0568516247371893,
+      "delta_logloss": -0.2182187687939765
+    },
+    "DOWN": {
+      "train_rate": 0.25412541254125415,
+      "validation_rate": 0.29740518962075846,
+      "mean_p": 0.31360624954337035,
+      "delta_brier": -0.008749887478821994,
+      "delta_logloss": -0.018822760811047057
+    },
+    "NEITHER": {
+      "train_rate": 0.1188118811881188,
+      "validation_rate": 0.033932135728542916,
+      "mean_p": 0.055959203255397966,
+      "delta_brier": 0.008821086779947918,
+      "delta_logloss": 0.07670880325770248
+    },
+    "AMBIGUOUS_SAME_SESSION": {
+      "train_rate": 0.013201320132013201,
+      "validation_rate": 0.08183632734530938,
+      "mean_p": 0.05449287064975576,
+      "delta_brier": 0.008018897766380303,
+      "delta_logloss": 0.10321923066542243
+    }
+  },
+  "sym_10": {
+    "UP": {
+      "train_rate": 0.3432343234323432,
+      "validation_rate": 0.4251497005988024,
+      "mean_p": 0.6146031629864676,
+      "delta_brier": -0.07547582029545902,
+      "delta_logloss": -0.3396972543272968
+    },
+    "DOWN": {
+      "train_rate": 0.33003300330033003,
+      "validation_rate": 0.41317365269461076,
+      "mean_p": 0.34714284800184964,
+      "delta_brier": -0.012752277898804398,
+      "delta_logloss": -0.03269231141479256
+    },
+    "NEITHER": {
+      "train_rate": 0.3201320132013201,
+      "validation_rate": 0.1277445109780439,
+      "mean_p": 0.13393919300925403,
+      "delta_brier": 0.0583654444197446,
+      "delta_logloss": 0.19652306046831997
+    },
+    "AMBIGUOUS_SAME_SESSION": {
+      "train_rate": 0.006600660066006601,
+      "validation_rate": 0.033932135728542916,
+      "mean_p": 0.05032166205733851,
+      "delta_brier": 0.001819929361264648,
+      "delta_logloss": 0.03760151328145783
+    }
+  }
+}

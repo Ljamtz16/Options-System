@@ -1,0 +1,41 @@
+{
+  "id": "O2-H3-MAGNITUDE-V01",
+  "status": "FROZEN_BEFORE_OOS",
+  "target": "abs_gt_1pct_h3",
+  "definition": "SPY reaches absolute close-to-reference move >=1% within next 3 sessions",
+  "features": [
+    "ret_1",
+    "ret_2",
+    "ret_5",
+    "ret_10",
+    "ret_20",
+    "ret_60",
+    "gap",
+    "intraday",
+    "range",
+    "atr_14",
+    "vol_5",
+    "vol_20",
+    "vol_60",
+    "vol_ratio",
+    "close_sma20",
+    "close_sma50",
+    "drawdown_60",
+    "volume_ratio"
+  ],
+  "train_end": "2021-12-31",
+  "validation_start": "2022-01-01",
+  "validation_end": "2023-12-31",
+  "purge_sessions": 3,
+  "model": "deterministic_l2_logistic",
+  "l2": 0.1,
+  "standardization": "fit_train_only",
+  "selection_metrics": [
+    "brier",
+    "logloss"
+  ],
+  "threshold_policy": "probabilities first; no trading threshold selected",
+  "oos_start": "2024-01-01",
+  "oos_status": "UNOPENED",
+  "sha256": "4205db556c9742064d3665bc16a37640d4f3c526509d33e058ed11a0cff8e845"
+}
