@@ -1,0 +1,242 @@
+[
+  {
+    "h": 15,
+    "side": "call",
+    "rule": "CALL_FLOW_REVERSAL",
+    "n": 9,
+    "mean": -0.028721469951532907,
+    "win_rate": 0.4444444444444444,
+    "gt10_rate": 0.2222222222222222,
+    "ltm10_rate": 0.3333333333333333
+  },
+  {
+    "h": 15,
+    "side": "call",
+    "rule": "CALL_WEAK_MARKET_FLOW_REVERSAL",
+    "n": 6,
+    "mean": -0.021557335012382772,
+    "win_rate": 0.5,
+    "gt10_rate": 0.16666666666666666,
+    "ltm10_rate": 0.3333333333333333
+  },
+  {
+    "h": 15,
+    "side": "call",
+    "rule": "PUT_EARLY_WEAKNESS",
+    "n": 19,
+    "mean": -0.03585263232364482,
+    "win_rate": 0.2631578947368421,
+    "gt10_rate": 0.10526315789473684,
+    "ltm10_rate": 0.3157894736842105
+  },
+  {
+    "h": 15,
+    "side": "call",
+    "rule": "PUT_SKEW_HIGH_RATIO_LOW",
+    "n": 22,
+    "mean": -0.0488454395046112,
+    "win_rate": 0.3181818181818182,
+    "gt10_rate": 0.045454545454545456,
+    "ltm10_rate": 0.2727272727272727
+  },
+  {
+    "h": 15,
+    "side": "put",
+    "rule": "CALL_FLOW_REVERSAL",
+    "n": 9,
+    "mean": 0.008396317807555197,
+    "win_rate": 0.5555555555555556,
+    "gt10_rate": 0.2222222222222222,
+    "ltm10_rate": 0.3333333333333333
+  },
+  {
+    "h": 15,
+    "side": "put",
+    "rule": "CALL_WEAK_MARKET_FLOW_REVERSAL",
+    "n": 6,
+    "mean": -0.020828421504180628,
+    "win_rate": 0.5,
+    "gt10_rate": 0.16666666666666666,
+    "ltm10_rate": 0.3333333333333333
+  },
+  {
+    "h": 15,
+    "side": "put",
+    "rule": "PUT_EARLY_WEAKNESS",
+    "n": 19,
+    "mean": -0.006151618825548007,
+    "win_rate": 0.42105263157894735,
+    "gt10_rate": 0.15789473684210525,
+    "ltm10_rate": 0.15789473684210525
+  },
+  {
+    "h": 15,
+    "side": "put",
+    "rule": "PUT_SKEW_HIGH_RATIO_LOW",
+    "n": 22,
+    "mean": 0.030767906451754427,
+    "win_rate": 0.4090909090909091,
+    "gt10_rate": 0.18181818181818182,
+    "ltm10_rate": 0.13636363636363635
+  },
+  {
+    "h": 30,
+    "side": "call",
+    "rule": "CALL_FLOW_REVERSAL",
+    "n": 8,
+    "mean": -0.014286580553615352,
+    "win_rate": 0.375,
+    "gt10_rate": 0.125,
+    "ltm10_rate": 0.25
+  },
+  {
+    "h": 30,
+    "side": "call",
+    "rule": "CALL_WEAK_MARKET_FLOW_REVERSAL",
+    "n": 6,
+    "mean": -0.0052300749757990496,
+    "win_rate": 0.3333333333333333,
+    "gt10_rate": 0.16666666666666666,
+    "ltm10_rate": 0.16666666666666666
+  },
+  {
+    "h": 30,
+    "side": "call",
+    "rule": "PUT_EARLY_WEAKNESS",
+    "n": 16,
+    "mean": -0.053722847166816586,
+    "win_rate": 0.25,
+    "gt10_rate": 0.0,
+    "ltm10_rate": 0.375
+  },
+  {
+    "h": 30,
+    "side": "call",
+    "rule": "PUT_SKEW_HIGH_RATIO_LOW",
+    "n": 19,
+    "mean": -0.038126034858108525,
+    "win_rate": 0.42105263157894735,
+    "gt10_rate": 0.05263157894736842,
+    "ltm10_rate": 0.3157894736842105
+  },
+  {
+    "h": 30,
+    "side": "put",
+    "rule": "CALL_FLOW_REVERSAL",
+    "n": 8,
+    "mean": -0.04398579287523794,
+    "win_rate": 0.5,
+    "gt10_rate": 0.125,
+    "ltm10_rate": 0.375
+  },
+  {
+    "h": 30,
+    "side": "put",
+    "rule": "CALL_WEAK_MARKET_FLOW_REVERSAL",
+    "n": 6,
+    "mean": -0.057410958656364974,
+    "win_rate": 0.5,
+    "gt10_rate": 0.0,
+    "ltm10_rate": 0.3333333333333333
+  },
+  {
+    "h": 30,
+    "side": "put",
+    "rule": "PUT_EARLY_WEAKNESS",
+    "n": 16,
+    "mean": -0.00944486579333198,
+    "win_rate": 0.625,
+    "gt10_rate": 0.0625,
+    "ltm10_rate": 0.1875
+  },
+  {
+    "h": 30,
+    "side": "put",
+    "rule": "PUT_SKEW_HIGH_RATIO_LOW",
+    "n": 19,
+    "mean": 0.001691576877045454,
+    "win_rate": 0.47368421052631576,
+    "gt10_rate": 0.15789473684210525,
+    "ltm10_rate": 0.21052631578947367
+  },
+  {
+    "h": 60,
+    "side": "call",
+    "rule": "CALL_FLOW_REVERSAL",
+    "n": 9,
+    "mean": 0.02102635888942148,
+    "win_rate": 0.4444444444444444,
+    "gt10_rate": 0.4444444444444444,
+    "ltm10_rate": 0.2222222222222222
+  },
+  {
+    "h": 60,
+    "side": "call",
+    "rule": "CALL_WEAK_MARKET_FLOW_REVERSAL",
+    "n": 6,
+    "mean": 0.0055893690764594675,
+    "win_rate": 0.3333333333333333,
+    "gt10_rate": 0.3333333333333333,
+    "ltm10_rate": 0.16666666666666666
+  },
+  {
+    "h": 60,
+    "side": "call",
+    "rule": "PUT_EARLY_WEAKNESS",
+    "n": 12,
+    "mean": -0.08805817564382185,
+    "win_rate": 0.08333333333333333,
+    "gt10_rate": 0.0,
+    "ltm10_rate": 0.4166666666666667
+  },
+  {
+    "h": 60,
+    "side": "call",
+    "rule": "PUT_SKEW_HIGH_RATIO_LOW",
+    "n": 14,
+    "mean": -0.07302512721978607,
+    "win_rate": 0.2857142857142857,
+    "gt10_rate": 0.07142857142857142,
+    "ltm10_rate": 0.42857142857142855
+  },
+  {
+    "h": 60,
+    "side": "put",
+    "rule": "CALL_FLOW_REVERSAL",
+    "n": 9,
+    "mean": -0.12145268845838392,
+    "win_rate": 0.1111111111111111,
+    "gt10_rate": 0.0,
+    "ltm10_rate": 0.5555555555555556
+  },
+  {
+    "h": 60,
+    "side": "put",
+    "rule": "CALL_WEAK_MARKET_FLOW_REVERSAL",
+    "n": 6,
+    "mean": -0.12003767277252235,
+    "win_rate": 0.0,
+    "gt10_rate": 0.0,
+    "ltm10_rate": 0.5
+  },
+  {
+    "h": 60,
+    "side": "put",
+    "rule": "PUT_EARLY_WEAKNESS",
+    "n": 12,
+    "mean": -0.009466580740073194,
+    "win_rate": 0.3333333333333333,
+    "gt10_rate": 0.08333333333333333,
+    "ltm10_rate": 0.08333333333333333
+  },
+  {
+    "h": 60,
+    "side": "put",
+    "rule": "PUT_SKEW_HIGH_RATIO_LOW",
+    "n": 14,
+    "mean": -0.01217643280989562,
+    "win_rate": 0.35714285714285715,
+    "gt10_rate": 0.14285714285714285,
+    "ltm10_rate": 0.2857142857142857
+  }
+]
