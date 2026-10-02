@@ -1,0 +1,37 @@
+{
+  "version": "v0.1",
+  "frozen_at": "2026-10-02",
+  "pre_freeze_diagnostic": {
+    "CALL_FLOW_REVERSAL_V01": {
+      "n": 9,
+      "mean_return": 0.02102635888942148,
+      "win_rate": 0.4444444444444444,
+      "gt10_rate": 0.4444444444444444,
+      "ltm10_rate": 0.2222222222222222
+    },
+    "PUT_SKEW_SHORT_V01": {
+      "n": 22,
+      "mean_return": 0.030767906451754427,
+      "win_rate": 0.4090909090909091,
+      "gt10_rate": 0.18181818181818182,
+      "ltm10_rate": 0.13636363636363635
+    }
+  },
+  "prospective_only": {
+    "CALL_FLOW_REVERSAL_V01": {
+      "n": 0,
+      "mean_return": null,
+      "win_rate": null,
+      "gt10_rate": null,
+      "ltm10_rate": null
+    },
+    "PUT_SKEW_SHORT_V01": {
+      "n": 0,
+      "mean_return": null,
+      "win_rate": null,
+      "gt10_rate": null,
+      "ltm10_rate": null
+    }
+  },
+  "prospective_rows": 0
+}
