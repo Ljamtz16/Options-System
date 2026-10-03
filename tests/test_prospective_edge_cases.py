@@ -56,3 +56,14 @@ def test_discovery_date_never_enters_account():
  eps=build_episodes([row("2026-10-02T14:00:00+00:00","2026-10-02",H03["id"])],H03)
  assert eps==[]
  assert build_virtual_account(eps,1000)["final_cash"]==1000
+
+
+def test_same_day_trades_settle_sequentially():
+ rows=[row("2026-10-05T14:00:00+00:00","2026-10-05",H03["id"],"A",2,"TP_FIRST",.10),
+       row("2026-10-05T15:00:00+00:00","2026-10-05",H03["id"],"B",2,"SL_FIRST",-.10)]
+ a=build_virtual_account(build_episodes(rows,H03),1000)
+ first,second=a["ledger"]
+ assert first["account_status"]=="EXECUTED" and second["account_status"]=="EXECUTED"
+ assert second["cash_before_trade"]==first["cash_after_trade"]
+ assert first["trade_net_pnl"]>0 and second["trade_net_pnl"]<0
+ assert second["cash_after_trade"]==a["final_cash"]
