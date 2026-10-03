@@ -1,4 +1,5 @@
 from datetime import datetime
+from options_system.option_costs import one_contract_trade
 
 def group_episodes(rows,active_key='h03',max_gap_minutes=6):
     active=[r for r in rows if r.get(active_key)]
@@ -24,5 +25,7 @@ def summarize_episodes(rows,active_key='h03',side='call',horizon=60,max_gap_minu
                     'contract':x.get(f'{side}_contract'),'entry_ask':x.get(f'{side}_entry_ask'),
                     'return':x.get(f'{side}_ret_{horizon}m'),'mfe':x.get(f'{side}_mfe_{horizon}m'),
                     'mae':x.get(f'{side}_mae_{horizon}m'),'tp_sl':touch,
-                    'tp_before_sl':None if not touch or touch=='AMBIGUOUS' or touch=='NEITHER' else int(touch=='TP_FIRST')})
+                    'tp_before_sl':None if not touch or touch=='AMBIGUOUS' or touch=='NEITHER' else int(touch=='TP_FIRST'),
+                    'exit_return':x.get(f'{side}_{horizon}m_tp10_sl10_exit_return'),
+                    'trade_1_contract':one_contract_trade(x.get(f'{side}_entry_ask'),x.get(f'{side}_{horizon}m_tp10_sl10_exit_return'))})
     return out

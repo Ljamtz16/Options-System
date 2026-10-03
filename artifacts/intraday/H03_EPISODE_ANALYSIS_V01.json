@@ -16,7 +16,17 @@
       "mfe": "0.12213740458015265",
       "mae": "-0.12213740458015276",
       "tp_sl": "TP_FIRST",
-      "tp_before_sl": 1
+      "tp_before_sl": 1,
+      "exit_return": "0.12213740458015265",
+      "trade_1_contract": {
+        "entry_price": 2.62,
+        "exit_price": 2.94,
+        "capital_required": 262.0,
+        "gross_pnl": 31.999999999999993,
+        "raw_regulatory_fees": 0.0899464,
+        "extra_slippage": 0.0,
+        "net_pnl_before_daily_rounding": 31.910053599999994
+      }
     },
     {
       "episode_id": "E2",
@@ -30,7 +40,17 @@
       "mfe": "0.11363636363636354",
       "mae": "-0.1287878787878789",
       "tp_sl": "TP_FIRST",
-      "tp_before_sl": 1
+      "tp_before_sl": 1,
+      "exit_return": "0.11363636363636354",
+      "trade_1_contract": {
+        "entry_price": 2.64,
+        "exit_price": 2.94,
+        "capital_required": 264.0,
+        "gross_pnl": 29.999999999999975,
+        "raw_regulatory_fees": 0.0899464,
+        "extra_slippage": 0.0,
+        "net_pnl_before_daily_rounding": 29.910053599999973
+      }
     },
     {
       "episode_id": "E3",
@@ -44,7 +64,17 @@
       "mfe": "0.058577405857740406",
       "mae": "-0.10460251046025104",
       "tp_sl": "SL_FIRST",
-      "tp_before_sl": 0
+      "tp_before_sl": 0,
+      "exit_return": "-0.10460251046025104",
+      "trade_1_contract": {
+        "entry_price": 2.39,
+        "exit_price": 2.14,
+        "capital_required": 239.0,
+        "gross_pnl": -25.0,
+        "raw_regulatory_fees": 0.0882984,
+        "extra_slippage": 0.0,
+        "net_pnl_before_daily_rounding": -25.0882984
+      }
     },
     {
       "episode_id": "E4",
@@ -58,7 +88,17 @@
       "mfe": "0.15348837209302335",
       "mae": "0.018604651162790642",
       "tp_sl": "TP_FIRST",
-      "tp_before_sl": 1
+      "tp_before_sl": 1,
+      "exit_return": "0.1348837209302325",
+      "trade_1_contract": {
+        "entry_price": 2.15,
+        "exit_price": 2.44,
+        "capital_required": 215.0,
+        "gross_pnl": 28.999999999999986,
+        "raw_regulatory_fees": 0.0889164,
+        "extra_slippage": 0.0,
+        "net_pnl_before_daily_rounding": 28.911083599999987
+      }
     },
     {
       "episode_id": "E5",
@@ -72,7 +112,17 @@
       "mfe": "0.13777777777777778",
       "mae": "-0.026666666666666727",
       "tp_sl": "TP_FIRST",
-      "tp_before_sl": 1
+      "tp_before_sl": 1,
+      "exit_return": "0.10222222222222221",
+      "trade_1_contract": {
+        "entry_price": 2.25,
+        "exit_price": 2.48,
+        "capital_required": 225.0,
+        "gross_pnl": 22.999999999999996,
+        "raw_regulatory_fees": 0.0889988,
+        "extra_slippage": 0.0,
+        "net_pnl_before_daily_rounding": 22.911001199999998
+      }
     },
     {
       "episode_id": "E6",
@@ -86,7 +136,17 @@
       "mfe": "0.16289592760180982",
       "mae": "",
       "tp_sl": "TP_FIRST",
-      "tp_before_sl": 1
+      "tp_before_sl": 1,
+      "exit_return": "0.158371040723982",
+      "trade_1_contract": {
+        "entry_price": 2.21,
+        "exit_price": 2.56,
+        "capital_required": 221.0,
+        "gross_pnl": 35.00000000000002,
+        "raw_regulatory_fees": 0.0891636,
+        "extra_slippage": 0.0,
+        "net_pnl_before_daily_rounding": 34.91083640000002
+      }
     }
   ],
   "summary": {
@@ -94,5 +154,23 @@
     "tp_sl_decided": 6,
     "tp_first": 5,
     "tp_before_sl_rate": 0.8333333333333334
+  },
+  "money_1_contract": {
+    "trades": 6,
+    "gross_pnl": 123.99999999999997,
+    "daily_regulatory_fees": {
+      "components": {
+        "ORF": 0.18,
+        "OCC": 0.3,
+        "CAT": 0.01,
+        "TAF": 0.02,
+        "SEC": 0.04
+      },
+      "total": 0.55
+    },
+    "net_observed": 123.44999999999997,
+    "net_with_1c_extra_slippage_per_leg": 111.44999999999997,
+    "net_with_2c_extra_slippage_per_leg": 99.44999999999997,
+    "spread_handling": "already included: buy at ask, exit path at bid"
   }
 }

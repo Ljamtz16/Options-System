@@ -65,6 +65,10 @@ def build():
                     if path:
                         targets=option_trade_targets(path,f'{side}_{h}m')
                         touch=targets.get(f'{side}_{h}m_tp10_sl10')
+                        if touch in ('TP_FIRST','SL_FIRST'):
+                            threshold=.10 if touch=='TP_FIRST' else -.10
+                            hit=next((v for v in path if v>=threshold),None) if touch=='TP_FIRST' else next((v for v in path if v<=threshold),None)
+                            rec[f'{side}_{h}m_tp10_sl10_exit_return']=hit
                         if f or touch in ('TP_FIRST','SL_FIRST'):
                             rec.update(targets)
                         if f or max(path)>=.10:
