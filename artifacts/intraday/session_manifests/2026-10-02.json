@@ -1,0 +1,22 @@
+{
+  "schema": "prospective_session_manifest_v01",
+  "decision_date": "2026-10-02",
+  "hypothesis_version": "v0.1",
+  "frozen_at": "2026-10-02",
+  "hypotheses_sha256": "0734cf485ef359f7401193cbf4cb27f72cbcc9237cc65b626b6c08d6da362848",
+  "snapshot_rows": 60,
+  "first_snapshot_utc": "2026-10-02T15:00:04.429079+00:00",
+  "last_snapshot_utc": "2026-10-02T19:55:05.574830+00:00",
+  "contracts": [
+    "SPY261005C00767000",
+    "SPY261005C00768000",
+    "SPY261005C00769000",
+    "SPY261005C00770000",
+    "SPY261005C00771000",
+    "SPY261005P00767000",
+    "SPY261005P00768000",
+    "SPY261005P00769000",
+    "SPY261005P00770000",
+    "SPY261005P00771000"
+  ]
+}

@@ -62,3 +62,20 @@ CALL_FLOW_REVERSAL_V01 uses the 60-minute CALL path and
 PUT_SKEW_SHORT_V01 uses the 15-minute PUT path.
 TP-before-SL rate excludes paths where neither threshold was reached.
 These additions are outcome measurements only; no v0.1 hypothesis threshold was changed.
+
+
+## Prospective governance
+Every post-close run now creates a governance layer without changing frozen rules:
+- a SHA-256 binding of the canonical frozen hypothesis specification;
+- one session manifest containing date, snapshot span, row count and observed selected contracts;
+- a daily hypothesis table where multiple same-day activations remain one independent session;
+- a prospective scoreboard with formal review checkpoints at 5, 10, 20 and 30 sessions.
+
+The freeze session and all earlier dates are excluded from the prospective daily table.
+Before five post-freeze sessions the scoreboard status is `INSUFFICIENT_SAMPLE`.
+Reaching a review checkpoint permits review, not silent threshold changes; any changed rule requires a new frozen hypothesis version.
+
+Additional outputs:
+- `data/processed/intraday/prospective_hypothesis_daily_v01.csv`
+- `artifacts/intraday/PROSPECTIVE_SCOREBOARD_V01.json`
+- `artifacts/intraday/session_manifests/YYYY-MM-DD.json`
