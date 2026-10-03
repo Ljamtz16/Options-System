@@ -32,3 +32,9 @@ def test_research_dashboard_tabs_and_meta_exist():
  meta=(a/'research_dashboard_meta.js').read_text(encoding='utf-8')
  for hid in ('CALL_FLOW_REVERSAL_V01','PUT_SKEW_SHORT_V01','H03_CALL_RELATIVE_WEAKNESS_REVERSAL_CANDIDATE','H04_CALL_CROSSMARKET_WEAKNESS_CANDIDATE','H05_PUT_CROSSMARKET_MOMENTUM_CANDIDATE'):
   assert hid in meta
+
+def test_research_tabs_asset_has_no_tool_metadata():
+ r=Path(__file__).resolve().parents[1]
+ code=(r/'artifacts/intraday/research_dashboard_tabs.js').read_text(encoding='utf-8')
+ assert '[Reading ' not in code
+ assert '[executed on device:' not in code

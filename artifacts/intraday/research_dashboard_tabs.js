@@ -1,4 +1,3 @@
-[Reading 21 lines from start (total: 21 lines, 0 remaining)]
 
 (function(){
 const M=window.RESEARCH_META||{},root=document.querySelector('.w');if(!root)return;
