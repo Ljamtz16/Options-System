@@ -50,8 +50,17 @@ def summarize(rows,hypotheses):
         ret_key=f"{side}_ret_{hz}m"
         hit=[r for r in rows if hid in (r.get("active_hypotheses") or "").split(";") and _f(r.get(ret_key)) is not None]
         vals=[_f(r.get(ret_key)) for r in hit]
+        mfe=[_f(r.get(f"{side}_mfe_{hz}m")) for r in hit]
+        mae=[_f(r.get(f"{side}_mae_{hz}m")) for r in hit]
+        mfe=[v for v in mfe if v is not None];mae=[v for v in mae if v is not None]
+        touch=[r.get(f"{side}_{hz}m_tp10_sl10") for r in hit]
+        decided=[v for v in touch if v in ("TP_FIRST","SL_FIRST")]
         report[hid]={"n":len(vals),"mean_return":sum(vals)/len(vals) if vals else None,
                      "win_rate":sum(v>0 for v in vals)/len(vals) if vals else None,
                      "gt10_rate":sum(v>=.10 for v in vals)/len(vals) if vals else None,
-                     "ltm10_rate":sum(v<=-.10 for v in vals)/len(vals) if vals else None}
+                     "ltm10_rate":sum(v<=-.10 for v in vals)/len(vals) if vals else None,
+                     "mean_mfe":sum(mfe)/len(mfe) if mfe else None,
+                     "mean_mae":sum(mae)/len(mae) if mae else None,
+                     "tp10_before_sl10_rate":sum(v=="TP_FIRST" for v in decided)/len(decided) if decided else None,
+                     "tp10_sl10_decided_n":len(decided)}
     return report

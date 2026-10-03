@@ -7,194 +7,418 @@
         {
           "hypothesis": "PUT_SKEW_SHORT_V01",
           "captured_at_utc": "2026-10-02T15:00:04.429079+00:00",
+          "side": "put",
+          "horizon_min": 15,
           "spot": "771.04",
-          "return": "0.5819672131147541"
+          "contract": "SPY261005P00771000",
+          "entry_ask": "2.44",
+          "return": "0.5819672131147541",
+          "mfe": "0.737704918032787",
+          "mae": "0.22540983606557385",
+          "tp10_sl10": "TP_FIRST"
         },
         {
           "hypothesis": "CALL_FLOW_REVERSAL_V01",
           "captured_at_utc": "2026-10-02T15:05:04.306503+00:00",
+          "side": "call",
+          "horizon_min": 60,
           "spot": "769.955",
-          "return": "-0.10646387832699612"
+          "contract": "SPY261005C00770000",
+          "entry_ask": "2.63",
+          "return": "-0.10646387832699612",
+          "mfe": "-0.08365019011406838",
+          "mae": "-0.3954372623574144",
+          "tp10_sl10": "SL_FIRST"
         },
         {
           "hypothesis": "PUT_SKEW_SHORT_V01",
           "captured_at_utc": "2026-10-02T15:05:04.306503+00:00",
+          "side": "put",
+          "horizon_min": 15,
           "spot": "769.955",
-          "return": "0.38996138996139007"
+          "contract": "SPY261005P00770000",
+          "entry_ask": "2.59",
+          "return": "0.38996138996139007",
+          "mfe": "0.6023166023166024",
+          "mae": "0.21235521235521237",
+          "tp10_sl10": "TP_FIRST"
         },
         {
           "hypothesis": "CALL_FLOW_REVERSAL_V01",
           "captured_at_utc": "2026-10-02T15:10:04.366327+00:00",
+          "side": "call",
+          "horizon_min": 60,
           "spot": "768.985",
-          "return": "0.1102661596958175"
+          "contract": "SPY261005C00769000",
+          "entry_ask": "2.63",
+          "return": "0.1102661596958175",
+          "mfe": "0.13307984790874539",
+          "mae": "-0.2585551330798479",
+          "tp10_sl10": "SL_FIRST"
         },
         {
           "hypothesis": "CALL_FLOW_REVERSAL_V01",
           "captured_at_utc": "2026-10-02T15:55:04.434716+00:00",
+          "side": "call",
+          "horizon_min": 60,
           "spot": "768.595",
-          "return": "0.15189873417721514"
+          "contract": "SPY261005C00769000",
+          "entry_ask": "2.37",
+          "return": "0.15189873417721514",
+          "mfe": "0.2573839662447257",
+          "mae": "0.04219409282700415",
+          "tp10_sl10": "TP_FIRST"
         },
         {
           "hypothesis": "PUT_SKEW_SHORT_V01",
           "captured_at_utc": "2026-10-02T16:02:46.385690+00:00",
+          "side": "put",
+          "horizon_min": 15,
           "spot": "769.65",
-          "return": "0.0"
+          "contract": "SPY261005P00770000",
+          "entry_ask": "2.54",
+          "return": "0.0",
+          "mfe": "0.0669291338582676",
+          "mae": "-0.019685039370078705",
+          "tp10_sl10": "NEITHER"
         },
         {
           "hypothesis": "PUT_SKEW_SHORT_V01",
           "captured_at_utc": "2026-10-02T16:10:05.865541+00:00",
+          "side": "put",
+          "horizon_min": 15,
           "spot": "769.775",
-          "return": "0.1633466135458168"
+          "contract": "SPY261005P00770000",
+          "entry_ask": "2.51",
+          "return": "0.1633466135458168",
+          "mfe": "0.1633466135458168",
+          "mae": "0.01195219123505975",
+          "tp10_sl10": "TP_FIRST"
         },
         {
           "hypothesis": "CALL_FLOW_REVERSAL_V01",
           "captured_at_utc": "2026-10-02T16:15:06.357243+00:00",
+          "side": "call",
+          "horizon_min": 60,
           "spot": "769.41",
-          "return": "-0.013513513513513624"
+          "contract": "SPY261005C00770000",
+          "entry_ask": "2.22",
+          "return": "-0.013513513513513624",
+          "mfe": "0.06306306306306286",
+          "mae": "-0.08603603603603616",
+          "tp10_sl10": "NEITHER"
         },
         {
           "hypothesis": "PUT_SKEW_SHORT_V01",
           "captured_at_utc": "2026-10-02T16:15:06.357243+00:00",
+          "side": "put",
+          "horizon_min": 15,
           "spot": "769.41",
-          "return": "0.014705882352941027"
+          "contract": "SPY261005P00770000",
+          "entry_ask": "2.72",
+          "return": "0.014705882352941027",
+          "mfe": "0.07352941176470584",
+          "mae": "-0.06617647058823539",
+          "tp10_sl10": "NEITHER"
         },
         {
           "hypothesis": "PUT_SKEW_SHORT_V01",
           "captured_at_utc": "2026-10-02T16:20:06.099035+00:00",
+          "side": "put",
+          "horizon_min": 15,
           "spot": "769.7",
-          "return": "0.0"
+          "contract": "SPY261005P00770000",
+          "entry_ask": "2.55",
+          "return": "0.0",
+          "mfe": "0.14509803921568643",
+          "mae": "0.0",
+          "tp10_sl10": "TP_FIRST"
         },
         {
           "hypothesis": "PUT_SKEW_SHORT_V01",
           "captured_at_utc": "2026-10-02T16:40:06.724176+00:00",
+          "side": "put",
+          "horizon_min": 15,
           "spot": "769.745",
-          "return": "0.06640624999999997"
+          "contract": "SPY261005P00770000",
+          "entry_ask": "2.56",
+          "return": "0.06640624999999997",
+          "mfe": "0.13671875",
+          "mae": "0.0234375",
+          "tp10_sl10": "TP_FIRST"
         },
         {
           "hypothesis": "PUT_SKEW_SHORT_V01",
           "captured_at_utc": "2026-10-02T17:10:06.138153+00:00",
+          "side": "put",
+          "horizon_min": 15,
           "spot": "769.51",
-          "return": "0.14176245210727975"
+          "contract": "SPY261005P00770000",
+          "entry_ask": "2.61",
+          "return": "0.14176245210727975",
+          "mfe": "0.20306513409961702",
+          "mae": "-0.011494252873563093",
+          "tp10_sl10": "TP_FIRST"
         },
         {
           "hypothesis": "CALL_FLOW_REVERSAL_V01",
           "captured_at_utc": "2026-10-02T17:15:06.093388+00:00",
+          "side": "call",
+          "horizon_min": 60,
           "spot": "769.305",
-          "return": "-0.17370892018779335"
+          "contract": "SPY261005C00770000",
+          "entry_ask": "2.13",
+          "return": "-0.17370892018779335",
+          "mfe": "0.028169014084507005",
+          "mae": "-0.17370892018779338",
+          "tp10_sl10": "SL_FIRST"
         },
         {
           "hypothesis": "CALL_FLOW_REVERSAL_V01",
           "captured_at_utc": "2026-10-02T17:30:06.149523+00:00",
+          "side": "call",
+          "horizon_min": 60,
           "spot": "768.47",
-          "return": "-0.030303030303030234"
+          "contract": "SPY261005C00769000",
+          "entry_ask": "2.31",
+          "return": "-0.030303030303030234",
+          "mfe": "0.09523809523809512",
+          "mae": "-0.07359307359307354",
+          "tp10_sl10": "NEITHER"
         },
         {
           "hypothesis": "PUT_SKEW_SHORT_V01",
           "captured_at_utc": "2026-10-02T17:55:06.514059+00:00",
+          "side": "put",
+          "horizon_min": 15,
           "spot": "769.44",
-          "return": "0.003846153846153764"
+          "contract": "SPY261005P00770000",
+          "entry_ask": "2.6",
+          "return": "0.003846153846153764",
+          "mfe": "0.0038461538461538325",
+          "mae": "-0.007692307692307665",
+          "tp10_sl10": "NEITHER"
         },
         {
           "hypothesis": "CALL_FLOW_REVERSAL_V01",
           "captured_at_utc": "2026-10-02T18:00:06.197322+00:00",
+          "side": "call",
+          "horizon_min": 60,
           "spot": "769.21",
-          "return": "-0.019762845849802303"
+          "contract": "SPY261005C00769000",
+          "entry_ask": "2.53",
+          "return": "-0.019762845849802303",
+          "mfe": "-0.019762845849802257",
+          "mae": "-0.15415019762845839",
+          "tp10_sl10": "SL_FIRST"
         },
         {
           "hypothesis": "PUT_SKEW_SHORT_V01",
           "captured_at_utc": "2026-10-02T18:10:05.858668+00:00",
+          "side": "put",
+          "horizon_min": 15,
           "spot": "769.135",
-          "return": "0.018264840182648418"
+          "contract": "SPY261005P00769000",
+          "entry_ask": "2.19",
+          "return": "0.018264840182648418",
+          "mfe": "0.08219178082191791",
+          "mae": "-0.0182648401826484",
+          "tp10_sl10": "NEITHER"
         },
         {
           "hypothesis": "PUT_SKEW_SHORT_V01",
           "captured_at_utc": "2026-10-02T18:20:05.694228+00:00",
+          "side": "put",
+          "horizon_min": 15,
           "spot": "768.88",
-          "return": "-0.008771929824561412"
+          "contract": "SPY261005P00769000",
+          "entry_ask": "2.28",
+          "return": "-0.008771929824561412",
+          "mfe": "0.03947368421052655",
+          "mae": "-0.02631578947368407",
+          "tp10_sl10": "NEITHER"
         },
         {
           "hypothesis": "CALL_FLOW_REVERSAL_V01",
           "captured_at_utc": "2026-10-02T18:25:05.744764+00:00",
+          "side": "call",
+          "horizon_min": 60,
           "spot": "768.64",
-          "return": "0.11627906976744186"
+          "contract": "SPY261005C00769000",
+          "entry_ask": "2.15",
+          "return": "0.11627906976744186",
+          "mfe": "0.15348837209302335",
+          "mae": "0.018604651162790642",
+          "tp10_sl10": "TP_FIRST"
         },
         {
           "hypothesis": "PUT_SKEW_SHORT_V01",
           "captured_at_utc": "2026-10-02T18:30:06.123447+00:00",
+          "side": "put",
+          "horizon_min": 15,
           "spot": "768.95",
-          "return": "-0.07589285714285729"
+          "contract": "SPY261005P00769000",
+          "entry_ask": "2.24",
+          "return": "-0.07589285714285729",
+          "mfe": "0.008928571428571175",
+          "mae": "-0.07589285714285732",
+          "tp10_sl10": "NEITHER"
         },
         {
           "hypothesis": "PUT_SKEW_SHORT_V01",
           "captured_at_utc": "2026-10-02T18:35:05.626371+00:00",
+          "side": "put",
+          "horizon_min": 15,
           "spot": "768.99",
-          "return": "-0.04932735426008963"
+          "contract": "SPY261005P00769000",
+          "entry_ask": "2.23",
+          "return": "-0.04932735426008963",
+          "mfe": "0.013452914798206095",
+          "mae": "-0.07623318385650224",
+          "tp10_sl10": "NEITHER"
         },
         {
           "hypothesis": "CALL_FLOW_REVERSAL_V01",
           "captured_at_utc": "2026-10-02T18:40:05.791588+00:00",
+          "side": "call",
+          "horizon_min": 60,
           "spot": "768.84",
-          "return": "0.15454545454545446"
+          "contract": "SPY261005C00769000",
+          "entry_ask": "2.2",
+          "return": "0.15454545454545446",
+          "mfe": "0.168181818181818",
+          "mae": "0.0",
+          "tp10_sl10": "TP_FIRST"
         },
         {
           "hypothesis": "PUT_SKEW_SHORT_V01",
           "captured_at_utc": "2026-10-02T18:45:06.135645+00:00",
+          "side": "put",
+          "horizon_min": 15,
           "spot": "769.265",
-          "return": "-0.012048192771084435"
+          "contract": "SPY261005P00770000",
+          "entry_ask": "2.49",
+          "return": "-0.012048192771084435",
+          "mfe": "0.04016064257028096",
+          "mae": "-0.016064257028112428",
+          "tp10_sl10": "NEITHER"
         },
         {
           "hypothesis": "PUT_SKEW_SHORT_V01",
           "captured_at_utc": "2026-10-02T18:55:05.683166+00:00",
+          "side": "put",
+          "horizon_min": 15,
           "spot": "769.31",
-          "return": "0.039370078740157514"
+          "contract": "SPY261005P00770000",
+          "entry_ask": "2.54",
+          "return": "0.039370078740157514",
+          "mfe": "0.03937007874015741",
+          "mae": "-0.03543307086614167",
+          "tp10_sl10": "NEITHER"
         },
         {
           "hypothesis": "PUT_SKEW_SHORT_V01",
           "captured_at_utc": "2026-10-02T19:05:05.911855+00:00",
+          "side": "put",
+          "horizon_min": 15,
           "spot": "769.32",
-          "return": "-0.06349206349206354"
+          "contract": "SPY261005P00770000",
+          "entry_ask": "2.52",
+          "return": "-0.06349206349206354",
+          "mfe": "0.04761904761904767",
+          "mae": "-0.07539682539682535",
+          "tp10_sl10": "NEITHER"
         },
         {
           "hypothesis": "PUT_SKEW_SHORT_V01",
           "captured_at_utc": "2026-10-02T19:10:06.094850+00:00",
+          "side": "put",
+          "horizon_min": 15,
           "spot": "769.01",
-          "return": "-0.11374407582938378"
+          "contract": "SPY261005P00769000",
+          "entry_ask": "2.11",
+          "return": "-0.11374407582938378",
+          "mfe": "-0.018957345971563955",
+          "mae": "-0.11374407582938373",
+          "tp10_sl10": "SL_FIRST"
         },
         {
           "hypothesis": "PUT_SKEW_SHORT_V01",
           "captured_at_utc": "2026-10-02T19:15:05.738363+00:00",
+          "side": "put",
+          "horizon_min": 15,
           "spot": "769.16",
-          "return": "-0.10096153846153845"
+          "contract": "SPY261005P00769000",
+          "entry_ask": "2.08",
+          "return": "-0.10096153846153845",
+          "mfe": "-0.0673076923076924",
+          "mae": "-0.17307692307692313",
+          "tp10_sl10": "SL_FIRST"
         },
         {
           "hypothesis": "PUT_SKEW_SHORT_V01",
           "captured_at_utc": "2026-10-02T19:20:05.983628+00:00",
+          "side": "put",
+          "horizon_min": 15,
           "spot": "769.38",
-          "return": "-0.09958506224066399"
+          "contract": "SPY261005P00770000",
+          "entry_ask": "2.41",
+          "return": "-0.09958506224066399",
+          "mfe": "-0.03319502074688796",
+          "mae": "-0.10373443983402486",
+          "tp10_sl10": "SL_FIRST"
         },
         {
           "hypothesis": "PUT_SKEW_SHORT_V01",
           "captured_at_utc": "2026-10-02T19:25:05.754373+00:00",
+          "side": "put",
+          "horizon_min": 15,
           "spot": "769.41",
-          "return": "-0.09205020920502101"
+          "contract": "SPY261005P00770000",
+          "entry_ask": "2.39",
+          "return": "-0.09205020920502101",
+          "mfe": "-0.03765690376569053",
+          "mae": "-0.12133891213389125",
+          "tp10_sl10": "SL_FIRST"
         },
         {
           "hypothesis": "PUT_SKEW_SHORT_V01",
           "captured_at_utc": "2026-10-02T19:30:06.176762+00:00",
+          "side": "put",
+          "horizon_min": 15,
           "spot": "769.37",
-          "return": "-0.11764705882352933"
+          "contract": "SPY261005P00770000",
+          "entry_ask": "2.38",
+          "return": "-0.11764705882352933",
+          "mfe": "-0.07983193277310918",
+          "mae": "-0.11764705882352933",
+          "tp10_sl10": "SL_FIRST"
         },
         {
           "hypothesis": "PUT_SKEW_SHORT_V01",
           "captured_at_utc": "2026-10-02T19:35:05.849396+00:00",
+          "side": "put",
+          "horizon_min": 15,
           "spot": "769.71",
-          "return": "-0.00921658986175116"
+          "contract": "SPY261005P00770000",
+          "entry_ask": "2.17",
+          "return": "-0.00921658986175116",
+          "mfe": "0.009216589861751112",
+          "mae": "-0.032258064516129004",
+          "tp10_sl10": "NEITHER"
         },
         {
           "hypothesis": "PUT_SKEW_SHORT_V01",
           "captured_at_utc": "2026-10-02T19:45:06.866852+00:00",
+          "side": "put",
+          "horizon_min": 15,
           "spot": "769.625",
-          "return": ""
+          "contract": "SPY261005P00770000",
+          "entry_ask": "2.12",
+          "return": "",
+          "mfe": "0.03301886792452824",
+          "mae": "0.014150943396226356",
+          "tp10_sl10": "NEITHER"
         }
       ]
     }

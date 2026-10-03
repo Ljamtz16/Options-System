@@ -16,10 +16,19 @@ TASKS=(
     "scripts/hypothesis_daily_report.py",
 )
 
+OPTIONAL_INPUTS={
+    "scripts/build_intraday_scoreboard.py": ROOT/"data/processed/intraday/intraday_options_v2.csv",
+    "scripts/intraday_daily_report.py": ROOT/"data/processed/intraday/intraday_options_v2.csv",
+}
+
 for task in TASKS:
     p=ROOT/task
     if not p.exists():
         print(f"SKIP_MISSING {task}")
+        continue
+    required=OPTIONAL_INPUTS.get(task)
+    if required is not None and not required.exists():
+        print(f"SKIP_NO_INPUT {task} input={required.relative_to(ROOT)}")
         continue
     print(f"RUN {task}")
     subprocess.run([PY,str(p)],cwd=ROOT,check=True)
