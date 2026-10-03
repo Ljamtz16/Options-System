@@ -1,0 +1,26 @@
+{
+  "version": "v0.1",
+  "status": "EXPLORATORY_ONLY",
+  "source_session": "2026-10-02",
+  "candidates": [
+    {
+      "id": "H03_CALL_RELATIVE_WEAKNESS_REVERSAL_CANDIDATE",
+      "side": "call",
+      "horizon_min": 60,
+      "target": "TP10_BEFORE_SL10",
+      "rules": [
+        {"feature": "iwm_from_open", "op": "<=", "value": -0.003338055604745982},
+        {"feature": "spy_from_open", "op": "<=", "value": -0.002140966419266088}
+      ],
+      "discovery": {"n": 9, "event_rate": 0.7777777777777778, "baseline": 0.23728813559322035, "lift": 3.2777777777777777, "first_half_rate": 1.0, "second_half_rate": 0.6666666666666666},
+      "promotion": "NOT_FROZEN"
+    }
+  ],
+  "rejected_for_now": [
+    {
+      "id": "H04_PUT_CANDIDATE",
+      "reason": "top combinations had zero event rate in the second half of the discovery session"
+    }
+  ],
+  "warning": "Single-session discovery. H03 is a candidate, not validated evidence or a trading rule."
+}

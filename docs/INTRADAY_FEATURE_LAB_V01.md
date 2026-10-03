@@ -33,3 +33,25 @@ Future returns, MFE, MAE, labels and frozen-hypothesis activation fields are exc
 
 A candidate H03/H04 may be written only as a new EXPLORATORY specification. It does not enter
 the prospective scoreboard until separately frozen under a new version before observing its validation data.
+
+
+## Multivariate candidate discovery
+The lab also evaluates conjunctions of two or three contemporaneous rules. Absolute price
+levels are excluded from general candidates. A combination requires at least 8 observations
+and at least 3 observations in each half of the discovery session. Temporal support requires
+a non-zero target-event rate in both halves.
+
+### H03 candidate
+`H03_CALL_RELATIVE_WEAKNESS_REVERSAL_CANDIDATE`:
+- IWM from open <= -0.3338%;
+- SPY from open <= -0.2141%;
+- target: CALL TP +10% before SL -10% within 60 minutes.
+
+Discovery-only result: 9 observations, 77.8% target rate versus 23.7% unconditional baseline.
+The first/second-half rates were 100% and 66.7%. This is not validation because both halves
+belong to the same session and overlapping 5-minute observations are correlated.
+
+No H04 PUT candidate is promoted at this stage: the strongest PUT combinations had zero target
+events in the second half of the discovery session.
+
+H03 remains `NOT_FROZEN` and is not connected to the prospective tracker.

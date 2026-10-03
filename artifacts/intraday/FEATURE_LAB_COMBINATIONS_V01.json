@@ -1,0 +1,1441 @@
+{
+  "version": "v0.1",
+  "status": "EXPLORATORY_ONLY",
+  "labels": {
+    "label_call_tp10_before_sl10_60m": {
+      "top_stable": [
+        {
+          "rules": [
+            {
+              "feature": "iwm_from_open",
+              "op": "le",
+              "threshold": -0.003338055604745982
+            },
+            {
+              "feature": "spy_from_open",
+              "op": "le",
+              "threshold": -0.002140966419266088
+            }
+          ],
+          "n": 9,
+          "rate": 0.7777777777777778,
+          "baseline": 0.23728813559322035,
+          "lift": 3.2777777777777777,
+          "first_half": {
+            "n": 3,
+            "rate": 1.0
+          },
+          "second_half": {
+            "n": 6,
+            "rate": 0.6666666666666666
+          },
+          "temporal_support": true,
+          "min_half_rate": 0.6666666666666666
+        },
+        {
+          "rules": [
+            {
+              "feature": "iwm_from_open",
+              "op": "le",
+              "threshold": -0.003338055604745982
+            },
+            {
+              "feature": "dte_1_3_put_iv_med",
+              "op": "le",
+              "threshold": 0.122725
+            }
+          ],
+          "n": 8,
+          "rate": 0.75,
+          "baseline": 0.23728813559322035,
+          "lift": 3.1607142857142856,
+          "first_half": {
+            "n": 3,
+            "rate": 1.0
+          },
+          "second_half": {
+            "n": 5,
+            "rate": 0.6
+          },
+          "temporal_support": true,
+          "min_half_rate": 0.6
+        },
+        {
+          "rules": [
+            {
+              "feature": "dte_1_3_put_iv_med",
+              "op": "le",
+              "threshold": 0.122725
+            },
+            {
+              "feature": "dte_4_7_put_iv_med",
+              "op": "le",
+              "threshold": 0.12585000000000002
+            }
+          ],
+          "n": 10,
+          "rate": 0.5,
+          "baseline": 0.23728813559322035,
+          "lift": 2.107142857142857,
+          "first_half": {
+            "n": 3,
+            "rate": 0.6666666666666666
+          },
+          "second_half": {
+            "n": 7,
+            "rate": 0.42857142857142855
+          },
+          "temporal_support": true,
+          "min_half_rate": 0.42857142857142855
+        },
+        {
+          "rules": [
+            {
+              "feature": "d_spot_since_first",
+              "op": "le",
+              "threshold": -2.0524999999999523
+            },
+            {
+              "feature": "put_call_iv_skew",
+              "op": "le",
+              "threshold": 0.004174999999999998
+            }
+          ],
+          "n": 8,
+          "rate": 0.5,
+          "baseline": 0.23728813559322035,
+          "lift": 2.107142857142857,
+          "first_half": {
+            "n": 5,
+            "rate": 0.6
+          },
+          "second_half": {
+            "n": 3,
+            "rate": 0.3333333333333333
+          },
+          "temporal_support": true,
+          "min_half_rate": 0.3333333333333333
+        },
+        {
+          "rules": [
+            {
+              "feature": "dte_1_3_call_iv_med",
+              "op": "gt",
+              "threshold": 0.09542500000000001
+            },
+            {
+              "feature": "dte_4_7_call_iv_med",
+              "op": "gt",
+              "threshold": 0.109225
+            }
+          ],
+          "n": 13,
+          "rate": 0.46153846153846156,
+          "baseline": 0.23728813559322035,
+          "lift": 1.945054945054945,
+          "first_half": {
+            "n": 9,
+            "rate": 0.5555555555555556
+          },
+          "second_half": {
+            "n": 4,
+            "rate": 0.25
+          },
+          "temporal_support": true,
+          "min_half_rate": 0.25
+        },
+        {
+          "rules": [
+            {
+              "feature": "dte_4_7_call_iv_med",
+              "op": "gt",
+              "threshold": 0.109225
+            },
+            {
+              "feature": "d_spot_since_first",
+              "op": "le",
+              "threshold": -2.0524999999999523
+            }
+          ],
+          "n": 11,
+          "rate": 0.45454545454545453,
+          "baseline": 0.23728813559322035,
+          "lift": 1.9155844155844155,
+          "first_half": {
+            "n": 7,
+            "rate": 0.5714285714285714
+          },
+          "second_half": {
+            "n": 4,
+            "rate": 0.25
+          },
+          "temporal_support": true,
+          "min_half_rate": 0.25
+        },
+        {
+          "rules": [
+            {
+              "feature": "dte_1_3_call_iv_med",
+              "op": "gt",
+              "threshold": 0.09542500000000001
+            },
+            {
+              "feature": "d_spot_since_first",
+              "op": "le",
+              "threshold": -2.0524999999999523
+            }
+          ],
+          "n": 10,
+          "rate": 0.4,
+          "baseline": 0.23728813559322035,
+          "lift": 1.6857142857142857,
+          "first_half": {
+            "n": 6,
+            "rate": 0.5
+          },
+          "second_half": {
+            "n": 4,
+            "rate": 0.25
+          },
+          "temporal_support": true,
+          "min_half_rate": 0.25
+        },
+        {
+          "rules": [
+            {
+              "feature": "dte_1_3_call_iv_med",
+              "op": "gt",
+              "threshold": 0.09542500000000001
+            },
+            {
+              "feature": "dte_4_7_call_iv_med",
+              "op": "gt",
+              "threshold": 0.109225
+            },
+            {
+              "feature": "d_spot_since_first",
+              "op": "le",
+              "threshold": -2.0524999999999523
+            }
+          ],
+          "n": 10,
+          "rate": 0.4,
+          "baseline": 0.23728813559322035,
+          "lift": 1.6857142857142857,
+          "first_half": {
+            "n": 6,
+            "rate": 0.5
+          },
+          "second_half": {
+            "n": 4,
+            "rate": 0.25
+          },
+          "temporal_support": true,
+          "min_half_rate": 0.25
+        }
+      ],
+      "top_any": [
+        {
+          "rules": [
+            {
+              "feature": "iwm_from_open",
+              "op": "le",
+              "threshold": -0.003338055604745982
+            },
+            {
+              "feature": "spy_from_open",
+              "op": "le",
+              "threshold": -0.002140966419266088
+            }
+          ],
+          "n": 9,
+          "rate": 0.7777777777777778,
+          "baseline": 0.23728813559322035,
+          "lift": 3.2777777777777777,
+          "first_half": {
+            "n": 3,
+            "rate": 1.0
+          },
+          "second_half": {
+            "n": 6,
+            "rate": 0.6666666666666666
+          },
+          "temporal_support": true,
+          "min_half_rate": 0.6666666666666666
+        },
+        {
+          "rules": [
+            {
+              "feature": "iwm_from_open",
+              "op": "le",
+              "threshold": -0.003338055604745982
+            },
+            {
+              "feature": "dte_1_3_put_iv_med",
+              "op": "le",
+              "threshold": 0.122725
+            }
+          ],
+          "n": 8,
+          "rate": 0.75,
+          "baseline": 0.23728813559322035,
+          "lift": 3.1607142857142856,
+          "first_half": {
+            "n": 3,
+            "rate": 1.0
+          },
+          "second_half": {
+            "n": 5,
+            "rate": 0.6
+          },
+          "temporal_support": true,
+          "min_half_rate": 0.6
+        },
+        {
+          "rules": [
+            {
+              "feature": "dte_1_3_put_iv_med",
+              "op": "le",
+              "threshold": 0.122725
+            },
+            {
+              "feature": "dte_4_7_put_iv_med",
+              "op": "le",
+              "threshold": 0.12585000000000002
+            }
+          ],
+          "n": 10,
+          "rate": 0.5,
+          "baseline": 0.23728813559322035,
+          "lift": 2.107142857142857,
+          "first_half": {
+            "n": 3,
+            "rate": 0.6666666666666666
+          },
+          "second_half": {
+            "n": 7,
+            "rate": 0.42857142857142855
+          },
+          "temporal_support": true,
+          "min_half_rate": 0.42857142857142855
+        },
+        {
+          "rules": [
+            {
+              "feature": "d_spot_since_first",
+              "op": "le",
+              "threshold": -2.0524999999999523
+            },
+            {
+              "feature": "put_call_iv_skew",
+              "op": "le",
+              "threshold": 0.004174999999999998
+            }
+          ],
+          "n": 8,
+          "rate": 0.5,
+          "baseline": 0.23728813559322035,
+          "lift": 2.107142857142857,
+          "first_half": {
+            "n": 5,
+            "rate": 0.6
+          },
+          "second_half": {
+            "n": 3,
+            "rate": 0.3333333333333333
+          },
+          "temporal_support": true,
+          "min_half_rate": 0.3333333333333333
+        },
+        {
+          "rules": [
+            {
+              "feature": "dte_1_3_call_iv_med",
+              "op": "gt",
+              "threshold": 0.09542500000000001
+            },
+            {
+              "feature": "dte_4_7_call_iv_med",
+              "op": "gt",
+              "threshold": 0.109225
+            }
+          ],
+          "n": 13,
+          "rate": 0.46153846153846156,
+          "baseline": 0.23728813559322035,
+          "lift": 1.945054945054945,
+          "first_half": {
+            "n": 9,
+            "rate": 0.5555555555555556
+          },
+          "second_half": {
+            "n": 4,
+            "rate": 0.25
+          },
+          "temporal_support": true,
+          "min_half_rate": 0.25
+        },
+        {
+          "rules": [
+            {
+              "feature": "dte_4_7_call_iv_med",
+              "op": "gt",
+              "threshold": 0.109225
+            },
+            {
+              "feature": "d_spot_since_first",
+              "op": "le",
+              "threshold": -2.0524999999999523
+            }
+          ],
+          "n": 11,
+          "rate": 0.45454545454545453,
+          "baseline": 0.23728813559322035,
+          "lift": 1.9155844155844155,
+          "first_half": {
+            "n": 7,
+            "rate": 0.5714285714285714
+          },
+          "second_half": {
+            "n": 4,
+            "rate": 0.25
+          },
+          "temporal_support": true,
+          "min_half_rate": 0.25
+        },
+        {
+          "rules": [
+            {
+              "feature": "dte_1_3_call_iv_med",
+              "op": "gt",
+              "threshold": 0.09542500000000001
+            },
+            {
+              "feature": "d_spot_since_first",
+              "op": "le",
+              "threshold": -2.0524999999999523
+            }
+          ],
+          "n": 10,
+          "rate": 0.4,
+          "baseline": 0.23728813559322035,
+          "lift": 1.6857142857142857,
+          "first_half": {
+            "n": 6,
+            "rate": 0.5
+          },
+          "second_half": {
+            "n": 4,
+            "rate": 0.25
+          },
+          "temporal_support": true,
+          "min_half_rate": 0.25
+        },
+        {
+          "rules": [
+            {
+              "feature": "dte_1_3_call_iv_med",
+              "op": "gt",
+              "threshold": 0.09542500000000001
+            },
+            {
+              "feature": "dte_4_7_call_iv_med",
+              "op": "gt",
+              "threshold": 0.109225
+            },
+            {
+              "feature": "d_spot_since_first",
+              "op": "le",
+              "threshold": -2.0524999999999523
+            }
+          ],
+          "n": 10,
+          "rate": 0.4,
+          "baseline": 0.23728813559322035,
+          "lift": 1.6857142857142857,
+          "first_half": {
+            "n": 6,
+            "rate": 0.5
+          },
+          "second_half": {
+            "n": 4,
+            "rate": 0.25
+          },
+          "temporal_support": true,
+          "min_half_rate": 0.25
+        },
+        {
+          "rules": [
+            {
+              "feature": "put_iv_1pct",
+              "op": "gt",
+              "threshold": 0.1066
+            },
+            {
+              "feature": "dte_1_3_put_50d_iv",
+              "op": "gt",
+              "threshold": 0.09284999999999999
+            },
+            {
+              "feature": "dte_8_10_put_50d_iv",
+              "op": "gt",
+              "threshold": 0.1056
+            }
+          ],
+          "n": 8,
+          "rate": 0.75,
+          "baseline": 0.23728813559322035,
+          "lift": 3.1607142857142856,
+          "first_half": {
+            "n": 8,
+            "rate": 0.75
+          },
+          "second_half": {
+            "n": 0,
+            "rate": null
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        },
+        {
+          "rules": [
+            {
+              "feature": "put_iv_1pct",
+              "op": "gt",
+              "threshold": 0.1066
+            },
+            {
+              "feature": "put_iv",
+              "op": "gt",
+              "threshold": 0.0923
+            },
+            {
+              "feature": "dte_8_10_put_50d_iv",
+              "op": "gt",
+              "threshold": 0.1056
+            }
+          ],
+          "n": 8,
+          "rate": 0.75,
+          "baseline": 0.23728813559322035,
+          "lift": 3.1607142857142856,
+          "first_half": {
+            "n": 8,
+            "rate": 0.75
+          },
+          "second_half": {
+            "n": 0,
+            "rate": null
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        },
+        {
+          "rules": [
+            {
+              "feature": "put_iv_1pct",
+              "op": "gt",
+              "threshold": 0.1066
+            },
+            {
+              "feature": "dte_8_10_put_50d_iv",
+              "op": "gt",
+              "threshold": 0.1056
+            },
+            {
+              "feature": "dte_1_3_put_25d_iv",
+              "op": "gt",
+              "threshold": 0.101425
+            }
+          ],
+          "n": 8,
+          "rate": 0.75,
+          "baseline": 0.23728813559322035,
+          "lift": 3.1607142857142856,
+          "first_half": {
+            "n": 8,
+            "rate": 0.75
+          },
+          "second_half": {
+            "n": 0,
+            "rate": null
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        },
+        {
+          "rules": [
+            {
+              "feature": "iwm_from_open",
+              "op": "le",
+              "threshold": -0.003338055604745982
+            },
+            {
+              "feature": "dte_4_7_put_iv_med",
+              "op": "le",
+              "threshold": 0.12585000000000002
+            }
+          ],
+          "n": 9,
+          "rate": 0.6666666666666666,
+          "baseline": 0.23728813559322035,
+          "lift": 2.8095238095238093,
+          "first_half": {
+            "n": 2,
+            "rate": 1.0
+          },
+          "second_half": {
+            "n": 7,
+            "rate": 0.5714285714285714
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        },
+        {
+          "rules": [
+            {
+              "feature": "dte_1_3_put_50d_iv",
+              "op": "gt",
+              "threshold": 0.09284999999999999
+            },
+            {
+              "feature": "dte_8_10_put_50d_iv",
+              "op": "gt",
+              "threshold": 0.1056
+            }
+          ],
+          "n": 9,
+          "rate": 0.6666666666666666,
+          "baseline": 0.23728813559322035,
+          "lift": 2.8095238095238093,
+          "first_half": {
+            "n": 9,
+            "rate": 0.6666666666666666
+          },
+          "second_half": {
+            "n": 0,
+            "rate": null
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        },
+        {
+          "rules": [
+            {
+              "feature": "put_iv",
+              "op": "gt",
+              "threshold": 0.0923
+            },
+            {
+              "feature": "dte_8_10_put_50d_iv",
+              "op": "gt",
+              "threshold": 0.1056
+            }
+          ],
+          "n": 9,
+          "rate": 0.6666666666666666,
+          "baseline": 0.23728813559322035,
+          "lift": 2.8095238095238093,
+          "first_half": {
+            "n": 9,
+            "rate": 0.6666666666666666
+          },
+          "second_half": {
+            "n": 0,
+            "rate": null
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        },
+        {
+          "rules": [
+            {
+              "feature": "dte_8_10_put_50d_iv",
+              "op": "gt",
+              "threshold": 0.1056
+            },
+            {
+              "feature": "dte_1_3_put_25d_iv",
+              "op": "gt",
+              "threshold": 0.101425
+            }
+          ],
+          "n": 9,
+          "rate": 0.6666666666666666,
+          "baseline": 0.23728813559322035,
+          "lift": 2.8095238095238093,
+          "first_half": {
+            "n": 9,
+            "rate": 0.6666666666666666
+          },
+          "second_half": {
+            "n": 0,
+            "rate": null
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        },
+        {
+          "rules": [
+            {
+              "feature": "dte_1_3_put_50d_iv",
+              "op": "gt",
+              "threshold": 0.09284999999999999
+            },
+            {
+              "feature": "put_iv",
+              "op": "gt",
+              "threshold": 0.0923
+            },
+            {
+              "feature": "dte_8_10_put_50d_iv",
+              "op": "gt",
+              "threshold": 0.1056
+            }
+          ],
+          "n": 9,
+          "rate": 0.6666666666666666,
+          "baseline": 0.23728813559322035,
+          "lift": 2.8095238095238093,
+          "first_half": {
+            "n": 9,
+            "rate": 0.6666666666666666
+          },
+          "second_half": {
+            "n": 0,
+            "rate": null
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        },
+        {
+          "rules": [
+            {
+              "feature": "dte_1_3_put_50d_iv",
+              "op": "gt",
+              "threshold": 0.09284999999999999
+            },
+            {
+              "feature": "dte_8_10_put_50d_iv",
+              "op": "gt",
+              "threshold": 0.1056
+            },
+            {
+              "feature": "dte_1_3_put_25d_iv",
+              "op": "gt",
+              "threshold": 0.101425
+            }
+          ],
+          "n": 9,
+          "rate": 0.6666666666666666,
+          "baseline": 0.23728813559322035,
+          "lift": 2.8095238095238093,
+          "first_half": {
+            "n": 9,
+            "rate": 0.6666666666666666
+          },
+          "second_half": {
+            "n": 0,
+            "rate": null
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        },
+        {
+          "rules": [
+            {
+              "feature": "put_iv",
+              "op": "gt",
+              "threshold": 0.0923
+            },
+            {
+              "feature": "dte_8_10_put_50d_iv",
+              "op": "gt",
+              "threshold": 0.1056
+            },
+            {
+              "feature": "dte_1_3_put_25d_iv",
+              "op": "gt",
+              "threshold": 0.101425
+            }
+          ],
+          "n": 9,
+          "rate": 0.6666666666666666,
+          "baseline": 0.23728813559322035,
+          "lift": 2.8095238095238093,
+          "first_half": {
+            "n": 9,
+            "rate": 0.6666666666666666
+          },
+          "second_half": {
+            "n": 0,
+            "rate": null
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        },
+        {
+          "rules": [
+            {
+              "feature": "put_iv_1pct",
+              "op": "gt",
+              "threshold": 0.1066
+            },
+            {
+              "feature": "dte_1_3_put_50d_iv",
+              "op": "gt",
+              "threshold": 0.09284999999999999
+            }
+          ],
+          "n": 11,
+          "rate": 0.6363636363636364,
+          "baseline": 0.23728813559322035,
+          "lift": 2.6818181818181817,
+          "first_half": {
+            "n": 11,
+            "rate": 0.6363636363636364
+          },
+          "second_half": {
+            "n": 0,
+            "rate": null
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        },
+        {
+          "rules": [
+            {
+              "feature": "put_iv_1pct",
+              "op": "gt",
+              "threshold": 0.1066
+            },
+            {
+              "feature": "put_iv",
+              "op": "gt",
+              "threshold": 0.0923
+            }
+          ],
+          "n": 11,
+          "rate": 0.6363636363636364,
+          "baseline": 0.23728813559322035,
+          "lift": 2.6818181818181817,
+          "first_half": {
+            "n": 11,
+            "rate": 0.6363636363636364
+          },
+          "second_half": {
+            "n": 0,
+            "rate": null
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        }
+      ]
+    },
+    "label_put_tp10_before_sl10_15m": {
+      "top_stable": [],
+      "top_any": [
+        {
+          "rules": [
+            {
+              "feature": "dte_8_10_put_25d_n",
+              "op": "gt",
+              "threshold": 5.0
+            },
+            {
+              "feature": "median_vega_1pct",
+              "op": "gt",
+              "threshold": 0.34804999999999997
+            },
+            {
+              "feature": "put_volume_1pct",
+              "op": "le",
+              "threshold": 467934.0
+            }
+          ],
+          "n": 8,
+          "rate": 0.875,
+          "baseline": 0.2033898305084746,
+          "lift": 4.302083333333333,
+          "first_half": {
+            "n": 7,
+            "rate": 1.0
+          },
+          "second_half": {
+            "n": 1,
+            "rate": 0.0
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        },
+        {
+          "rules": [
+            {
+              "feature": "dte_8_10_put_25d_n",
+              "op": "gt",
+              "threshold": 5.0
+            },
+            {
+              "feature": "median_vega_1pct",
+              "op": "gt",
+              "threshold": 0.34804999999999997
+            },
+            {
+              "feature": "dte_1_3_call_volume",
+              "op": "le",
+              "threshold": 336388.0
+            }
+          ],
+          "n": 8,
+          "rate": 0.875,
+          "baseline": 0.2033898305084746,
+          "lift": 4.302083333333333,
+          "first_half": {
+            "n": 7,
+            "rate": 1.0
+          },
+          "second_half": {
+            "n": 1,
+            "rate": 0.0
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        },
+        {
+          "rules": [
+            {
+              "feature": "dte_8_10_put_25d_n",
+              "op": "gt",
+              "threshold": 5.0
+            },
+            {
+              "feature": "median_vega_1pct",
+              "op": "gt",
+              "threshold": 0.34804999999999997
+            },
+            {
+              "feature": "dte_1_3_put_volume",
+              "op": "le",
+              "threshold": 378711.0
+            }
+          ],
+          "n": 8,
+          "rate": 0.875,
+          "baseline": 0.2033898305084746,
+          "lift": 4.302083333333333,
+          "first_half": {
+            "n": 7,
+            "rate": 1.0
+          },
+          "second_half": {
+            "n": 1,
+            "rate": 0.0
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        },
+        {
+          "rules": [
+            {
+              "feature": "dte_8_10_put_25d_n",
+              "op": "gt",
+              "threshold": 5.0
+            },
+            {
+              "feature": "median_vega_1pct",
+              "op": "gt",
+              "threshold": 0.34804999999999997
+            },
+            {
+              "feature": "dte_4_7_call_volume",
+              "op": "le",
+              "threshold": 514123.0
+            }
+          ],
+          "n": 8,
+          "rate": 0.875,
+          "baseline": 0.2033898305084746,
+          "lift": 4.302083333333333,
+          "first_half": {
+            "n": 7,
+            "rate": 1.0
+          },
+          "second_half": {
+            "n": 1,
+            "rate": 0.0
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        },
+        {
+          "rules": [
+            {
+              "feature": "dte_8_10_put_25d_n",
+              "op": "gt",
+              "threshold": 5.0
+            },
+            {
+              "feature": "median_vega_1pct",
+              "op": "gt",
+              "threshold": 0.34804999999999997
+            },
+            {
+              "feature": "dte_4_7_put_volume",
+              "op": "le",
+              "threshold": 315680.0
+            }
+          ],
+          "n": 8,
+          "rate": 0.875,
+          "baseline": 0.2033898305084746,
+          "lift": 4.302083333333333,
+          "first_half": {
+            "n": 7,
+            "rate": 1.0
+          },
+          "second_half": {
+            "n": 1,
+            "rate": 0.0
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        },
+        {
+          "rules": [
+            {
+              "feature": "dte_8_10_put_25d_n",
+              "op": "gt",
+              "threshold": 5.0
+            },
+            {
+              "feature": "median_vega_1pct",
+              "op": "gt",
+              "threshold": 0.34804999999999997
+            },
+            {
+              "feature": "dte_8_10_call_volume",
+              "op": "le",
+              "threshold": 13938.0
+            }
+          ],
+          "n": 8,
+          "rate": 0.875,
+          "baseline": 0.2033898305084746,
+          "lift": 4.302083333333333,
+          "first_half": {
+            "n": 7,
+            "rate": 1.0
+          },
+          "second_half": {
+            "n": 1,
+            "rate": 0.0
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        },
+        {
+          "rules": [
+            {
+              "feature": "dte_8_10_put_25d_n",
+              "op": "gt",
+              "threshold": 5.0
+            },
+            {
+              "feature": "median_vega_1pct",
+              "op": "gt",
+              "threshold": 0.34804999999999997
+            },
+            {
+              "feature": "dte_8_10_put_volume",
+              "op": "le",
+              "threshold": 13303.0
+            }
+          ],
+          "n": 8,
+          "rate": 0.875,
+          "baseline": 0.2033898305084746,
+          "lift": 4.302083333333333,
+          "first_half": {
+            "n": 7,
+            "rate": 1.0
+          },
+          "second_half": {
+            "n": 1,
+            "rate": 0.0
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        },
+        {
+          "rules": [
+            {
+              "feature": "dte_8_10_put_25d_n",
+              "op": "gt",
+              "threshold": 5.0
+            },
+            {
+              "feature": "median_vega_1pct",
+              "op": "gt",
+              "threshold": 0.34804999999999997
+            },
+            {
+              "feature": "minutes_from_us_open",
+              "op": "le",
+              "threshold": 235.1026858
+            }
+          ],
+          "n": 8,
+          "rate": 0.875,
+          "baseline": 0.2033898305084746,
+          "lift": 4.302083333333333,
+          "first_half": {
+            "n": 7,
+            "rate": 1.0
+          },
+          "second_half": {
+            "n": 1,
+            "rate": 0.0
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        },
+        {
+          "rules": [
+            {
+              "feature": "dte_8_10_put_25d_n",
+              "op": "gt",
+              "threshold": 5.0
+            },
+            {
+              "feature": "median_vega_1pct",
+              "op": "gt",
+              "threshold": 0.34804999999999997
+            }
+          ],
+          "n": 9,
+          "rate": 0.7777777777777778,
+          "baseline": 0.2033898305084746,
+          "lift": 3.824074074074074,
+          "first_half": {
+            "n": 7,
+            "rate": 1.0
+          },
+          "second_half": {
+            "n": 2,
+            "rate": 0.0
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        },
+        {
+          "rules": [
+            {
+              "feature": "spy_from_open",
+              "op": "gt",
+              "threshold": -0.001560310375252949
+            },
+            {
+              "feature": "put_volume_1pct",
+              "op": "le",
+              "threshold": 467934.0
+            }
+          ],
+          "n": 8,
+          "rate": 0.75,
+          "baseline": 0.2033898305084746,
+          "lift": 3.6874999999999996,
+          "first_half": {
+            "n": 8,
+            "rate": 0.75
+          },
+          "second_half": {
+            "n": 0,
+            "rate": null
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        },
+        {
+          "rules": [
+            {
+              "feature": "spy_from_open",
+              "op": "gt",
+              "threshold": -0.001560310375252949
+            },
+            {
+              "feature": "dte_1_3_call_volume",
+              "op": "le",
+              "threshold": 336388.0
+            }
+          ],
+          "n": 8,
+          "rate": 0.75,
+          "baseline": 0.2033898305084746,
+          "lift": 3.6874999999999996,
+          "first_half": {
+            "n": 8,
+            "rate": 0.75
+          },
+          "second_half": {
+            "n": 0,
+            "rate": null
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        },
+        {
+          "rules": [
+            {
+              "feature": "spy_from_open",
+              "op": "gt",
+              "threshold": -0.001560310375252949
+            },
+            {
+              "feature": "dte_1_3_put_volume",
+              "op": "le",
+              "threshold": 378711.0
+            }
+          ],
+          "n": 8,
+          "rate": 0.75,
+          "baseline": 0.2033898305084746,
+          "lift": 3.6874999999999996,
+          "first_half": {
+            "n": 8,
+            "rate": 0.75
+          },
+          "second_half": {
+            "n": 0,
+            "rate": null
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        },
+        {
+          "rules": [
+            {
+              "feature": "spy_from_open",
+              "op": "gt",
+              "threshold": -0.001560310375252949
+            },
+            {
+              "feature": "dte_4_7_call_volume",
+              "op": "le",
+              "threshold": 514123.0
+            }
+          ],
+          "n": 8,
+          "rate": 0.75,
+          "baseline": 0.2033898305084746,
+          "lift": 3.6874999999999996,
+          "first_half": {
+            "n": 8,
+            "rate": 0.75
+          },
+          "second_half": {
+            "n": 0,
+            "rate": null
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        },
+        {
+          "rules": [
+            {
+              "feature": "spy_from_open",
+              "op": "gt",
+              "threshold": -0.001560310375252949
+            },
+            {
+              "feature": "dte_4_7_put_volume",
+              "op": "le",
+              "threshold": 315680.0
+            }
+          ],
+          "n": 8,
+          "rate": 0.75,
+          "baseline": 0.2033898305084746,
+          "lift": 3.6874999999999996,
+          "first_half": {
+            "n": 8,
+            "rate": 0.75
+          },
+          "second_half": {
+            "n": 0,
+            "rate": null
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        },
+        {
+          "rules": [
+            {
+              "feature": "spy_from_open",
+              "op": "gt",
+              "threshold": -0.001560310375252949
+            },
+            {
+              "feature": "dte_8_10_call_volume",
+              "op": "le",
+              "threshold": 13938.0
+            }
+          ],
+          "n": 8,
+          "rate": 0.75,
+          "baseline": 0.2033898305084746,
+          "lift": 3.6874999999999996,
+          "first_half": {
+            "n": 8,
+            "rate": 0.75
+          },
+          "second_half": {
+            "n": 0,
+            "rate": null
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        },
+        {
+          "rules": [
+            {
+              "feature": "spy_from_open",
+              "op": "gt",
+              "threshold": -0.001560310375252949
+            },
+            {
+              "feature": "dte_8_10_put_volume",
+              "op": "le",
+              "threshold": 13303.0
+            }
+          ],
+          "n": 8,
+          "rate": 0.75,
+          "baseline": 0.2033898305084746,
+          "lift": 3.6874999999999996,
+          "first_half": {
+            "n": 8,
+            "rate": 0.75
+          },
+          "second_half": {
+            "n": 0,
+            "rate": null
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        },
+        {
+          "rules": [
+            {
+              "feature": "spy_from_open",
+              "op": "gt",
+              "threshold": -0.001560310375252949
+            },
+            {
+              "feature": "minutes_from_us_open",
+              "op": "le",
+              "threshold": 235.1026858
+            }
+          ],
+          "n": 8,
+          "rate": 0.75,
+          "baseline": 0.2033898305084746,
+          "lift": 3.6874999999999996,
+          "first_half": {
+            "n": 8,
+            "rate": 0.75
+          },
+          "second_half": {
+            "n": 0,
+            "rate": null
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        },
+        {
+          "rules": [
+            {
+              "feature": "put_volume_1pct",
+              "op": "le",
+              "threshold": 467934.0
+            },
+            {
+              "feature": "dte_4_7_call_50d_spread_pct",
+              "op": "gt",
+              "threshold": 0.011441430029535602
+            }
+          ],
+          "n": 8,
+          "rate": 0.75,
+          "baseline": 0.2033898305084746,
+          "lift": 3.6874999999999996,
+          "first_half": {
+            "n": 8,
+            "rate": 0.75
+          },
+          "second_half": {
+            "n": 0,
+            "rate": null
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        },
+        {
+          "rules": [
+            {
+              "feature": "dte_1_3_call_volume",
+              "op": "le",
+              "threshold": 336388.0
+            },
+            {
+              "feature": "dte_4_7_call_50d_spread_pct",
+              "op": "gt",
+              "threshold": 0.011441430029535602
+            }
+          ],
+          "n": 8,
+          "rate": 0.75,
+          "baseline": 0.2033898305084746,
+          "lift": 3.6874999999999996,
+          "first_half": {
+            "n": 8,
+            "rate": 0.75
+          },
+          "second_half": {
+            "n": 0,
+            "rate": null
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        },
+        {
+          "rules": [
+            {
+              "feature": "dte_1_3_put_volume",
+              "op": "le",
+              "threshold": 378711.0
+            },
+            {
+              "feature": "dte_4_7_call_50d_spread_pct",
+              "op": "gt",
+              "threshold": 0.011441430029535602
+            }
+          ],
+          "n": 8,
+          "rate": 0.75,
+          "baseline": 0.2033898305084746,
+          "lift": 3.6874999999999996,
+          "first_half": {
+            "n": 8,
+            "rate": 0.75
+          },
+          "second_half": {
+            "n": 0,
+            "rate": null
+          },
+          "temporal_support": false,
+          "min_half_rate": null
+        }
+      ]
+    }
+  }
+}
