@@ -24,6 +24,9 @@ def future(day_rows,i,minutes):
     xs=[r for r in day_rows[i+1:] if target<=r['ts']<=target+timedelta(minutes=6)]
     return xs[0] if xs else None
 
+def horizon_complete(day_rows,i,minutes):
+    return future(day_rows,i,minutes) is not None
+
 def contract_path(entry,day_rows,i,minutes):
     if not entry:return []
     end=day_rows[i]['ts']+timedelta(minutes=minutes)
@@ -56,9 +59,18 @@ def build():
                         rec[f'{side}_ret_{h}m']=pnl['return'] if pnl else None
                 for side in ('call','put'):
                     path=[v for _,v in contract_path(reps.get(side),dr,i,h)]
+                    # Path-based negative labels require full horizon coverage. A partial path
+                    # can prove a first touch, but cannot prove that an untouched level would
+                    # never have been reached before the requested horizon.
                     if path:
-                        rec[f'{side}_mfe_{h}m']=max(path);rec[f'{side}_mae_{h}m']=min(path)
-                        rec.update(option_trade_targets(path,f'{side}_{h}m'))
+                        targets=option_trade_targets(path,f'{side}_{h}m')
+                        touch=targets.get(f'{side}_{h}m_tp10_sl10')
+                        if f or touch in ('TP_FIRST','SL_FIRST'):
+                            rec.update(targets)
+                        if f or max(path)>=.10:
+                            rec[f'{side}_mfe_{h}m']=max(path)
+                        if f:
+                            rec[f'{side}_mae_{h}m']=min(path)
             out.append(rec)
     p=Path('data/processed/intraday/spy_intraday_outcomes_all_days.csv');p.parent.mkdir(parents=True,exist_ok=True)
     fields=sorted({k for r in out for k in r}) if out else []

@@ -1,7 +1,9 @@
 import math
 
 EXCLUDE_PREFIX=('label_','call_ret_','put_ret_','spy_ret_','call_mfe_','put_mfe_','call_mae_','put_mae_')
-EXCLUDE_EXACT={'captured_at_utc','decision_date','source_file','capture_id','active_hypotheses'}
+EXCLUDE_EXACT={'captured_at_utc','decision_date','source_file','capture_id','active_hypotheses',
+ 'p_raw','p_calibrated','p_conservative','activity_pass','o6_decision','direction','decision','signal','prediction','score'}
+EXCLUDE_MODEL_PREFIX=('p_','model_','pred_','prediction_','prob_','decision_','signal_')
 
 def _f(x):
  try:
@@ -17,7 +19,7 @@ def scan_univariate(rows,label,min_n=8):
  if not y:return []
  base=sum(int(r[label]) for r in y)/len(y);features=[]
  for k in y[0]:
-  if k in EXCLUDE_EXACT or k.startswith(EXCLUDE_PREFIX):continue
+  if k in EXCLUDE_EXACT or k.startswith(EXCLUDE_PREFIX) or k.startswith(EXCLUDE_MODEL_PREFIX):continue
   pairs=[(_f(r.get(k)),int(r[label])) for r in y];pairs=[p for p in pairs if p[0] is not None]
   vals=[p[0] for p in pairs]
   if len(vals)<min_n*2 or min(vals)==max(vals):continue

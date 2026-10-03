@@ -1,0 +1,98 @@
+{
+  "version": "v0.1",
+  "status": "EXPLORATORY_ONLY",
+  "candidate": "H03_CALL_RELATIVE_WEAKNESS_REVERSAL_CANDIDATE",
+  "episode_definition": "consecutive activations separated by no more than 6 minutes; first activation is episode entry",
+  "episodes": [
+    {
+      "episode_id": "E1",
+      "start": "2026-10-02T16:30:06.214640+00:00",
+      "end": "2026-10-02T16:30:06.214640+00:00",
+      "activation_count": 1,
+      "duration_minutes": 0,
+      "contract": "SPY261005C00769000",
+      "entry_ask": "2.62",
+      "return": "-0.04961832061068698",
+      "mfe": "0.12213740458015265",
+      "mae": "-0.12213740458015276",
+      "tp_sl": "TP_FIRST",
+      "tp_before_sl": 1
+    },
+    {
+      "episode_id": "E2",
+      "start": "2026-10-02T16:45:06.169076+00:00",
+      "end": "2026-10-02T16:50:06.437440+00:00",
+      "activation_count": 2,
+      "duration_minutes": 5.004472733333333,
+      "contract": "SPY261005C00769000",
+      "entry_ask": "2.64",
+      "return": "-0.07196969696969695",
+      "mfe": "0.11363636363636354",
+      "mae": "-0.1287878787878789",
+      "tp_sl": "TP_FIRST",
+      "tp_before_sl": 1
+    },
+    {
+      "episode_id": "E3",
+      "start": "2026-10-02T17:25:06.161148+00:00",
+      "end": "2026-10-02T17:30:06.149523+00:00",
+      "activation_count": 2,
+      "duration_minutes": 4.999806250000001,
+      "contract": "SPY261005C00769000",
+      "entry_ask": "2.39",
+      "return": "-0.05020920502092055",
+      "mfe": "0.058577405857740406",
+      "mae": "-0.10460251046025104",
+      "tp_sl": "SL_FIRST",
+      "tp_before_sl": 0
+    },
+    {
+      "episode_id": "E4",
+      "start": "2026-10-02T18:25:05.744764+00:00",
+      "end": "2026-10-02T18:25:05.744764+00:00",
+      "activation_count": 1,
+      "duration_minutes": 0,
+      "contract": "SPY261005C00769000",
+      "entry_ask": "2.15",
+      "return": "0.11627906976744186",
+      "mfe": "0.15348837209302335",
+      "mae": "0.018604651162790642",
+      "tp_sl": "TP_FIRST",
+      "tp_before_sl": 1
+    },
+    {
+      "episode_id": "E5",
+      "start": "2026-10-02T18:35:05.626371+00:00",
+      "end": "2026-10-02T18:40:05.791588+00:00",
+      "activation_count": 2,
+      "duration_minutes": 5.002753616666666,
+      "contract": "SPY261005C00769000",
+      "entry_ask": "2.25",
+      "return": "0.1377777777777778",
+      "mfe": "0.13777777777777778",
+      "mae": "-0.026666666666666727",
+      "tp_sl": "TP_FIRST",
+      "tp_before_sl": 1
+    },
+    {
+      "episode_id": "E6",
+      "start": "2026-10-02T19:10:06.094850+00:00",
+      "end": "2026-10-02T19:10:06.094850+00:00",
+      "activation_count": 1,
+      "duration_minutes": 0,
+      "contract": "SPY261005C00769000",
+      "entry_ask": "2.21",
+      "return": "",
+      "mfe": "0.16289592760180982",
+      "mae": "",
+      "tp_sl": "TP_FIRST",
+      "tp_before_sl": 1
+    }
+  ],
+  "summary": {
+    "n_episodes": 6,
+    "tp_sl_decided": 6,
+    "tp_first": 5,
+    "tp_before_sl_rate": 0.8333333333333334
+  }
+}

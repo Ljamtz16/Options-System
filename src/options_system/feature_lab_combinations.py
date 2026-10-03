@@ -8,7 +8,7 @@ def applies(r,c):
  return v is not None and (v<=c['threshold'] if c['op']=='le' else v>c['threshold'])
 
 def temporal_stats(rows,label,conds):
- eligible=[r for r in rows if r.get(label) not in (None,'')]
+ eligible=sorted([r for r in rows if r.get(label) not in (None,'')],key=lambda r:r.get('captured_at_utc',''))
  hit=[r for r in eligible if all(applies(r,c) for c in conds)]
  if not hit:return None
  hit=sorted(hit,key=lambda r:r.get('captured_at_utc',''))

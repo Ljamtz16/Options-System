@@ -1,6 +1,7 @@
 import csv,json
 from pathlib import Path
-from datetime import datetime,date
+from datetime import datetime,date,time
+from zoneinfo import ZoneInfo
 from options_system.intraday_contracts import representative_contracts
 
 def _f(x):
@@ -18,8 +19,10 @@ def build_feature_lab(state_rows,outcome_rows,raw_dir):
     for s in state_rows:
         x=dict(s);o=out_by_ts.get(s['captured_at_utc'],{});x.update(o)
         ts=datetime.fromisoformat(s['captured_at_utc']);x['utc_hour']=ts.hour;x['utc_minute']=ts.minute
-        first=ts.replace(hour=13,minute=30,second=0,microsecond=0)
-        x['minutes_from_us_open']=(ts-first).total_seconds()/60
+        ny=ZoneInfo('America/New_York');utc=ZoneInfo('UTC')
+        local_day=ts.astimezone(ny).date()
+        first=datetime.combine(local_day,time(9,30),tzinfo=ny).astimezone(utc)
+        x['minutes_from_us_open']=(ts.astimezone(utc)-first).total_seconds()/60
         reps=representative_contracts(chain_by_ts.get(s['captured_at_utc'],{}),date.fromisoformat(s['decision_date']))
         for side in ('call','put'):
             r=reps.get(side) or {};bid=_f(r.get('bid'));ask=_f(r.get('ask'))

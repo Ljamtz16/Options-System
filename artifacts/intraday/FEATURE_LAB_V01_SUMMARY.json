@@ -7,64 +7,64 @@
   ],
   "events": {
     "label_call_mfe10_15m": {
-      "n": 59,
+      "n": 56,
       "positive": 13,
-      "rate": 0.22033898305084745
+      "rate": 0.23214285714285715
     },
     "label_call_tp10_before_sl10_15m": {
-      "n": 59,
+      "n": 56,
       "positive": 10,
-      "rate": 0.1694915254237288
+      "rate": 0.17857142857142858
     },
     "label_call_mfe10_30m": {
-      "n": 59,
+      "n": 52,
       "positive": 17,
-      "rate": 0.288135593220339
+      "rate": 0.3269230769230769
     },
     "label_call_tp10_before_sl10_30m": {
-      "n": 59,
+      "n": 53,
       "positive": 13,
-      "rate": 0.22033898305084745
+      "rate": 0.24528301886792453
     },
     "label_call_mfe10_60m": {
-      "n": 59,
+      "n": 49,
       "positive": 20,
-      "rate": 0.3389830508474576
+      "rate": 0.40816326530612246
     },
     "label_call_tp10_before_sl10_60m": {
-      "n": 59,
+      "n": 50,
       "positive": 14,
-      "rate": 0.23728813559322035
+      "rate": 0.28
     },
     "label_put_mfe10_15m": {
-      "n": 59,
+      "n": 55,
       "positive": 12,
-      "rate": 0.2033898305084746
+      "rate": 0.21818181818181817
     },
     "label_put_tp10_before_sl10_15m": {
-      "n": 59,
+      "n": 56,
       "positive": 12,
-      "rate": 0.2033898305084746
+      "rate": 0.21428571428571427
     },
     "label_put_mfe10_30m": {
-      "n": 59,
+      "n": 53,
       "positive": 16,
-      "rate": 0.2711864406779661
+      "rate": 0.3018867924528302
     },
     "label_put_tp10_before_sl10_30m": {
-      "n": 59,
+      "n": 55,
       "positive": 16,
-      "rate": 0.2711864406779661
+      "rate": 0.2909090909090909
     },
     "label_put_mfe10_60m": {
-      "n": 59,
+      "n": 47,
       "positive": 18,
-      "rate": 0.3050847457627119
+      "rate": 0.3829787234042553
     },
     "label_put_tp10_before_sl10_60m": {
-      "n": 59,
+      "n": 55,
       "positive": 16,
-      "rate": 0.2711864406779661
+      "rate": 0.2909090909090909
     }
   }
 }

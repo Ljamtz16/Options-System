@@ -55,3 +55,19 @@ No H04 PUT candidate is promoted at this stage: the strongest PUT combinations h
 events in the second half of the discovery session.
 
 H03 remains `NOT_FROZEN` and is not connected to the prospective tracker.
+
+## Auditoría de censura y episodios — 2026-10-03
+
+Se corrigió el tratamiento de horizontes incompletos cerca del cierre. Un camino parcial ya no puede demostrar un resultado negativo por ausencia de evento. Un TP_FIRST o SL_FIRST ya observado conserva validez; MFE >= +10% ya observado también conserva el positivo. NEITHER y MFE < +10% requieren cobertura completa del horizonte.
+
+Después de la corrección, CALL TP10-before-SL10 a 60m pasa de 59 observaciones aparentes a 50 observables. Los 14 positivos no cambian, por lo que el baseline descriptivo de la sesión cambia de 23.73% a 28.00%.
+
+La regla H03 original NO fue reajustada:
+- IWM from open <= -0.003338055604745982
+- SPY from open <= -0.002140966419266088
+
+Sigue produciendo 9 activaciones y 7/9 TP-first entre esas activaciones. Para reducir pseudo-replicación, las activaciones se agrupan en episodios cuando la separación entre activaciones consecutivas es <= 6 minutos. Esto produce 6 episodios. Usando exclusivamente la primera activación como entrada del episodio, 5/6 tuvieron TP +10% antes que SL -10% en la sesión diagnóstica del 2026-10-02.
+
+Este 5/6 (83.3%) NO es una estimación prospectiva ni una expectativa de rentabilidad: procede de un único día usado para descubrimiento. H03 permanece EXPLORATORY_ONLY / NOT_FROZEN.
+
+También se corrigió minutes_from_us_open para calcular 09:30 America/New_York de forma timezone-aware y se excluyeron explícitamente outputs de modelos/decisiones previas del escáner de predictores.
