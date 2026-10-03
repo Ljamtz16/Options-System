@@ -52,3 +52,11 @@ def test_all_dashboard_assets_have_no_tool_metadata():
    code=p.read_text(encoding='utf-8')
    assert '[Reading ' not in code, p.name
    assert '[executed on device:' not in code, p.name
+
+def test_episodes_has_own_tabpage_without_special_click_handler():
+ r=Path(__file__).resolve().parents[1]
+ code=(r/'artifacts/intraday/research_dashboard_tabs.js').read_text(encoding='utf-8')
+ assert "const episodes=make('episodes','')" in code
+ assert 'episodes.appendChild(aside)' in code
+ assert 'episodes.appendChild(compare)' in code
+ assert "querySelector('[data-tab=\"episodes\"]').onclick" not in code
