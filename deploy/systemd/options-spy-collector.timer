@@ -1,11 +1,10 @@
 [Unit]
-Description=Run SPY prospective collector every 5 minutes
+Description=Run SPY prospective collector every 5 minutes during US market window
 
 [Timer]
-OnBootSec=3min
-OnUnitActiveSec=5min
+OnCalendar=Mon..Fri *-*-* 09..16:00/5 America/New_York
 AccuracySec=10s
-Persistent=true
+Persistent=false
 Unit=options-spy-collector.service
 
 [Install]

@@ -1,0 +1,75 @@
+{
+  "version": "v0.2",
+  "frozen_at": "2026-10-02",
+  "pre_freeze_diagnostic": {
+    "CALL_FLOW_REVERSAL_V01": {
+      "n": 9,
+      "mean_return": 0.02102635888942148,
+      "win_rate": 0.4444444444444444,
+      "gt10_rate": 0.4444444444444444,
+      "ltm10_rate": 0.2222222222222222,
+      "mean_mfe": 0.08835457120556742,
+      "mean_mae": -0.12007576432142544,
+      "tp10_before_sl10_rate": 0.42857142857142855,
+      "tp10_sl10_decided_n": 7
+    },
+    "PUT_SKEW_SHORT_V01": {
+      "n": 22,
+      "mean_return": 0.030767906451754427,
+      "win_rate": 0.4090909090909091,
+      "gt10_rate": 0.18181818181818182,
+      "ltm10_rate": 0.13636363636363635,
+      "mean_mfe": 0.09890996232568873,
+      "mean_mae": -0.02805880131949962,
+      "tp10_before_sl10_rate": 0.5454545454545454,
+      "tp10_sl10_decided_n": 11
+    },
+    "H03_CALL_RELATIVE_WEAKNESS_REVERSAL_V01": {
+      "n": 8,
+      "mean_return": 0.024347912398292412,
+      "win_rate": 0.375,
+      "gt10_rate": 0.375,
+      "ltm10_rate": 0.0,
+      "mean_mfe": 0.12468434217062135,
+      "mean_mae": -0.06734317286565406,
+      "tp10_before_sl10_rate": 0.8571428571428571,
+      "tp10_sl10_decided_n": 7
+    }
+  },
+  "prospective_only": {
+    "CALL_FLOW_REVERSAL_V01": {
+      "n": 0,
+      "mean_return": null,
+      "win_rate": null,
+      "gt10_rate": null,
+      "ltm10_rate": null,
+      "mean_mfe": null,
+      "mean_mae": null,
+      "tp10_before_sl10_rate": null,
+      "tp10_sl10_decided_n": 0
+    },
+    "PUT_SKEW_SHORT_V01": {
+      "n": 0,
+      "mean_return": null,
+      "win_rate": null,
+      "gt10_rate": null,
+      "ltm10_rate": null,
+      "mean_mfe": null,
+      "mean_mae": null,
+      "tp10_before_sl10_rate": null,
+      "tp10_sl10_decided_n": 0
+    },
+    "H03_CALL_RELATIVE_WEAKNESS_REVERSAL_V01": {
+      "n": 0,
+      "mean_return": null,
+      "win_rate": null,
+      "gt10_rate": null,
+      "ltm10_rate": null,
+      "mean_mfe": null,
+      "mean_mae": null,
+      "tp10_before_sl10_rate": null,
+      "tp10_sl10_decided_n": 0
+    }
+  },
+  "prospective_rows": 0
+}

@@ -3,7 +3,7 @@ from pathlib import Path
 
 R=Path(__file__).resolve().parents[1]
 A=R/'artifacts/intraday'
-frozen=json.loads((A/'FROZEN_HYPOTHESES_V01.json').read_text(encoding='utf-8'))
+frozen=json.loads((A/'FROZEN_HYPOTHESES_V02.json').read_text(encoding='utf-8'))
 candidates=json.loads((A/'EXPLORATORY_HYPOTHESIS_CANDIDATES_V02.json').read_text(encoding='utf-8'))
 combos=json.loads((A/'FEATURE_LAB_COMBINATIONS_V01.json').read_text(encoding='utf-8'))
 eval_path=A/'EXPLORATORY_CANDIDATE_PROSPECTIVE_EVAL_V01.json'
@@ -11,7 +11,11 @@ evaluation=json.loads(eval_path.read_text(encoding='utf-8')) if eval_path.exists
 hypotheses=[]
 for h in frozen['hypotheses']:
     hypotheses.append({'id':h['id'],'side':h['side'].upper(),'horizon_min':h['horizon_min'],'status':'FROZEN · PROSPECTIVE','kind':'frozen','rules':h['rules']})
+frozen_source_candidates = {h.get('source_candidate') for h in frozen['hypotheses'] if h.get('source_candidate')}
+frozen_ids = {h['id'] for h in frozen['hypotheses']}
 for h in candidates['candidates']:
+    if h['id'] in frozen_ids or h['id'] in frozen_source_candidates:
+        continue
     hypotheses.append({'id':h['id'],'side':h['side'].upper(),'horizon_min':h['horizon_min'],'status':'EXPLORATORY · NOT FROZEN','kind':'candidate','rules':h['rules'],'discovery_snapshot':h.get('discovery_snapshot'),'discovery_episode':h.get('discovery_episode')})
 discovery={}
 for label,payload in combos['labels'].items():

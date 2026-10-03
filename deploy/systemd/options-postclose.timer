@@ -1,8 +1,9 @@
 [Unit]
-Description=Run Options System post-close pipeline daily
+Description=Run Options System post-close pipeline
 
 [Timer]
-OnCalendar=*-*-* 23:30:00 UTC
+OnCalendar=Mon..Fri *-*-* 18:30:00 America/New_York
+AccuracySec=1min
 Persistent=true
 Unit=options-postclose.service
 

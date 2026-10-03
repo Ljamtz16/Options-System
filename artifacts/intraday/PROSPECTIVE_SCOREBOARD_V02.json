@@ -1,0 +1,42 @@
+{
+  "version": "v0.2",
+  "frozen_at": "2026-10-02",
+  "review_days": [
+    5,
+    10,
+    20,
+    30
+  ],
+  "hypotheses": {
+    "CALL_FLOW_REVERSAL_V01": {
+      "prospective_days": 0,
+      "activated_days": 0,
+      "activations": 0,
+      "mean_daily_return": null,
+      "positive_days": 0,
+      "tp10_before_sl10_rate": null,
+      "status": "INSUFFICIENT_SAMPLE",
+      "next_review_day": 5
+    },
+    "PUT_SKEW_SHORT_V01": {
+      "prospective_days": 0,
+      "activated_days": 0,
+      "activations": 0,
+      "mean_daily_return": null,
+      "positive_days": 0,
+      "tp10_before_sl10_rate": null,
+      "status": "INSUFFICIENT_SAMPLE",
+      "next_review_day": 5
+    },
+    "H03_CALL_RELATIVE_WEAKNESS_REVERSAL_V01": {
+      "prospective_days": 0,
+      "activated_days": 0,
+      "activations": 0,
+      "mean_daily_return": null,
+      "positive_days": 0,
+      "tp10_before_sl10_rate": null,
+      "status": "INSUFFICIENT_SAMPLE",
+      "next_review_day": 5
+    }
+  }
+}

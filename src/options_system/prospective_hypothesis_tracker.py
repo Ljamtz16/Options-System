@@ -8,9 +8,33 @@ def _f(x):
 def load_hypotheses(path):
     return json.loads(Path(path).read_text(encoding="utf-8"))["hypotheses"]
 
+def _compare(v, op, t):
+    if op in (">", "gt"):
+        return v > t
+    if op in (">=", "gte"):
+        return v >= t
+    if op in ("<", "lt"):
+        return v < t
+    if op in ("<=", "lte"):
+        return v <= t
+    if op in ("==", "eq"):
+        return v == t
+    raise ValueError(f"Unsupported rule op: {op}")
+
 def hypothesis_active(h,row):
     r=h["rules"]
     checks=[]
+
+    # Generic rule format used by frozen candidates promoted from discovery:
+    # [{"feature": "iwm_from_open", "op": "<=", "value": -0.0033}, ...]
+    if isinstance(r, list):
+        for rule in r:
+            v=_f(row.get(rule["feature"]))
+            t=float(rule["value"])
+            checks.append(v is not None and _compare(v, rule["op"], t))
+        return all(checks)
+
+    # Legacy fixed-key format used by H01/H02.
     mapping={
       "d_atm_iv_prev_gt":("d_atm_iv_prev",lambda v,t:v>t),
       "d_put_call_iv_skew_prev_lt":("d_put_call_iv_skew_prev",lambda v,t:v<t),
