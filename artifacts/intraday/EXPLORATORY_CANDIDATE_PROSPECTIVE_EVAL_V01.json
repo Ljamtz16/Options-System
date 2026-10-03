@@ -1,0 +1,28 @@
+{
+  "version": "v0.1",
+  "status": "PROSPECTIVE_EVALUATION_ONLY",
+  "exclude_through": "2026-10-02",
+  "candidates": {
+    "H03_CALL_RELATIVE_WEAKNESS_REVERSAL_CANDIDATE": {
+      "days": [],
+      "prospective_days": 0,
+      "episodes": 0,
+      "decided": 0,
+      "tp_first": 0
+    },
+    "H04_CALL_CROSSMARKET_WEAKNESS_CANDIDATE": {
+      "days": [],
+      "prospective_days": 0,
+      "episodes": 0,
+      "decided": 0,
+      "tp_first": 0
+    },
+    "H05_PUT_CROSSMARKET_MOMENTUM_CANDIDATE": {
+      "days": [],
+      "prospective_days": 0,
+      "episodes": 0,
+      "decided": 0,
+      "tp_first": 0
+    }
+  }
+}

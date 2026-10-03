@@ -1,0 +1,40 @@
+{
+  "version": "v0.2",
+  "status": "EXPLORATORY_ONLY",
+  "source_session": "2026-10-02",
+  "methodology_note": "Candidates are recorded after censoring-aware label audit. They are not frozen, not connected to prospective tracking, and must not be tuned on future validation sessions.",
+  "candidates": [
+    {
+      "id": "H03_CALL_RELATIVE_WEAKNESS_REVERSAL_CANDIDATE",
+      "side": "call", "horizon_min": 60, "target": "TP10_BEFORE_SL10",
+      "rules": [
+        {"feature": "iwm_from_open", "op": "<=", "value": -0.003338055604745982},
+        {"feature": "spy_from_open", "op": "<=", "value": -0.002140966419266088}
+      ],
+      "discovery_snapshot": {"activations": 9, "tp_first": 7, "rate": 0.7777777777777778},
+      "discovery_episode": {"episodes": 6, "tp_sl_decided": 6, "tp_first": 5, "rate": 0.8333333333333334},
+      "promotion": "NOT_FROZEN"
+    },
+    {
+      "id": "H04_CALL_CROSSMARKET_WEAKNESS_CANDIDATE",
+      "side": "call", "horizon_min": 60, "target": "TP10_BEFORE_SL10",
+      "rules": [
+        {"feature": "d_spot_since_first", "op": "<=", "value": -1.8625000000000114},
+        {"feature": "iwm_minus_spy_from_open", "op": "<=", "value": -0.0010563487710916197}
+      ],
+      "discovery_snapshot": {"n": 10, "event_rate": 0.8, "baseline": 0.28, "lift": 2.857142857142857, "first_half_rate": 1.0, "second_half_rate": 0.6666666666666666},
+      "promotion": "NOT_FROZEN"
+    },
+    {
+      "id": "H05_PUT_CROSSMARKET_MOMENTUM_CANDIDATE",
+      "side": "put", "horizon_min": 15, "target": "TP10_BEFORE_SL10",
+      "rules": [
+        {"feature": "d_iwm_from_open_prev", "op": ">", "value": 0.0004072959093324169},
+        {"feature": "d_spy_from_open_prev", "op": ">", "value": 0.00034709607100230633}
+      ],
+      "discovery_snapshot": {"n": 8, "event_rate": 0.625, "baseline": 0.21428571428571427, "lift": 2.916666666666667, "first_half_rate": 0.8, "second_half_rate": 0.3333333333333333},
+      "promotion": "NOT_FROZEN"
+    }
+  ],
+  "warning": "All candidates were discovered on one diagnostic session. None is validated evidence or a trading rule."
+}

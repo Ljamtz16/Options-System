@@ -19,3 +19,16 @@ def test_episode_comparator_asset_is_loadable():
  assert 'toggleEpisodeCompare' in code
  assert 'refreshEpisodeComparison' in code
  assert 'EP_COMPARE_SELECTED' in code
+
+def test_research_dashboard_tabs_and_meta_exist():
+ r=Path(__file__).resolve().parents[1]
+ a=r/'artifacts/intraday'
+ html=(a/'intraday_research_dashboard.html').read_text(encoding='utf-8')
+ assert 'research_dashboard_meta.js' in html
+ assert 'research_dashboard_tabs.js' in html
+ tabs=(a/'research_dashboard_tabs.js').read_text(encoding='utf-8')
+ for label in ('Sesión intradía','Episodios','Hipótesis','Validación prospectiva','Discovery Lab'):
+  assert label in tabs
+ meta=(a/'research_dashboard_meta.js').read_text(encoding='utf-8')
+ for hid in ('CALL_FLOW_REVERSAL_V01','PUT_SKEW_SHORT_V01','H03_CALL_RELATIVE_WEAKNESS_REVERSAL_CANDIDATE','H04_CALL_CROSSMARKET_WEAKNESS_CANDIDATE','H05_PUT_CROSSMARKET_MOMENTUM_CANDIDATE'):
+  assert hid in meta
