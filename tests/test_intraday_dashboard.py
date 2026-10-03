@@ -38,3 +38,8 @@ def test_research_tabs_asset_has_no_tool_metadata():
  code=(r/'artifacts/intraday/research_dashboard_tabs.js').read_text(encoding='utf-8')
  assert '[Reading ' not in code
  assert '[executed on device:' not in code
+
+def test_research_tab_pages_are_explicitly_shown():
+ r=Path(__file__).resolve().parents[1]
+ code=(r/'artifacts/intraday/research_dashboard_tabs.js').read_text(encoding='utf-8')
+ assert "x.classList.contains('tabpage')?'block':''" in code
