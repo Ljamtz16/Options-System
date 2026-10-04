@@ -57,6 +57,7 @@ def simulate_strategy(episodes, strategy, initial_cash=1000.0, name="strategy"):
             "cash_before_trade": before,
             "contracts": contracts,
             "capital_deployed": deployed,
+            "capital_utilization_pct": (deployed / before) if before > 0 else 0.0,
             "trade_gross_pnl": gross,
             "trade_fees": fees,
             "trade_net_pnl": net,
@@ -66,6 +67,16 @@ def simulate_strategy(episodes, strategy, initial_cash=1000.0, name="strategy"):
     executed = [x for x in ledger if x["sizing_status"] == "EXECUTED"]
     wins = sum(x["trade_net_pnl"] > 0 for x in executed)
     losses = sum(x["trade_net_pnl"] < 0 for x in executed)
+    pnls = [x["trade_net_pnl"] for x in executed]
+    utilizations = [x["capital_utilization_pct"] for x in executed]
+    gross_profit = sum(x for x in pnls if x > 0)
+    gross_loss = -sum(x for x in pnls if x < 0)
+    max_loss_streak = streak = 0
+    for x in pnls:
+        streak = streak + 1 if x < 0 else 0
+        max_loss_streak = max(max_loss_streak, streak)
+    max_utilization = max(utilizations, default=0.0)
+    risk_band = "NO_DATA" if not executed else ("LOW" if max_utilization <= .25 else "MODERATE" if max_utilization <= .50 else "HIGH" if max_utilization <= .75 else "VERY_HIGH")
     return {
         "strategy": name,
         "initial_cash": float(initial_cash),
@@ -78,6 +89,14 @@ def simulate_strategy(episodes, strategy, initial_cash=1000.0, name="strategy"):
         "losses": losses,
         "win_rate": wins / len(executed) if executed else None,
         "max_contracts": max((x["contracts"] for x in ledger), default=0),
+        "avg_capital_utilization_pct": sum(utilizations) / len(utilizations) if utilizations else 0.0,
+        "max_capital_utilization_pct": max_utilization,
+        "largest_win": max(pnls, default=0.0),
+        "largest_loss": min(pnls, default=0.0),
+        "expectancy_per_trade": sum(pnls) / len(pnls) if pnls else None,
+        "profit_factor": (gross_profit / gross_loss) if gross_loss > 0 else (None if gross_profit == 0 else "INF"),
+        "max_consecutive_losses": max_loss_streak,
+        "risk_band": risk_band,
         "ledger": ledger,
     }
 

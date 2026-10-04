@@ -17,6 +17,14 @@
       "losses": 0,
       "win_rate": null,
       "max_contracts": 0,
+      "avg_capital_utilization_pct": 0.0,
+      "max_capital_utilization_pct": 0.0,
+      "largest_win": 0.0,
+      "largest_loss": 0.0,
+      "expectancy_per_trade": null,
+      "profit_factor": null,
+      "max_consecutive_losses": 0,
+      "risk_band": "NO_DATA",
       "ledger": []
     },
     "pct_20": {
@@ -31,6 +39,14 @@
       "losses": 0,
       "win_rate": null,
       "max_contracts": 0,
+      "avg_capital_utilization_pct": 0.0,
+      "max_capital_utilization_pct": 0.0,
+      "largest_win": 0.0,
+      "largest_loss": 0.0,
+      "expectancy_per_trade": null,
+      "profit_factor": null,
+      "max_consecutive_losses": 0,
+      "risk_band": "NO_DATA",
       "ledger": []
     },
     "pct_40": {
@@ -45,6 +61,14 @@
       "losses": 0,
       "win_rate": null,
       "max_contracts": 0,
+      "avg_capital_utilization_pct": 0.0,
+      "max_capital_utilization_pct": 0.0,
+      "largest_win": 0.0,
+      "largest_loss": 0.0,
+      "expectancy_per_trade": null,
+      "profit_factor": null,
+      "max_consecutive_losses": 0,
+      "risk_band": "NO_DATA",
       "ledger": []
     },
     "pct_60": {
@@ -59,6 +83,14 @@
       "losses": 0,
       "win_rate": null,
       "max_contracts": 0,
+      "avg_capital_utilization_pct": 0.0,
+      "max_capital_utilization_pct": 0.0,
+      "largest_win": 0.0,
+      "largest_loss": 0.0,
+      "expectancy_per_trade": null,
+      "profit_factor": null,
+      "max_consecutive_losses": 0,
+      "risk_band": "NO_DATA",
       "ledger": []
     },
     "pct_80": {
@@ -73,6 +105,14 @@
       "losses": 0,
       "win_rate": null,
       "max_contracts": 0,
+      "avg_capital_utilization_pct": 0.0,
+      "max_capital_utilization_pct": 0.0,
+      "largest_win": 0.0,
+      "largest_loss": 0.0,
+      "expectancy_per_trade": null,
+      "profit_factor": null,
+      "max_consecutive_losses": 0,
+      "risk_band": "NO_DATA",
       "ledger": []
     }
   }

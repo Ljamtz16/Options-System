@@ -58,3 +58,32 @@ def test_comparison_has_all_governed_strategies():
     assert set(c["strategies"]) == {"fixed_1_contract","pct_20","pct_40","pct_60","pct_80"}
     assert c["scientific_evidence"] is False
     assert all(v["final_cash"] == 1000 for v in c["strategies"].values())
+
+
+def test_risk_metrics_and_loss_streak():
+    episodes=[ep("2026-10-05","2026-10-05T14:00:00+00:00",1,.10),
+              ep("2026-10-05","2026-10-05T15:00:00+00:00",1,-.10,"SL_FIRST"),
+              ep("2026-10-05","2026-10-05T16:00:00+00:00",1,-.10,"SL_FIRST")]
+    sim=simulate_strategy(episodes,{"mode":"fixed","contracts":1},1000)
+    assert sim["executed_trades"] == 3
+    assert sim["max_consecutive_losses"] == 2
+    assert sim["largest_win"] > 0
+    assert sim["largest_loss"] < 0
+    assert sim["expectancy_per_trade"] == pytest.approx(sim["net_pnl"]/3)
+    assert sim["profit_factor"] > 0
+    assert sim["max_capital_utilization_pct"] > 0
+    assert sim["risk_band"] == "LOW"
+
+def test_percentage_risk_band_reflects_actual_integer_contract_exposure():
+    sim=simulate_strategy([ep("2026-10-05","2026-10-05T14:00:00+00:00",2.5,.10)],
+                          {"mode":"pct","fraction":.80},1000)
+    assert sim["ledger"][0]["capital_utilization_pct"] == pytest.approx(.75)
+    assert sim["max_capital_utilization_pct"] == pytest.approx(.75)
+    assert sim["risk_band"] == "HIGH"
+
+def test_empty_strategy_risk_metrics_are_neutral():
+    sim=simulate_strategy([],{"mode":"pct","fraction":.80},1000)
+    assert sim["risk_band"] == "NO_DATA"
+    assert sim["max_capital_utilization_pct"] == 0
+    assert sim["expectancy_per_trade"] is None
+    assert sim["profit_factor"] is None
