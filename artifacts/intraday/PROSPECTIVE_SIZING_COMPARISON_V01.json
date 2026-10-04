@@ -1,0 +1,79 @@
+{
+  "version": "v0.1",
+  "do_not_use_as_hypothesis_evidence": true,
+  "initial_cash": 1000.0,
+  "scientific_evidence": false,
+  "purpose": "execution_and_risk_simulation_only",
+  "strategies": {
+    "fixed_1_contract": {
+      "strategy": "fixed_1_contract",
+      "initial_cash": 1000.0,
+      "final_cash": 1000.0,
+      "net_pnl": 0.0,
+      "return_pct": 0.0,
+      "max_drawdown_pct": 0.0,
+      "executed_trades": 0,
+      "wins": 0,
+      "losses": 0,
+      "win_rate": null,
+      "max_contracts": 0,
+      "ledger": []
+    },
+    "pct_20": {
+      "strategy": "pct_20",
+      "initial_cash": 1000.0,
+      "final_cash": 1000.0,
+      "net_pnl": 0.0,
+      "return_pct": 0.0,
+      "max_drawdown_pct": 0.0,
+      "executed_trades": 0,
+      "wins": 0,
+      "losses": 0,
+      "win_rate": null,
+      "max_contracts": 0,
+      "ledger": []
+    },
+    "pct_40": {
+      "strategy": "pct_40",
+      "initial_cash": 1000.0,
+      "final_cash": 1000.0,
+      "net_pnl": 0.0,
+      "return_pct": 0.0,
+      "max_drawdown_pct": 0.0,
+      "executed_trades": 0,
+      "wins": 0,
+      "losses": 0,
+      "win_rate": null,
+      "max_contracts": 0,
+      "ledger": []
+    },
+    "pct_60": {
+      "strategy": "pct_60",
+      "initial_cash": 1000.0,
+      "final_cash": 1000.0,
+      "net_pnl": 0.0,
+      "return_pct": 0.0,
+      "max_drawdown_pct": 0.0,
+      "executed_trades": 0,
+      "wins": 0,
+      "losses": 0,
+      "win_rate": null,
+      "max_contracts": 0,
+      "ledger": []
+    },
+    "pct_80": {
+      "strategy": "pct_80",
+      "initial_cash": 1000.0,
+      "final_cash": 1000.0,
+      "net_pnl": 0.0,
+      "return_pct": 0.0,
+      "max_drawdown_pct": 0.0,
+      "executed_trades": 0,
+      "wins": 0,
+      "losses": 0,
+      "win_rate": null,
+      "max_contracts": 0,
+      "ledger": []
+    }
+  }
+}

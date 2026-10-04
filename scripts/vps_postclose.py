@@ -14,7 +14,9 @@ TASKS=(
     "scripts/build_spy_intraday_outcomes_all_days.py",
     "scripts/track_frozen_hypotheses.py",
     "scripts/hypothesis_daily_report.py",
+    "scripts/build_prospective_sizing_comparison.py",
     "scripts/build_prospective_governance.py",
+    "scripts/build_research_dashboard_meta.py",
 )
 
 OPTIONAL_INPUTS={
