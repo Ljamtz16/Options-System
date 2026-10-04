@@ -1,0 +1,32 @@
+{
+  "version": "v0.1",
+  "scientific_evidence": false,
+  "purpose": "prospective_position_sizing_governance_only",
+  "status": "ACTIVE",
+  "allowed_max_fraction": 0.2,
+  "recommended_strategy": "pct_20",
+  "evidence": {
+    "executed_trades": 0,
+    "decided_episodes": 0,
+    "tier": "BOOTSTRAP",
+    "max_fraction": 0.2
+  },
+  "stress": {
+    "max_fraction": 0.4,
+    "reason": "WITHIN_STRESS_DRAWDOWN_LIMIT",
+    "worst_drawdown": 0.13533000000000003,
+    "worst_drawdown_by_fraction": {
+      "pct_20": 0.0,
+      "pct_40": 0.13533000000000003,
+      "pct_60": 0.22587000000000024,
+      "pct_80": 0.3156600000000001
+    },
+    "max_allowed_drawdown": 0.2
+  },
+  "rules": {
+    "no_leverage": true,
+    "whole_contracts_only": true,
+    "cannot_override_frozen_hypothesis": true,
+    "diagnostic_history_does_not_unlock_sizing": true
+  }
+}

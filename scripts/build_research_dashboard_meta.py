@@ -21,6 +21,10 @@ stress_path=A/'PROSPECTIVE_STRESS_TEST_V01.json'
 stress=json.loads(stress_path.read_text(encoding='utf-8')) if stress_path.exists() else {
     'scientific_evidence':False,'purpose':'deterministic_execution_risk_stress_testing_only','scenarios':{}
 }
+gate_path=A/'PROSPECTIVE_RISK_GATE_V01.json'
+gate=json.loads(gate_path.read_text(encoding='utf-8')) if gate_path.exists() else {
+    'status':'UNKNOWN','allowed_max_fraction':0,'recommended_strategy':'NO_TRADE'
+}
 hypotheses=[]
 for h in frozen['hypotheses']:
     hypotheses.append({'id':h['id'],'side':h['side'].upper(),'horizon_min':h['horizon_min'],
@@ -37,7 +41,7 @@ discovery={}
 for label,payload in combos['labels'].items():
     discovery[label]={'top_stable':payload.get('top_stable',[])[:5]}
 meta={'discovery_session':'2026-10-02','hypotheses':hypotheses,
-      'prospective':evaluation.get('candidates',{}),'prospective_validation':daily,'sizing_simulation':sizing,'stress_testing':stress,'discovery':discovery}
+      'prospective':evaluation.get('candidates',{}),'prospective_validation':daily,'sizing_simulation':sizing,'stress_testing':stress,'risk_gate':gate,'discovery':discovery}
 raw=json.dumps(meta,separators=(',',':'))
 (A/'research_dashboard_meta.json').write_text(raw,encoding='utf-8')
 (A/'research_dashboard_meta.js').write_text('window.RESEARCH_META='+raw+';',encoding='utf-8')
