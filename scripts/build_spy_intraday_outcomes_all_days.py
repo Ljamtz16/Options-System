@@ -49,7 +49,10 @@ def build():
             for side in ('call','put'):
                 e=reps.get(side)
                 rec[f'{side}_contract']=e['symbol'] if e else None
+                rec[f'{side}_entry_bid']=e['bid'] if e else None
                 rec[f'{side}_entry_ask']=e['ask'] if e else None
+                rec[f'{side}_entry_bid_size']=e.get('bid_size') if e else None
+                rec[f'{side}_entry_ask_size']=e.get('ask_size') if e else None
             for h in HORIZONS:
                 f=future(dr,i,h)
                 if f:

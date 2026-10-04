@@ -25,7 +25,9 @@ def build_episodes(rows,hypothesis):
         episodes.append({"hypothesis":hid,"episode_id":f"{hid}:{g['decision_date']}:E{i}",
           "decision_date":g["decision_date"],"start":entry.get("captured_at_utc"),"end":g["rows"][-1].get("captured_at_utc"),
           "activation_count":len(g["rows"]),"side":side,"horizon_min":hz,"contract":entry.get(f"{side}_contract"),
-          "entry_ask":entry.get(f"{side}_entry_ask"),"return":entry.get(f"{side}_ret_{hz}m"),
+          "entry_bid":entry.get(f"{side}_entry_bid"),"entry_ask":entry.get(f"{side}_entry_ask"),
+          "entry_bid_size":entry.get(f"{side}_entry_bid_size"),"entry_ask_size":entry.get(f"{side}_entry_ask_size"),
+          "return":entry.get(f"{side}_ret_{hz}m"),
           "mfe":entry.get(f"{side}_mfe_{hz}m"),"mae":entry.get(f"{side}_mae_{hz}m"),"tp_sl":touch,
           "exit_return":exit_return,"trade_1_contract":trade})
     return episodes

@@ -1,0 +1,14 @@
+{
+  "version": "v0.1",
+  "scientific_evidence": false,
+  "purpose": "contract_execution_quality_governance_only",
+  "cash_reference": 1000.0,
+  "risk_gate_status": "ACTIVE",
+  "allowed_max_fraction": 0.2,
+  "counts": {
+    "PASS": 0,
+    "BLOCK": 0,
+    "REVIEW_MISSING_MARKET_QUALITY": 0
+  },
+  "episodes": []
+}

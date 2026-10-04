@@ -17,6 +17,7 @@ TASKS=(
     "scripts/build_prospective_sizing_comparison.py",
     "scripts/build_prospective_stress_test.py",
     "scripts/build_prospective_risk_gate.py",
+    "scripts/build_prospective_execution_gate.py",
     "scripts/build_prospective_governance.py",
     "scripts/build_research_dashboard_meta.py",
 )
