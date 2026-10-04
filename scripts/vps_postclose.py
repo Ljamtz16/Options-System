@@ -38,4 +38,24 @@ for task in TASKS:
         continue
     print(f"RUN {task}")
     subprocess.run([PY,str(p)],cwd=ROOT,check=True)
+# Publish the refreshed static dashboard when a web directory is available.
+WEB_DIR = Path("/var/www/options-dashboard")
+DASHBOARD_FILES = (
+    "intraday_research_dashboard.html",
+    "intraday_dashboard_data.js",
+    "research_dashboard_meta.js",
+    "intraday_episode_compare.js",
+    "research_dashboard_tabs.js",
+)
+
+if WEB_DIR.is_dir():
+    for name in DASHBOARD_FILES:
+        src = ROOT / "artifacts/intraday" / name
+        if not src.exists():
+            raise FileNotFoundError(f"Dashboard asset missing: {src}")
+        (WEB_DIR / name).write_bytes(src.read_bytes())
+    print(f"DASHBOARD_PUBLISHED {WEB_DIR}")
+else:
+    print(f"SKIP_DASHBOARD_PUBLISH missing={WEB_DIR}")
+
 print("POSTCLOSE_OK")
