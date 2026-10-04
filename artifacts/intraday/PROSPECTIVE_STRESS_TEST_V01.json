@@ -1,0 +1,395 @@
+{
+  "version": "v0.1",
+  "do_not_use_as_hypothesis_evidence": true,
+  "initial_cash": 1000.0,
+  "scientific_evidence": false,
+  "purpose": "deterministic_execution_risk_stress_testing_only",
+  "scenarios": {
+    "loss_streak_2": {
+      "config": {
+        "losses": 2,
+        "entry_ask": 2.5,
+        "loss_return": -0.1
+      },
+      "strategies": {
+        "fixed_1_contract": {
+          "final_cash": 949.78,
+          "net_pnl": -50.22000000000003,
+          "return_pct": -0.05022000000000004,
+          "max_drawdown_pct": 0.05022000000000003,
+          "executed_trades": 2,
+          "max_contracts": 1,
+          "max_capital_utilization_pct": 0.2564391880109551,
+          "risk_band": "MODERATE",
+          "survived": true
+        },
+        "pct_20": {
+          "final_cash": 1000.0,
+          "net_pnl": 0.0,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 0.0,
+          "executed_trades": 0,
+          "max_contracts": 0,
+          "max_capital_utilization_pct": 0.0,
+          "risk_band": "NO_DATA",
+          "survived": true
+        },
+        "pct_40": {
+          "final_cash": 949.78,
+          "net_pnl": -50.22000000000003,
+          "return_pct": -0.05022000000000004,
+          "max_drawdown_pct": 0.05022000000000003,
+          "executed_trades": 2,
+          "max_contracts": 1,
+          "max_capital_utilization_pct": 0.2564391880109551,
+          "risk_band": "MODERATE",
+          "survived": true
+        },
+        "pct_60": {
+          "final_cash": 899.6199999999999,
+          "net_pnl": -100.38000000000011,
+          "return_pct": -0.10038000000000014,
+          "max_drawdown_pct": 0.10038000000000011,
+          "executed_trades": 2,
+          "max_contracts": 2,
+          "max_capital_utilization_pct": 0.526421073688422,
+          "risk_band": "HIGH",
+          "survived": true
+        },
+        "pct_80": {
+          "final_cash": 874.53,
+          "net_pnl": -125.47000000000003,
+          "return_pct": -0.12547000000000008,
+          "max_drawdown_pct": 0.12547000000000003,
+          "executed_trades": 2,
+          "max_contracts": 3,
+          "max_capital_utilization_pct": 0.75,
+          "risk_band": "HIGH",
+          "survived": true
+        }
+      }
+    },
+    "loss_streak_3": {
+      "config": {
+        "losses": 3,
+        "entry_ask": 2.5,
+        "loss_return": -0.1
+      },
+      "strategies": {
+        "fixed_1_contract": {
+          "final_cash": 924.67,
+          "net_pnl": -75.33000000000004,
+          "return_pct": -0.07533000000000001,
+          "max_drawdown_pct": 0.07533000000000004,
+          "executed_trades": 3,
+          "max_contracts": 1,
+          "max_capital_utilization_pct": 0.26321885068121037,
+          "risk_band": "MODERATE",
+          "survived": true
+        },
+        "pct_20": {
+          "final_cash": 1000.0,
+          "net_pnl": 0.0,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 0.0,
+          "executed_trades": 0,
+          "max_contracts": 0,
+          "max_capital_utilization_pct": 0.0,
+          "risk_band": "NO_DATA",
+          "survived": true
+        },
+        "pct_40": {
+          "final_cash": 924.67,
+          "net_pnl": -75.33000000000004,
+          "return_pct": -0.07533000000000001,
+          "max_drawdown_pct": 0.07533000000000004,
+          "executed_trades": 3,
+          "max_contracts": 1,
+          "max_capital_utilization_pct": 0.26321885068121037,
+          "risk_band": "MODERATE",
+          "survived": true
+        },
+        "pct_60": {
+          "final_cash": 849.4299999999998,
+          "net_pnl": -150.57000000000016,
+          "return_pct": -0.1505700000000002,
+          "max_drawdown_pct": 0.15057000000000018,
+          "executed_trades": 3,
+          "max_contracts": 2,
+          "max_capital_utilization_pct": 0.5557902225384052,
+          "risk_band": "HIGH",
+          "survived": true
+        },
+        "pct_80": {
+          "final_cash": 824.3399999999999,
+          "net_pnl": -175.66000000000008,
+          "return_pct": -0.17566000000000004,
+          "max_drawdown_pct": 0.1756600000000001,
+          "executed_trades": 3,
+          "max_contracts": 3,
+          "max_capital_utilization_pct": 0.75,
+          "risk_band": "HIGH",
+          "survived": true
+        }
+      }
+    },
+    "loss_streak_5": {
+      "config": {
+        "losses": 5,
+        "entry_ask": 2.5,
+        "loss_return": -0.1
+      },
+      "strategies": {
+        "fixed_1_contract": {
+          "final_cash": 874.4499999999999,
+          "net_pnl": -125.55000000000007,
+          "return_pct": -0.12555000000000005,
+          "max_drawdown_pct": 0.12555000000000008,
+          "executed_trades": 5,
+          "max_contracts": 1,
+          "max_capital_utilization_pct": 0.2779136466717062,
+          "risk_band": "MODERATE",
+          "survived": true
+        },
+        "pct_20": {
+          "final_cash": 1000.0,
+          "net_pnl": 0.0,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 0.0,
+          "executed_trades": 0,
+          "max_contracts": 0,
+          "max_capital_utilization_pct": 0.0,
+          "risk_band": "NO_DATA",
+          "survived": true
+        },
+        "pct_40": {
+          "final_cash": 874.4499999999999,
+          "net_pnl": -125.55000000000007,
+          "return_pct": -0.12555000000000005,
+          "max_drawdown_pct": 0.12555000000000008,
+          "executed_trades": 5,
+          "max_contracts": 1,
+          "max_capital_utilization_pct": 0.2779136466717062,
+          "risk_band": "MODERATE",
+          "survived": true
+        },
+        "pct_60": {
+          "final_cash": 774.1299999999998,
+          "net_pnl": -225.87000000000023,
+          "return_pct": -0.22587000000000024,
+          "max_drawdown_pct": 0.22587000000000024,
+          "executed_trades": 5,
+          "max_contracts": 2,
+          "max_capital_utilization_pct": 0.588630022485667,
+          "risk_band": "HIGH",
+          "survived": true
+        },
+        "pct_80": {
+          "final_cash": 723.9599999999998,
+          "net_pnl": -276.0400000000002,
+          "return_pct": -0.2760400000000002,
+          "max_drawdown_pct": 0.2760400000000002,
+          "executed_trades": 5,
+          "max_contracts": 3,
+          "max_capital_utilization_pct": 0.75,
+          "risk_band": "HIGH",
+          "survived": true
+        }
+      }
+    },
+    "expensive_contract_loss_streak_3": {
+      "config": {
+        "losses": 3,
+        "entry_ask": 4.0,
+        "loss_return": -0.1
+      },
+      "strategies": {
+        "fixed_1_contract": {
+          "final_cash": 879.67,
+          "net_pnl": -120.33000000000004,
+          "return_pct": -0.12033000000000005,
+          "max_drawdown_pct": 0.12033000000000003,
+          "executed_trades": 3,
+          "max_contracts": 1,
+          "max_capital_utilization_pct": 0.4348866033181848,
+          "risk_band": "MODERATE",
+          "survived": true
+        },
+        "pct_20": {
+          "final_cash": 1000.0,
+          "net_pnl": 0.0,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 0.0,
+          "executed_trades": 0,
+          "max_contracts": 0,
+          "max_capital_utilization_pct": 0.0,
+          "risk_band": "NO_DATA",
+          "survived": true
+        },
+        "pct_40": {
+          "final_cash": 959.89,
+          "net_pnl": -40.110000000000014,
+          "return_pct": -0.04010999999999998,
+          "max_drawdown_pct": 0.040110000000000014,
+          "executed_trades": 1,
+          "max_contracts": 1,
+          "max_capital_utilization_pct": 0.4,
+          "risk_band": "MODERATE",
+          "survived": true
+        },
+        "pct_60": {
+          "final_cash": 879.67,
+          "net_pnl": -120.33000000000004,
+          "return_pct": -0.12033000000000005,
+          "max_drawdown_pct": 0.12033000000000003,
+          "executed_trades": 3,
+          "max_contracts": 1,
+          "max_capital_utilization_pct": 0.4348866033181848,
+          "risk_band": "MODERATE",
+          "survived": true
+        },
+        "pct_80": {
+          "final_cash": 839.5799999999999,
+          "net_pnl": -160.42000000000007,
+          "return_pct": -0.16042000000000012,
+          "max_drawdown_pct": 0.16042000000000006,
+          "executed_trades": 3,
+          "max_contracts": 2,
+          "max_capital_utilization_pct": 0.8,
+          "risk_band": "VERY_HIGH",
+          "survived": true
+        }
+      }
+    },
+    "slippage_5c_loss_streak_3": {
+      "config": {
+        "losses": 3,
+        "entry_ask": 2.5,
+        "loss_return": -0.1,
+        "slippage_cents_per_leg": 5
+      },
+      "strategies": {
+        "fixed_1_contract": {
+          "final_cash": 894.67,
+          "net_pnl": -105.33000000000004,
+          "return_pct": -0.10533000000000003,
+          "max_drawdown_pct": 0.10533000000000003,
+          "executed_trades": 3,
+          "max_contracts": 1,
+          "max_capital_utilization_pct": 0.2688808105143152,
+          "risk_band": "MODERATE",
+          "survived": true
+        },
+        "pct_20": {
+          "final_cash": 1000.0,
+          "net_pnl": 0.0,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 0.0,
+          "executed_trades": 0,
+          "max_contracts": 0,
+          "max_capital_utilization_pct": 0.0,
+          "risk_band": "NO_DATA",
+          "survived": true
+        },
+        "pct_40": {
+          "final_cash": 894.67,
+          "net_pnl": -105.33000000000004,
+          "return_pct": -0.10533000000000003,
+          "max_drawdown_pct": 0.10533000000000003,
+          "executed_trades": 3,
+          "max_contracts": 1,
+          "max_capital_utilization_pct": 0.2688808105143152,
+          "risk_band": "MODERATE",
+          "survived": true
+        },
+        "pct_60": {
+          "final_cash": 789.4299999999998,
+          "net_pnl": -210.57000000000016,
+          "return_pct": -0.21057000000000015,
+          "max_drawdown_pct": 0.21057000000000017,
+          "executed_trades": 3,
+          "max_contracts": 2,
+          "max_capital_utilization_pct": 0.5816523580186594,
+          "risk_band": "HIGH",
+          "survived": true
+        },
+        "pct_80": {
+          "final_cash": 754.3399999999999,
+          "net_pnl": -245.66000000000008,
+          "return_pct": -0.2456600000000001,
+          "max_drawdown_pct": 0.24566000000000007,
+          "executed_trades": 3,
+          "max_contracts": 3,
+          "max_capital_utilization_pct": 0.75,
+          "risk_band": "HIGH",
+          "survived": true
+        }
+      }
+    },
+    "slippage_10c_loss_streak_3": {
+      "config": {
+        "losses": 3,
+        "entry_ask": 2.5,
+        "loss_return": -0.1,
+        "slippage_cents_per_leg": 10
+      },
+      "strategies": {
+        "fixed_1_contract": {
+          "final_cash": 864.67,
+          "net_pnl": -135.33000000000004,
+          "return_pct": -0.13533000000000006,
+          "max_drawdown_pct": 0.13533000000000003,
+          "executed_trades": 3,
+          "max_contracts": 1,
+          "max_capital_utilization_pct": 0.27479170788542284,
+          "risk_band": "MODERATE",
+          "survived": true
+        },
+        "pct_20": {
+          "final_cash": 1000.0,
+          "net_pnl": 0.0,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 0.0,
+          "executed_trades": 0,
+          "max_contracts": 0,
+          "max_capital_utilization_pct": 0.0,
+          "risk_band": "NO_DATA",
+          "survived": true
+        },
+        "pct_40": {
+          "final_cash": 864.67,
+          "net_pnl": -135.33000000000004,
+          "return_pct": -0.13533000000000006,
+          "max_drawdown_pct": 0.13533000000000003,
+          "executed_trades": 3,
+          "max_contracts": 1,
+          "max_capital_utilization_pct": 0.27479170788542284,
+          "risk_band": "MODERATE",
+          "survived": true
+        },
+        "pct_60": {
+          "final_cash": 774.5099999999999,
+          "net_pnl": -225.49000000000012,
+          "return_pct": -0.22549000000000008,
+          "max_drawdown_pct": 0.22549000000000013,
+          "executed_trades": 3,
+          "max_contracts": 2,
+          "max_capital_utilization_pct": 0.5495652938525627,
+          "risk_band": "HIGH",
+          "survived": true
+        },
+        "pct_80": {
+          "final_cash": 684.3399999999999,
+          "net_pnl": -315.6600000000001,
+          "return_pct": -0.31566000000000005,
+          "max_drawdown_pct": 0.3156600000000001,
+          "executed_trades": 3,
+          "max_contracts": 3,
+          "max_capital_utilization_pct": 0.75,
+          "risk_band": "HIGH",
+          "survived": true
+        }
+      }
+    }
+  }
+}

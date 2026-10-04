@@ -17,6 +17,10 @@ sizing_path=A/'PROSPECTIVE_SIZING_COMPARISON_V01.json'
 sizing=json.loads(sizing_path.read_text(encoding='utf-8')) if sizing_path.exists() else {
     'scientific_evidence':False,'purpose':'execution_and_risk_simulation_only','strategies':{}
 }
+stress_path=A/'PROSPECTIVE_STRESS_TEST_V01.json'
+stress=json.loads(stress_path.read_text(encoding='utf-8')) if stress_path.exists() else {
+    'scientific_evidence':False,'purpose':'deterministic_execution_risk_stress_testing_only','scenarios':{}
+}
 hypotheses=[]
 for h in frozen['hypotheses']:
     hypotheses.append({'id':h['id'],'side':h['side'].upper(),'horizon_min':h['horizon_min'],
@@ -33,7 +37,7 @@ discovery={}
 for label,payload in combos['labels'].items():
     discovery[label]={'top_stable':payload.get('top_stable',[])[:5]}
 meta={'discovery_session':'2026-10-02','hypotheses':hypotheses,
-      'prospective':evaluation.get('candidates',{}),'prospective_validation':daily,'sizing_simulation':sizing,'discovery':discovery}
+      'prospective':evaluation.get('candidates',{}),'prospective_validation':daily,'sizing_simulation':sizing,'stress_testing':stress,'discovery':discovery}
 raw=json.dumps(meta,separators=(',',':'))
 (A/'research_dashboard_meta.json').write_text(raw,encoding='utf-8')
 (A/'research_dashboard_meta.js').write_text('window.RESEARCH_META='+raw+';',encoding='utf-8')
