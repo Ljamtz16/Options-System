@@ -1,0 +1,52 @@
+{
+  "version": "v0.1",
+  "generated_at_utc": "2026-10-04T17:18:04.125772+00:00",
+  "overall_status": "WAITING_MARKET_DATA",
+  "failures": 0,
+  "waiting": 1,
+  "snapshot_count": 60,
+  "latest_snapshot_utc": "2026-10-02T19:55:05.689263+00:00",
+  "prospective_episode_count": 0,
+  "checks": [
+    {
+      "id": "h03_frozen",
+      "label": "H03 frozen",
+      "status": "PASS",
+      "detail": "prospective_start_after=2026-10-02"
+    },
+    {
+      "id": "raw_snapshots",
+      "label": "Raw SPY snapshots",
+      "status": "PASS",
+      "detail": "60 snapshots; latest=2026-10-02T19:55:05.689263+00:00"
+    },
+    {
+      "id": "prospective_evidence",
+      "label": "Prospective evidence",
+      "status": "WAITING",
+      "detail": "No post-freeze episode settled yet"
+    },
+    {
+      "id": "risk_gate",
+      "label": "Risk gate",
+      "status": "PASS",
+      "detail": "ACTIVE / max=20%"
+    },
+    {
+      "id": "execution_gate",
+      "label": "Execution gate",
+      "status": "PASS",
+      "detail": "PASS=0 BLOCK=0 REVIEW=0"
+    },
+    {
+      "id": "dashboard_meta",
+      "label": "Dashboard metadata",
+      "status": "PASS",
+      "detail": "research_dashboard_meta.json present"
+    }
+  ],
+  "notes": [
+    "System health is operational readiness, not scientific evidence.",
+    "Collector service/timer liveness must be verified on the VPS with systemd; this artifact verifies persisted outputs, not process state."
+  ]
+}

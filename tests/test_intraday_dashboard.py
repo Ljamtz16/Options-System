@@ -85,3 +85,14 @@ def test_dashboard_exposes_execution_gate_tab():
   assert label in tabs
  assert 'execution_gate' in meta
  assert 'contract_execution_quality_governance_only' in meta
+
+
+def test_dashboard_exposes_monday_readiness():
+ r=Path(__file__).resolve().parents[1]
+ a=r/'artifacts/intraday'
+ tabs=(a/'research_dashboard_tabs.js').read_text(encoding='utf-8')
+ meta=(a/'research_dashboard_meta.js').read_text(encoding='utf-8')
+ assert 'Monday Readiness' in tabs
+ assert 'healthchecks' in tabs
+ assert 'H03 frozen' in meta
+ assert 'readiness' in meta
