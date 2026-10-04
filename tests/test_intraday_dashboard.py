@@ -29,7 +29,7 @@ def test_research_dashboard_tabs_and_meta_exist():
  assert 'research_dashboard_meta.js' in html
  assert 'research_dashboard_tabs.js' in html
  tabs=(a/'research_dashboard_tabs.js').read_text(encoding='utf-8')
- for label in ('Sesion intradia','Episodios','Hipotesis','Validacion prospectiva','Discovery Lab'):
+ for label in ('Sesion intradia','Episodios','Hipotesis','Validacion prospectiva','Execution Gate','Discovery Lab'):
   assert label in tabs
  meta=(a/'research_dashboard_meta.js').read_text(encoding='utf-8')
  for hid in ('CALL_FLOW_REVERSAL_V01','PUT_SKEW_SHORT_V01','H03_CALL_RELATIVE_WEAKNESS_REVERSAL_CANDIDATE','H04_CALL_CROSSMARKET_WEAKNESS_CANDIDATE','H05_PUT_CROSSMARKET_MOMENTUM_CANDIDATE'):
@@ -72,3 +72,16 @@ def test_dashboard_exposes_sizing_simulation():
  assert 'Sizing simulation - not part of frozen hypothesis evidence' in tabs
  assert 'sizing_simulation' in meta
  assert 'execution_and_risk_simulation_only' in meta
+
+
+def test_dashboard_exposes_execution_gate_tab():
+ r=Path(__file__).resolve().parents[1]
+ a=r/'artifacts/intraday'
+ tabs=(a/'research_dashboard_tabs.js').read_text(encoding='utf-8')
+ meta=(a/'research_dashboard_meta.js').read_text(encoding='utf-8')
+ assert 'data-tab="exec">Execution Gate' in tabs
+ assert "make('exec'" in tabs
+ for label in ('Decision por episodio','Politica de ejecucion','Presupuesto','Max contratos','Decision','Motivo'):
+  assert label in tabs
+ assert 'execution_gate' in meta
+ assert 'contract_execution_quality_governance_only' in meta
