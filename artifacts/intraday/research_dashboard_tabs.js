@@ -46,3 +46,155 @@ document.getElementById('labgrid').innerHTML=Object.entries(M.discovery||{}).map
 function show(id){document.querySelectorAll('[data-tabgroup]').forEach(x=>x.style.display=x.dataset.tabgroup===id?(x.classList.contains('tabpage')?'block':''):'none');tabs.querySelectorAll('button').forEach(x=>x.classList.toggle('active',x.dataset.tab===id));}
 tabs.addEventListener('click',e=>{let b=e.target.closest('button');if(b)show(b.dataset.tab)});show('session');
 })();
+
+
+/* ALL_FROZEN_HYPOTHESES_MONITOR_V01 */
+(function () {
+  function pct(x) {
+    if (x === null || x === undefined || Number.isNaN(Number(x))) return "—";
+    return (Number(x) * 100).toFixed(2) + "%";
+  }
+
+  function num(x) {
+    if (x === null || x === undefined || Number.isNaN(Number(x))) return "—";
+    return String(x);
+  }
+
+  function label(id) {
+    if (id === "CALL_FLOW_REVERSAL_V01") return "H01 · CALL Flow Reversal";
+    if (id === "PUT_SKEW_SHORT_V01") return "H02 · PUT Skew Short";
+    if (id === "H03_CALL_RELATIVE_WEAKNESS_REVERSAL_V01") return "H03 · CALL Relative Weakness";
+    return id;
+  }
+
+  function renderAllFrozenHypothesesMonitor() {
+    const meta = window.RESEARCH_META || {};
+    const tracker = meta.tracker_summary || {};
+    const prospective = tracker.prospective_only || {};
+
+    const ids = Object.keys(prospective);
+    if (!ids.length) return;
+
+    const old = document.getElementById("all-frozen-hypotheses-monitor");
+    if (old) old.remove();
+
+    const rows = ids.map(function (id) {
+      const x = prospective[id] || {};
+      const n = Number(x.n || 0);
+      const rowClass = n > 0 ? "hyp-live-active" : "hyp-live-empty";
+
+      return `
+        <tr class="${rowClass}">
+          <td><strong>${label(id)}</strong><br><span>${id}</span></td>
+          <td>${num(x.n)}</td>
+          <td>${pct(x.mean_return)}</td>
+          <td>${pct(x.win_rate)}</td>
+          <td>${pct(x.gt10_rate)}</td>
+          <td>${pct(x.ltm10_rate)}</td>
+          <td>${pct(x.tp10_before_sl10_rate)}</td>
+          <td>${num(x.tp10_sl10_decided_n)}</td>
+        </tr>`;
+    }).join("");
+
+    const card = document.createElement("section");
+    card.id = "all-frozen-hypotheses-monitor";
+    card.innerHTML = `
+      <style>
+        #all-frozen-hypotheses-monitor {
+          margin: 14px 0 18px 0;
+          padding: 16px;
+          border: 1px solid rgba(96, 165, 250, 0.28);
+          border-radius: 14px;
+          background: rgba(15, 23, 42, 0.88);
+          color: #e5e7eb;
+          box-shadow: 0 8px 28px rgba(0,0,0,.20);
+        }
+        #all-frozen-hypotheses-monitor h2 {
+          margin: 0 0 6px 0;
+          font-size: 18px;
+        }
+        #all-frozen-hypotheses-monitor .sub {
+          margin-bottom: 14px;
+          color: #94a3b8;
+          font-size: 13px;
+        }
+        #all-frozen-hypotheses-monitor .table-wrap {
+          overflow-x: auto;
+        }
+        #all-frozen-hypotheses-monitor table {
+          width: 100%;
+          border-collapse: collapse;
+          font-size: 13px;
+        }
+        #all-frozen-hypotheses-monitor th,
+        #all-frozen-hypotheses-monitor td {
+          padding: 10px 8px;
+          border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+          text-align: left;
+          vertical-align: top;
+          white-space: nowrap;
+        }
+        #all-frozen-hypotheses-monitor td:first-child,
+        #all-frozen-hypotheses-monitor th:first-child {
+          white-space: normal;
+          min-width: 260px;
+        }
+        #all-frozen-hypotheses-monitor td span {
+          color: #94a3b8;
+          font-size: 11px;
+        }
+        #all-frozen-hypotheses-monitor .hyp-live-active {
+          background: rgba(22, 163, 74, 0.10);
+        }
+        #all-frozen-hypotheses-monitor .hyp-live-empty {
+          opacity: .78;
+        }
+      </style>
+
+      <h2>All Frozen Hypotheses Monitor</h2>
+      <div class="sub">
+        Monitor prospectivo intradía para H01/H02/H03. H03 permanece congelada;
+        estos datos no modifican reglas ni thresholds.
+        Rows prospectivas: <strong>${num(tracker.prospective_rows)}</strong>.
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Hipótesis</th>
+              <th>n</th>
+              <th>Mean return</th>
+              <th>Win rate</th>
+              <th>GT +10%</th>
+              <th>LT -10%</th>
+              <th>TP10 before SL10</th>
+              <th>Decided n</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    `;
+
+    const anchor =
+      document.querySelector(".tabs") ||
+      document.querySelector("[role='tablist']") ||
+      document.querySelector("nav") ||
+      document.body.firstElementChild;
+
+    if (anchor && anchor.parentNode) {
+      anchor.parentNode.insertBefore(card, anchor.nextSibling);
+    } else {
+      document.body.prepend(card);
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", function () {
+      setTimeout(renderAllFrozenHypothesesMonitor, 250);
+    });
+  } else {
+    setTimeout(renderAllFrozenHypothesesMonitor, 250);
+  }
+})();

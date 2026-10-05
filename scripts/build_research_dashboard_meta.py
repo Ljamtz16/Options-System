@@ -30,6 +30,16 @@ execution_path=A/'PROSPECTIVE_EXECUTION_GATE_V01.json'
 execution=json.loads(execution_path.read_text(encoding='utf-8')) if execution_path.exists() else {
     'counts':{'PASS':0,'BLOCK':0,'REVIEW_MISSING_MARKET_QUALITY':0},'episodes':[]
 }
+
+tracker_path=A/'PROSPECTIVE_HYPOTHESIS_REPORT_V02.json'
+tracker_summary=json.loads(tracker_path.read_text(encoding='utf-8')) if tracker_path.exists() else {
+    'version':'v0.2',
+    'frozen_at':frozen.get('frozen_at'),
+    'pre_freeze_diagnostic':{},
+    'prospective_only':{},
+    'prospective_rows':0
+}
+
 health=build_health(R)
 (A/'SYSTEM_HEALTH_V01.json').write_text(json.dumps(health,indent=2),encoding='utf-8')
 hypotheses=[]
@@ -48,7 +58,9 @@ discovery={}
 for label,payload in combos['labels'].items():
     discovery[label]={'top_stable':payload.get('top_stable',[])[:5]}
 meta={'discovery_session':'2026-10-02','hypotheses':hypotheses,
-      'prospective':evaluation.get('candidates',{}),'prospective_validation':daily,'sizing_simulation':sizing,'stress_testing':stress,'risk_gate':gate,'execution_gate':execution,'readiness':health,'discovery':discovery}
+      'prospective':evaluation.get('candidates',{}),'prospective_validation':daily,
+      'tracker_summary':tracker_summary,
+      'sizing_simulation':sizing,'stress_testing':stress,'risk_gate':gate,'execution_gate':execution,'readiness':health,'discovery':discovery}
 raw=json.dumps(meta,separators=(',',':'))
 (A/'research_dashboard_meta.json').write_text(raw,encoding='utf-8')
 (A/'research_dashboard_meta.js').write_text('window.RESEARCH_META='+raw+';',encoding='utf-8')
