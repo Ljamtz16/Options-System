@@ -14,6 +14,7 @@ TASKS = [
     "scripts/market_state_readiness.py",
     "scripts/build_intraday_dataset.py",
     "scripts/build_intraday_scoreboard.py",
+    "scripts/build_intraday_dashboard_data.py",
     "scripts/intraday_daily_report.py",
     "scripts/build_spy_intraday_outcomes_all_days.py",
     "scripts/track_frozen_hypotheses.py",
@@ -26,7 +27,9 @@ TASKS = [
 ]
 
 PUBLISH = [
+    "intraday_research_dashboard.html",
     "intraday_dashboard_data.js",
+    "intraday_session_multisymbol.js",
     "research_dashboard_meta.js",
     "intraday_episode_compare.js",
     "research_dashboard_tabs.js",

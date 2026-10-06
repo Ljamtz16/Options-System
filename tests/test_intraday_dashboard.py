@@ -96,3 +96,34 @@ def test_dashboard_exposes_monday_readiness():
  assert 'healthchecks' in tabs
  assert 'H03 frozen' in meta
  assert 'readiness' in meta
+
+
+def test_dashboard_supports_multisession_multisymbol_layer():
+ r=Path(__file__).resolve().parents[1]
+ a=r/'artifacts/intraday'
+ seed=json.loads((a/'DISCOVERY_DASHBOARD_2026-10-02.json').read_text(encoding='utf-8'))
+ assert len(seed)==60
+ assert {x.get('decision_date') for x in seed}=={'2026-10-02'}
+ html=(a/'intraday_research_dashboard.html').read_text(encoding='utf-8')
+ assert 'intraday_session_multisymbol.js' in html
+ js=(a/'intraday_session_multisymbol.js').read_text(encoding='utf-8')
+ for token in ("symbol.id='symbol'",'session_kind','H03 es SPY-only','syncSymbols'):
+  assert token in js
+
+
+def test_dashboard_builder_is_prospective_multisymbol_compatible():
+ r=Path(__file__).resolve().parents[1]
+ code=(r/'scripts/build_intraday_dashboard_data.py').read_text(encoding='utf-8')
+ assert 'intraday_options_v2.csv' in code
+ assert 'DISCOVERY_DASHBOARD_2026-10-02.json' in code
+ assert 'symbol_from_open' in code
+ assert 'if row.get("symbol") != "SPY"' in code
+ assert 'session_kind' in code
+
+
+def test_dashboard_publishers_rebuild_and_publish_multisymbol_asset():
+ r=Path(__file__).resolve().parents[1]
+ for name in ('vps_postclose.py','publish_intraday_dashboard_live.py'):
+  code=(r/'scripts'/name).read_text(encoding='utf-8')
+  assert 'scripts/build_intraday_dashboard_data.py' in code
+  assert 'intraday_session_multisymbol.js' in code
