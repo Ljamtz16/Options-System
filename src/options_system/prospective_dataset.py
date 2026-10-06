@@ -1,6 +1,8 @@
 import csv,json
 from pathlib import Path
 from datetime import date,datetime
+from zoneinfo import ZoneInfo
+import hashlib
 from .chain_features import extract_chain_features
 from .option_surface import extract_option_surface
 
@@ -11,16 +13,27 @@ DELTA_FIELDS=("spot","atm_iv","put_call_iv_skew","put_call_volume_ratio_1pct","p
 
 def snapshot_to_row(path):
  obj=json.loads(Path(path).read_text(encoding="utf-8")); p=obj["payload"]
- md=date.fromisoformat(p["market_clock"]["timestamp"][:10])
+ canonical=json.dumps(p,sort_keys=True,separators=(",",":"),ensure_ascii=False)
+ if hashlib.sha256(canonical.encode()).hexdigest()!=obj["sha256"]:raise ValueError("Snapshot checksum mismatch")
+ captured=datetime.fromisoformat(obj["captured_at_utc"].replace("Z","+00:00"))
+ if captured.tzinfo is None:raise ValueError("Timezone missing")
+ md=datetime.fromisoformat(p["market_clock"]["timestamp"].replace("Z","+00:00")).astimezone(ZoneInfo("America/New_York")).date()
  us=p["underlying"]["snapshot"]; trade=us.get("latestTrade") or {}; quote=us.get("latestQuote") or {}
  spot=trade.get("p") or (((quote.get("bp") or 0)+(quote.get("ap") or 0))/2 or None)
  rs=p["research_state"]; prob=rs["probability"]; act=rs["activity_gate"]; o6=rs["o6"]
  row={"capture_id":obj["capture_id"],"captured_at_utc":obj["captured_at_utc"],"schema_version":p.get("schema_version"),
+      "snapshot_sha256":obj["sha256"],"dataset_policy":"SPY_PROSPECTIVE_CANONICAL_V1",
       "decision_date":rs["features"]["decision_date"],"spot":spot,"open_t":rs["features"]["open_t"],
       "p_raw":prob["raw"],"p_calibrated":prob["calibrated"],"p_conservative":prob["conservative"],
       "activity_pass":act["activity_pass"],"o6_decision":o6["decision"],
       "direction":rs["direction"]["direction"],"source_file":Path(path).name}
- chain=p["options"]["snapshot"]
+ chain={"snapshots":{}}
+ for name,option in p["options"]["snapshot"].get("snapshots",{}).items():
+  item=dict(option)
+  for field in ("latestQuote","dailyBar"):
+   stamp=(item.get(field) or {}).get("t")
+   if stamp and datetime.fromisoformat(stamp.replace("Z","+00:00"))>captured:item.pop(field,None)
+  chain["snapshots"][name]=item
  row.update(extract_chain_features(chain,float(spot),md))
  row.update(extract_option_surface(chain,float(spot),md))
  for k,v in (((p.get("cross_market") or {}).get("features") or {})).items():row[k]=v
