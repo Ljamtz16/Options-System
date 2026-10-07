@@ -24,6 +24,10 @@ REPLAY = A / "PAPER_TRADING_REPLAY_V01.json"
 STATE = A / "PAPER_TRADING_LIVE_STATE_V01.json"
 CONTROL = A / "PAPER_TRADING_CONTROL_V01.json"
 
+# Share the state lock with epoch resets; an atomic reset cannot be overwritten by an older runner.
+from options_system.paper_epochs import acquire_state_lock
+state_lock = acquire_state_lock(STATE)
+
 TP = 0.10
 SL = -0.10
 MAX_CONTRACTS = 1
@@ -168,6 +172,9 @@ last_processed = state.get("last_processed_snapshot_utc")
 for snapshot in snapshots:
     now_s = snapshot["captured_at_utc"]
 
+    if state.get('epoch_start_utc') and dt(now_s) <= dt(state['epoch_start_utc']):
+        continue
+
     if last_processed and dt(now_s) <= dt(last_processed):
         continue
 
@@ -264,6 +271,9 @@ for snapshot in snapshots:
 
     for signal in signals_by_time.get(now_s, []):
         sid = signal["signal_id"]
+
+        if state.get('epoch_start_utc') and dt(signal['signal_time']) <= dt(state['epoch_start_utc']):
+            continue
 
         if sid in seen:
             continue
@@ -439,10 +449,13 @@ state.update({
     "updated_at_utc": datetime.now(timezone.utc).isoformat(),
 })
 
-STATE.write_text(
+state_tmp=STATE.with_suffix('.live.tmp')
+state_tmp.write_text(
     json.dumps(state, indent=2),
     encoding="utf-8",
 )
+state_tmp.replace(STATE)
+state_lock.close()
 
 print(
     "LIVE_PAPER_OK",

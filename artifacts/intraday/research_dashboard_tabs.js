@@ -117,6 +117,16 @@ const replayPnl=+(replay.net_account_pnl||0);
 const totalRealized=+(P.realized_net_pnl||0);
 const liveRealized=totalRealized-replayPnl;
 
+if(P.epoch_id){
+ const epoch=document.createElement('div');epoch.className='explain';
+ const previous=P.previous_epoch_summary||{},plan=P.observation_plan||{};
+ epoch.innerHTML='<b>Etapa '+esc(P.epoch_id)+'</b> · Inicio '+esc(P.epoch_start_utc)+
+  ' · Capital inicial '+money(P.initial_cash)+' · 1 contrato por entrada · Presupuesto de prima '+pct(P.epoch_initial_configuration?.premium_budget_fraction)+
+  '<br>Etapa anterior archivada: saldo '+money(previous.prior_cash)+' · P&L '+money(previous.prior_net_account_pnl)+
+  '. Los resultados mostrados pertenecen a la etapa actual.<br>Revisión principal: '+esc(plan.primary_review_sessions)+' sesiones; seguimiento ampliado 60–90 sesiones.';
+ document.getElementById('papercards').before(epoch);
+}
+
 document.getElementById('papercards').innerHTML=[
  ['Equity'+(P.equity_is_estimate?' estimada':''),money(P.equity??P.cash??P.initial_cash),(P.pending_reconciliation_positions||0)+' pendientes de reconciliar'],
  ['Cash',money(P.cash),'efectivo disponible'],
