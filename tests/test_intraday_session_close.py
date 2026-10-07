@@ -44,7 +44,7 @@ def test_replay_closes_using_previous_session_bid_and_updates_totals(monkeypatch
   return {'captured_at_utc':ts,'payload':{'options':{'snapshot':{'snapshots':{contract:{'latestQuote':{'bp':bid,'ap':2.,'t':ts}}}}}}}
  ts='2026-10-06T19:50:00Z'
  signal=dict(signal_id='test',hypothesis='H01',decision_date='2026-10-06',signal_time=ts,horizon_min=60,contract=contract,entry_ask=2.,entry_bid=1.95,entry_ask_size=10,entry_bid_size=10)
- result=trader.replay_paper_account([snap(ts,1.95),snap('2026-10-06T19:59:00Z',1.96),snap('2026-10-07T14:00:00Z',3.)],[signal],{})
+ result=trader.replay_paper_account([snap(ts,1.95),snap('2026-10-06T19:59:00Z',1.96),snap('2026-10-07T14:00:00Z',3.)],[signal],{},policy={'select_executable_contract':False})
  assert result['closed_trades']==1 and result['open_positions_count']==0
  assert result['reserved_capital']==0. and result['ledger'][0]['exit_reason']=='SESSION_CLOSE'
  assert abs(result['cash']-result['equity'])<1e-8

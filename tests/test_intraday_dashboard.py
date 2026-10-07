@@ -3,8 +3,28 @@ from pathlib import Path
 def test_dashboard_artifacts_exist_and_bind_h03():
  r=Path(__file__).resolve().parents[1]
  d=json.loads((r/'artifacts/intraday/intraday_dashboard_data.json').read_text(encoding='utf-8'))
- assert len(d)==60
- assert sum(bool(x['h03']) for x in d)==9
+
+ # Frozen discovery session remains intact.
+ discovery=[
+  x for x in d
+  if x.get('decision_date')=='2026-10-02'
+  and x.get('session_kind')=='DISCOVERY'
+  and x.get('symbol')=='SPY'
+ ]
+ assert len(discovery)==60
+ assert sum(bool(x.get('h03')) for x in discovery)==9
+
+ # Prospective observations coexist with discovery observations.
+ prospective=[x for x in d if x.get('session_kind')=='PROSPECTIVE']
+ assert prospective
+
+ # H03 is frozen for SPY only.
+ assert all(
+  not x.get('h03')
+  for x in d
+  if x.get('symbol')!='SPY'
+ )
+
  h=(r/'artifacts/intraday/intraday_research_dashboard.html').read_text(encoding='utf-8')
  assert 'Options Research Lab' in h
  assert 'research_dashboard_meta.js' in h
@@ -87,12 +107,12 @@ def test_dashboard_exposes_execution_gate_tab():
  assert 'contract_execution_quality_governance_only' in meta
 
 
-def test_dashboard_exposes_monday_readiness():
+def test_dashboard_exposes_readiness():
  r=Path(__file__).resolve().parents[1]
  a=r/'artifacts/intraday'
  tabs=(a/'research_dashboard_tabs.js').read_text(encoding='utf-8')
  meta=(a/'research_dashboard_meta.js').read_text(encoding='utf-8')
- assert 'Monday Readiness' in tabs
+ assert 'Readiness' in tabs
  assert 'healthchecks' in tabs
  assert 'H03 frozen' in meta
  assert 'readiness' in meta

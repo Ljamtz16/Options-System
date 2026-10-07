@@ -6,6 +6,8 @@ from typing import Any
 from options_system.option_costs import one_contract_trade, daily_regulatory_fees
 from options_system.prospective_execution_gate import evaluate_execution
 from options_system.intraday_session import position_quote,finalize_positions,snapshot_close
+from options_system.executable_contracts import select_signal
+from options_system.entry_controls import update_session_risk, entry_block
 
 
 DEFAULT_PAPER_POLICY = {
@@ -14,6 +16,8 @@ DEFAULT_PAPER_POLICY = {
     "sl": -0.10,
     "default_gap_minutes": 6,
     "max_contracts_per_trade": 1,
+    "select_executable_contract": True,
+    "entry_controls": {},
 }
 
 
@@ -162,6 +166,8 @@ def replay_paper_account(
 
     open_positions: dict[str, dict[str, Any]] = {}
     ledger: list[dict[str, Any]] = []
+    session_risk = {}
+    equity_curve = []
 
     for snapshot in snapshots:
         now_s = snapshot.get("captured_at_utc")
@@ -169,6 +175,8 @@ def replay_paper_account(
             continue
 
         now = _dt(now_s)
+        if as_of is not None and now > as_of:
+            continue
 
         # ----------------------------------------------------------
         # 1. Mark / close positions that were already open
@@ -249,11 +257,22 @@ def replay_paper_account(
             del open_positions[signal_id]
 
         cash,_=finalize_positions(open_positions,ledger,cash,now)
+        update_session_risk(session_risk,now,cash,open_positions,ledger)
+        equity_curve.append(dict(timestamp=now_s,**session_risk))
 
         # ----------------------------------------------------------
         # 2. Open signals occurring at this snapshot
         # ----------------------------------------------------------
         for signal in signal_by_time.get(now_s, []):
+            update_session_risk(session_risk,now,cash,open_positions,ledger)
+            block = entry_block(signal,now,open_positions,ledger,session_risk,policy['entry_controls'])
+            if block:
+                ledger.append(dict(signal, mode='CAUSAL_REPLAY', account_kind='LOCAL_SIMULATION',
+                                   status='BLOCKED', exit_reason=block, net_pnl=None, cash_after=cash))
+                continue
+            if policy['select_executable_contract']:
+                signal = select_signal(snapshot,signal,cash,float(risk_gate.get('allowed_max_fraction') or 0),
+                                       policy.get('contract_selection_policy'))
             episode = {
                 "contract": signal["contract"],
                 "entry_ask": signal["entry_ask"],
@@ -271,6 +290,7 @@ def replay_paper_account(
             base = {
                 **signal,
                 "mode": "CAUSAL_REPLAY",
+                "account_kind": "LOCAL_SIMULATION",
                 "execution_gate": execution,
                 "cash_before": cash,
             }
@@ -340,6 +360,7 @@ def replay_paper_account(
                 "quantity": qty,
                 "capital_required": capital,
                 "entry_time": now_s,
+                "entry_quote_time":signal.get('entry_quote_time'),
                 "mfe": 0.0,
                 "mae": 0.0,
                 "marks": 0,
@@ -351,6 +372,8 @@ def replay_paper_account(
 
     if snapshots:
         cash,_=finalize_positions(open_positions,ledger,cash,as_of or _dt(snapshots[-1]['captured_at_utc']))
+        update_session_risk(session_risk,as_of or _dt(snapshots[-1]['captured_at_utc']),cash,open_positions,ledger)
+        equity_curve.append(dict(timestamp=(as_of or _dt(snapshots[-1]['captured_at_utc'])).isoformat(),**session_risk))
 
     # Open positions at end of available data.
     open_list = sorted(
@@ -395,6 +418,10 @@ def replay_paper_account(
         "pending_reconciliation_positions":sum(bool(x.get("pending_reconciliation")) for x in open_list),
         "equity_is_estimate":any(x.get("pending_reconciliation") for x in open_list),
         "mode": "CAUSAL_REPLAY",
+        "account_kind":"LOCAL_SIMULATION",
+        "policy":policy,
+        "session_risk":session_risk,
+        "equity_curve":equity_curve,
         "scientific_evidence": False,
         "purpose": "execution_realism_paper_simulation_only",
         "initial_cash": initial_cash,

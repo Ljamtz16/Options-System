@@ -40,6 +40,34 @@ tracker_summary=json.loads(tracker_path.read_text(encoding='utf-8')) if tracker_
     'prospective_rows':0
 }
 
+paper_state_path=A/'PAPER_TRADING_LIVE_STATE_V01.json'
+paper_state=json.loads(paper_state_path.read_text(encoding='utf-8')) if paper_state_path.exists() else {
+    'mode':'LIVE_PAPER','initial_cash':1000.0,'cash':1000.0,
+    'equity':1000.0,'net_account_pnl':0.0,'open_positions':[],
+    'live_ledger':[],'causal_replay_summary':{}
+}
+
+paper_risk_comparison_path=A/'PAPER_RISK_REPLAY_COMPARISON_V01.json'
+paper_risk_comparison=json.loads(
+    paper_risk_comparison_path.read_text(encoding='utf-8')
+) if paper_risk_comparison_path.exists() else {
+    'version':'v0.1',
+    'scenarios':{}
+}
+
+paper_control_path=A/'PAPER_TRADING_CONTROL_V01.json'
+paper_control=json.loads(paper_control_path.read_text(encoding='utf-8')) if paper_control_path.exists() else {
+    'risk_fraction':0.20,
+    'allowed_fractions':[0.0,0.2,0.4,0.6,0.8],
+    'scope':'PAPER_TRADING_ONLY'
+}
+
+def analysis_report(path):
+    return json.loads(path.read_text(encoding='utf-8')) if path.exists() else {'status':'NOT_GENERATED','auto_apply':False}
+
+entry_controls_analysis=analysis_report(A/'ENTRY_CONTROLS_ANALYSIS_V01.json')
+jev_calibration_analysis=analysis_report(R.parent/'jev-lab/data/calibration-analysis.json')
+
 health=build_health(R)
 (A/'SYSTEM_HEALTH_V01.json').write_text(json.dumps(health,indent=2),encoding='utf-8')
 hypotheses=[]
@@ -57,9 +85,14 @@ for h in candidates['candidates']:
 discovery={}
 for label,payload in combos['labels'].items():
     discovery[label]={'top_stable':payload.get('top_stable',[])[:5]}
-meta={'discovery_session':'2026-10-02','hypotheses':hypotheses,
+meta={'entry_controls_analysis':entry_controls_analysis,'jev_calibration_analysis':jev_calibration_analysis,
+      'execution_modes':{'JEV_SHADOW':'Simulaciones independientes por snapshot; no cuenta',
+       'COMPARATOR_SHADOW':'Hipótesis con reglas comunes; no cuenta',
+       'LIVE_PAPER':'Cuenta virtual local; sin órdenes de broker',
+       'ALPACA_PAPER':'Cuenta del broker; resultados por fills confirmados'},
+      'discovery_session':'2026-10-02','hypotheses':hypotheses,
       'prospective':evaluation.get('candidates',{}),'prospective_validation':daily,
-      'tracker_summary':tracker_summary,
+      'tracker_summary':tracker_summary,'paper_trading':paper_state,'paper_control':paper_control,'paper_risk_comparison':paper_risk_comparison,
       'sizing_simulation':sizing,'stress_testing':stress,'risk_gate':gate,'execution_gate':execution,'readiness':health,'discovery':discovery}
 raw=json.dumps(meta,separators=(',',':'))
 (A/'research_dashboard_meta.json').write_text(raw,encoding='utf-8')

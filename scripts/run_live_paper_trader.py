@@ -6,6 +6,8 @@ from pathlib import Path
 from options_system.option_costs import one_contract_trade, daily_regulatory_fees
 from options_system.prospective_execution_gate import evaluate_execution
 from options_system.intraday_session import position_quote,finalize_positions,snapshot_close
+from options_system.executable_contracts import select_signal
+from options_system.entry_controls import update_session_risk, entry_block
 from options_system.prospective_paper_trader import (
     build_paper_signals,
     option_quote,
@@ -153,6 +155,8 @@ open_positions = {
 }
 
 ledger = list(state.get("live_ledger", []))
+session_risk = dict(state.get('session_risk') or {})
+entry_policy = dict(control.get('entry_controls') or {})
 
 last_processed = state.get("last_processed_snapshot_utc")
 
@@ -168,6 +172,8 @@ for snapshot in snapshots:
         continue
 
     now = dt(now_s)
+    if now > datetime.now(timezone.utc):
+        continue
 
     # --------------------------------------------------------
     # 1. Mark existing positions first
@@ -250,6 +256,7 @@ for snapshot in snapshots:
 
     cash,close_net=finalize_positions(open_positions,ledger,cash,now)
     realized+=close_net
+    update_session_risk(session_risk,now,cash,open_positions,ledger)
 
     # --------------------------------------------------------
     # 2. Handle signals that occur on this snapshot
@@ -262,6 +269,13 @@ for snapshot in snapshots:
             continue
 
         seen.add(sid)
+        update_session_risk(session_risk,now,cash,open_positions,ledger)
+        block = entry_block(signal,now,open_positions,ledger,session_risk,entry_policy)
+        if block:
+            ledger.append(dict(signal,mode='LIVE_PAPER',account_kind='LOCAL_SIMULATION',
+                               status='BLOCKED',exit_reason=block,net_pnl=None,cash_after=cash))
+            continue
+        signal = select_signal(snapshot,signal,cash,paper_fraction)
 
         episode = {
             "contract": signal["contract"],
@@ -280,6 +294,7 @@ for snapshot in snapshots:
         record = {
             **signal,
             "mode": "LIVE_PAPER",
+            "account_kind": "LOCAL_SIMULATION",
             "execution_gate": gate,
             "cash_before": cash,
         }
@@ -300,7 +315,7 @@ for snapshot in snapshots:
             gate.get("max_contracts_by_risk_budget") or 0
         )
 
-        qty = max_qty
+        qty = min(MAX_CONTRACTS,max_qty)
 
         if qty < 1:
             ledger.append({
@@ -341,6 +356,7 @@ for snapshot in snapshots:
             "capital_required": capital,
 
             "entry_time": now_s,
+            "entry_quote_time":signal.get('entry_quote_time'),
 
             "last_bid": signal.get("entry_bid"),
             "last_mark_time": now_s,
@@ -382,6 +398,11 @@ equity = cash + reserved + unrealized
 
 
 state.update({
+    "mode":"LIVE_PAPER",
+    "account_kind":"LOCAL_SIMULATION",
+    "entry_controls":entry_policy,
+    "session_risk":session_risk,
+    "contract_selection_version":"executable_contract_v1",
     "simulation_version":"intraday_session_v2",
     "pending_reconciliation_positions":sum(bool(x.get("pending_reconciliation")) for x in open_positions.values()),
     "equity_is_estimate":any(x.get("pending_reconciliation") for x in open_positions.values()),

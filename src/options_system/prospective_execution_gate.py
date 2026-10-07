@@ -1,3 +1,5 @@
+import math
+
 DEFAULT_EXECUTION_POLICY = {
     "max_contract_price": 5.00,
     "max_spread_pct": 0.12,
@@ -10,6 +12,10 @@ DEFAULT_EXECUTION_POLICY = {
 def evaluate_execution(episode, risk_gate, cash=1000.0, policy=None):
     policy = {**DEFAULT_EXECUTION_POLICY, **(policy or {})}
     allowed = float((risk_gate or {}).get("allowed_max_fraction") or 0.0)
+    if not math.isfinite(allowed) or not 0 <= allowed <= 1 or not math.isfinite(float(cash)) or float(cash) < 0:
+        return dict(status='BLOCK',executable=False,reasons=['INVALID_RISK_BUDGET'],missing_market_quality=[],
+                    contract=episode.get('contract'),entry_ask=None,capital_per_contract=None,
+                    risk_budget=0.,max_contracts_by_risk_budget=0,market_quality={},policy=policy)
     reasons = []
     missing = []
     contract = episode.get("contract")
@@ -26,6 +32,7 @@ def evaluate_execution(episode, risk_gate, cash=1000.0, policy=None):
         ask = float(ask)
     except (TypeError, ValueError):
         ask = None
+    if ask is not None and not math.isfinite(ask):ask=None
     if ask is None or ask <= 0:
         reasons.append("INVALID_ASK")
     elif ask > float(policy["max_contract_price"]):
@@ -43,11 +50,12 @@ def evaluate_execution(episode, risk_gate, cash=1000.0, policy=None):
     else:
         bid = float(bid)
         quality["bid"] = bid
-        if bid < float(policy["min_bid"]):
+        if not math.isfinite(bid) or bid < float(policy["min_bid"]):
             reasons.append("BID_BELOW_LIMIT")
+            if not math.isfinite(bid):quality['bid']=None
         if ask:
             spread_pct = (ask - bid) / ask
-            quality["spread_pct"] = spread_pct
+            quality["spread_pct"] = spread_pct if math.isfinite(spread_pct) else None
             if spread_pct < 0:
                 reasons.append("CROSSED_OR_INVALID_QUOTE")
             elif spread_pct > float(policy["max_spread_pct"]):
@@ -60,8 +68,8 @@ def evaluate_execution(episode, risk_gate, cash=1000.0, policy=None):
         if value in (None, ""):
             missing.append(field)
         else:
-            quality[field] = float(value)
-            if float(value) < float(minimum):
+            quality[field] = float(value) if math.isfinite(float(value)) else None
+            if not math.isfinite(float(value)) or float(value) < float(minimum):
                 reasons.append(field.upper() + "_BELOW_LIMIT")
 
     hard_block = bool(reasons)
