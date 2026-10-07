@@ -5,12 +5,12 @@ import argparse
 import json
 from pathlib import Path
 
-from options_system.live_paper_audit import audit, render_text
+from options_system.live_paper_audit import audit, latest_session_date, render_text
 
 
 def main() -> int:
     ap = argparse.ArgumentParser(description="Audit Options-System local LIVE PAPER ledger for one session date")
-    ap.add_argument("--date", required=True, help="Session date YYYY-MM-DD")
+    ap.add_argument("--date", help="Session date YYYY-MM-DD; defaults to latest session in LIVE ledger")
     ap.add_argument("--state", default="artifacts/intraday/PAPER_TRADING_LIVE_STATE_V01.json")
     ap.add_argument("--out-dir", default="artifacts/intraday/live_paper_audits")
     ap.add_argument("--stdout-only", action="store_true", help="Do not write report files")
@@ -21,14 +21,20 @@ def main() -> int:
         raise SystemExit(f"State file not found: {state_path}")
 
     state = json.loads(state_path.read_text(encoding="utf-8"))
-    result = audit(state, args.date)
+    date = args.date or latest_session_date(state)
+    if not date:
+        raise SystemExit("No LIVE PAPER session date available in live_ledger")
+    if args.date is None:
+        print(f"AUTO_DATE {date}")
+
+    result = audit(state, date)
     text = render_text(result)
     print(text)
 
     if not args.stdout_only:
         out = Path(args.out_dir)
         out.mkdir(parents=True, exist_ok=True)
-        stem = f"LIVE_PAPER_AUDIT_{args.date}"
+        stem = f"LIVE_PAPER_AUDIT_{date}"
         json_path = out / f"{stem}.json"
         text_path = out / f"{stem}.txt"
         json_path.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")

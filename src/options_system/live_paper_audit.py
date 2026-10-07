@@ -40,6 +40,11 @@ def add_check(checks: list[dict[str, Any]], name: str, status: str, detail: str)
     checks.append({"name": name, "status": status, "detail": detail})
 
 
+def latest_session_date(state: dict[str, Any]) -> str | None:
+    dates = sorted({str(t.get("decision_date")) for t in (state.get("live_ledger") or []) if t.get("decision_date")})
+    return dates[-1] if dates else None
+
+
 @dataclass
 class Event:
     ts: datetime

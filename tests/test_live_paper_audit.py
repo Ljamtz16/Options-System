@@ -2,7 +2,7 @@ from copy import deepcopy
 
 import pytest
 
-from options_system.live_paper_audit import audit
+from options_system.live_paper_audit import audit, latest_session_date
 
 
 def trade(signal_id, entry_time, exit_time, ask, bid, cash_before, cash_after_entry, cash_after):
@@ -77,3 +77,13 @@ def test_audit_fails_on_corrupted_trade_pnl():
 
     assert result["status"] == "FAIL"
     assert result["diagnostics"]["pnl_errors"]
+
+
+def test_latest_session_date_uses_latest_ledger_day():
+    state = state_fixture()
+    later = deepcopy(state["live_ledger"][0])
+    later["decision_date"] = "2026-10-08"
+    state["live_ledger"].append(later)
+
+    assert latest_session_date(state) == "2026-10-08"
+    assert latest_session_date({"live_ledger": []}) is None

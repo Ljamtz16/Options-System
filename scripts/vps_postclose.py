@@ -20,6 +20,7 @@ TASKS=(
     "scripts/build_prospective_risk_gate.py",
     "scripts/build_prospective_execution_gate.py",
     "scripts/run_live_paper_trader.py",
+    "scripts/audit_live_paper.py",
     "scripts/build_paper_risk_replay_comparison.py",
     "scripts/build_prospective_governance.py",
     "scripts/analyze_entry_controls.py",
