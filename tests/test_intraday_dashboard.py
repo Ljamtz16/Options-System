@@ -107,6 +107,22 @@ def test_dashboard_exposes_execution_gate_tab():
  assert 'contract_execution_quality_governance_only' in meta
 
 
+def test_dashboard_separates_local_and_broker_paper_accounts():
+ r=Path(__file__).resolve().parents[1]
+ a=r/'artifacts/intraday'
+ tabs=(a/'research_dashboard_tabs.js').read_text(encoding='utf-8')
+ builder=(r/'scripts/build_research_dashboard_meta.py').read_text(encoding='utf-8')
+ for label in ('Options Local','Options Alpaca','Jev Alpaca'):
+  assert label in tabs
+ for token in ('optionsAlpacaCards','optionsAlpacaTrades','jevAlpacaCards','jevAlpacaOrders'):
+  assert token in tabs
+ assert "OPTIONS_ALPACA_PAPER_STATE_V01.json" in builder
+ assert "data/paper-status.json" in builder
+ assert "data/paper.sqlite" in builder
+ assert "'options_alpaca_paper':options_alpaca" in builder
+ assert "'jev_alpaca_paper':jev_alpaca" in builder
+
+
 def test_dashboard_exposes_readiness():
  r=Path(__file__).resolve().parents[1]
  a=r/'artifacts/intraday'

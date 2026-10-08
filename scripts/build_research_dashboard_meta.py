@@ -1,4 +1,5 @@
 import json
+import sqlite3
 from options_system.prospective_readiness import build_health
 from pathlib import Path
 
@@ -47,6 +48,36 @@ paper_state=json.loads(paper_state_path.read_text(encoding='utf-8')) if paper_st
     'live_ledger':[],'causal_replay_summary':{}
 }
 
+options_alpaca_path=A/'OPTIONS_ALPACA_PAPER_STATE_V01.json'
+options_alpaca=json.loads(options_alpaca_path.read_text(encoding='utf-8')) if options_alpaca_path.exists() else {
+    'mode':'ALPACA_PAPER_MIRROR','paper_only':True,'submit_orders':False,
+    'shadow_capital':1000.0,'account':{},'trades':{},'last_actions':[]
+}
+
+jev_root=R.parent/'jev-lab'
+jev_paper_status_path=jev_root/'data/paper-status.json'
+jev_paper_status=json.loads(jev_paper_status_path.read_text(encoding='utf-8')) if jev_paper_status_path.exists() else {}
+jev_paper_orders=[]
+jev_paper_db=jev_root/'data/paper.sqlite'
+if jev_paper_db.exists():
+    try:
+        with sqlite3.connect(str(jev_paper_db),timeout=2) as db:
+            rows=db.execute('SELECT * FROM intents ORDER BY rowid DESC LIMIT 100').fetchall()
+        for cid,body,broker,state,created in rows:
+            request=json.loads(body) if body else {}
+            saved=json.loads(broker) if broker else {}
+            jev_paper_orders.append({
+                'client_order_id':cid,'created_at':created,'state':state,
+                'symbol':request.get('symbol'),'qty':request.get('qty'),
+                'side':request.get('side'),'position_intent':request.get('position_intent'),
+                'type':request.get('type'),'limit_price':request.get('limit_price'),
+                'broker_status':saved.get('status'),'filled_qty':saved.get('filled_qty'),
+                'filled_avg_price':saved.get('filled_avg_price'),'filled_at':saved.get('filled_at')
+            })
+    except (sqlite3.Error,ValueError,TypeError):
+        jev_paper_orders=[]
+jev_alpaca={'available':bool(jev_paper_status),'status':jev_paper_status,'orders':jev_paper_orders}
+
 paper_risk_comparison_path=A/'PAPER_RISK_REPLAY_COMPARISON_V01.json'
 paper_risk_comparison=json.loads(
     paper_risk_comparison_path.read_text(encoding='utf-8')
@@ -88,11 +119,14 @@ for label,payload in combos['labels'].items():
 meta={'entry_controls_analysis':entry_controls_analysis,'jev_calibration_analysis':jev_calibration_analysis,
       'execution_modes':{'JEV_SHADOW':'Simulaciones independientes por snapshot; no cuenta',
        'COMPARATOR_SHADOW':'Hipótesis con reglas comunes; no cuenta',
-       'LIVE_PAPER':'Cuenta virtual local; sin órdenes de broker',
-       'ALPACA_PAPER':'Cuenta del broker; resultados por fills confirmados'},
+       'LIVE_PAPER':'Options-System cuenta virtual local; sin órdenes de broker',
+       'OPTIONS_ALPACA_PAPER':'Options-System espejo en cuenta Alpaca Paper dedicada',
+       'JEV_ALPACA_PAPER':'Jev ejecutor en cuenta Alpaca Paper separada'},
       'discovery_session':'2026-10-02','hypotheses':hypotheses,
       'prospective':evaluation.get('candidates',{}),'prospective_validation':daily,
-      'tracker_summary':tracker_summary,'paper_trading':paper_state,'paper_control':paper_control,'paper_risk_comparison':paper_risk_comparison,
+      'tracker_summary':tracker_summary,'paper_trading':paper_state,
+      'options_alpaca_paper':options_alpaca,'jev_alpaca_paper':jev_alpaca,
+      'paper_control':paper_control,'paper_risk_comparison':paper_risk_comparison,
       'sizing_simulation':sizing,'stress_testing':stress,'risk_gate':gate,'execution_gate':execution,'readiness':health,'discovery':discovery}
 raw=json.dumps(meta,separators=(',',':'))
 (A/'research_dashboard_meta.json').write_text(raw,encoding='utf-8')

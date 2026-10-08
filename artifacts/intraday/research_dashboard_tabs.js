@@ -1,11 +1,11 @@
 (function(){
-const M=window.RESEARCH_META||{},V=M.prospective_validation||{},S=M.sizing_simulation||{},T=M.stress_testing||{},G=M.risk_gate||{},X=M.execution_gate||{},H=M.readiness||{},P=M.paper_trading||{},PC=M.paper_control||{},PR=M.paper_risk_comparison||{},root=document.querySelector('.w');if(!root)return;
+const M=window.RESEARCH_META||{},V=M.prospective_validation||{},S=M.sizing_simulation||{},T=M.stress_testing||{},G=M.risk_gate||{},X=M.execution_gate||{},H=M.readiness||{},P=M.paper_trading||{},OA=M.options_alpaca_paper||{},JA=M.jev_alpaca_paper||{},PC=M.paper_control||{},PR=M.paper_risk_comparison||{},root=document.querySelector('.w');if(!root)return;
 const esc=x=>String(x??'--').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const pct=x=>x==null?'--':(100*(+x)).toFixed(1)+'%';
 const money=x=>x==null?'--':new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(+x);
 const ruleText=r=>r.feature?esc(r.feature)+' '+esc(r.op)+' '+esc(r.value):Object.entries(r).map(([k,v])=>esc(k)+' = '+esc(v)).join('<br>');
 const header=root.querySelector('header'),cards=root.querySelector('#cards'),grid=root.querySelector('.grid'),compare=document.querySelector('#compare')?.closest('.panel'),foot=root.querySelector('.foot');
-const tabs=document.createElement('div');tabs.className='tabs';tabs.innerHTML='<button data-tab="session" class="active">Sesion intradia</button><button data-tab="episodes">Episodios</button><button data-tab="hyp">Hipotesis</button><button data-tab="pros">Validacion prospectiva</button><button data-tab="exec">Execution Gate</button><button data-tab="paper">LIVE_PAPER · local</button><button data-tab="controls">Análisis P2–P3</button><button data-tab="health">Readiness</button><button data-tab="lab">Discovery Lab</button>';
+const tabs=document.createElement('div');tabs.className='tabs';tabs.innerHTML='<button data-tab="session" class="active">Sesion intradia</button><button data-tab="episodes">Episodios</button><button data-tab="hyp">Hipotesis</button><button data-tab="pros">Validacion prospectiva</button><button data-tab="exec">Execution Gate</button><button data-tab="paper">Options Local</button><button data-tab="optalpaca">Options Alpaca</button><button data-tab="jevalpaca">Jev Alpaca</button><button data-tab="controls">Análisis P2–P3</button><button data-tab="health">Readiness</button><button data-tab="lab">Discovery Lab</button>';
 root.insertBefore(tabs,root.children[1]);
 const banner=document.createElement('div');banner.className='research-banner';banner.innerHTML='<b>Sesion de descubrimiento: '+esc(M.discovery_session)+'</b> - Los resultados de esta fecha son diagnosticos y no cuentan como evidencia prospectiva. H03 esta congelada desde el cierre de esta sesion.';root.insertBefore(banner,tabs.nextSibling);
 const session=[header,cards,grid].filter(Boolean);session.forEach(x=>x.dataset.tabgroup='session');
@@ -77,6 +77,9 @@ make('paper',`
   </div>
 </div>`);
 
+make('optalpaca',`<div class="panel"><h2>Options Alpaca · cuenta broker paper dedicada</h2><div class="explain"><b>Espejo de Options-System.</b> Sólo reproduce operaciones nuevas del LIVE PAPER local en una cuenta Alpaca Paper separada. El capital sombra permanece en $1,000 aunque el saldo broker sea distinto.</div><div class="cards" id="optionsAlpacaCards"></div><div class="panel" style="margin-top:12px"><h2>Operaciones espejo</h2><div class="compare" id="optionsAlpacaTrades"></div></div><div class="panel" style="margin-top:12px"><h2>Últimas acciones del mirror</h2><div class="compare" id="optionsAlpacaActions"></div></div></div>`);
+make('jevalpaca',`<div class="panel"><h2>Jev Alpaca · cuenta broker paper separada</h2><div class="explain"><b>Ejecutor independiente de Jev.</b> Sus decisiones, órdenes, saldo y P&amp;L no se suman a Options Local ni a Options Alpaca.</div><div class="cards" id="jevAlpacaCards"></div><div class="panel" style="margin-top:12px"><h2>Órdenes Jev · últimas 100</h2><div class="compare" id="jevAlpacaOrders"></div></div></div>`);
+
 make('controls','<div class="panel"><h2>P2 · controles de entrada</h2><div id="p2analysis"></div></div><div class="panel"><h2>P3 · diagnóstico Jev</h2><div id="p3analysis"></div></div>');
 make('health','<div class="panel"><h2>Readiness</h2><div class="explain"><b>Estado general:</b> <span id="healthstatus"></span> &nbsp; <b>Generado:</b> <span id="healthtime"></span><br>Comprueba outputs persistidos del pipeline. El estado de timers/services de la VPS se verifica por systemd y no se infiere desde el navegador.</div><div class="cards" id="healthcards"></div><div class="compare" id="healthchecks"></div></div>');
 make('lab','<div class="panel"><h2>Discovery Lab</h2><div class="explain"><b>Uso:</b> combinaciones retrospectivas para generar hipotesis, no para afirmar rendimiento futuro. Baseline = frecuencia del evento; lift = tasa de la combinacion / baseline.</div><div id="labgrid"></div></div>');
@@ -106,6 +109,40 @@ document.getElementById('exectable').innerHTML=XE.length?'<table><thead><tr><th>
 document.getElementById('healthstatus').textContent=H.overall_status||'UNKNOWN';document.getElementById('healthtime').textContent=H.generated_at_utc||'--';
 document.getElementById('healthcards').innerHTML=[['Fallos',H.failures||0],['Esperando',H.waiting||0],['Snapshots',H.snapshot_count||0],['Episodios prospectivos',H.prospective_episode_count||0]].map(([k,v])=>'<div class="card"><span>'+esc(k)+'</span><b>'+esc(v)+'</b></div>').join('');
 document.getElementById('healthchecks').innerHTML=(H.checks||[]).length?'<table><thead><tr><th>Check</th><th>Estado</th><th>Detalle</th></tr></thead><tbody>'+(H.checks||[]).map(c=>'<tr><td>'+esc(c.label)+'</td><td><b>'+esc(c.status)+'</b></td><td>'+esc(c.detail)+'</td></tr>').join('')+'</tbody></table>':'<div class="sub" style="padding:18px 0">Readiness pendiente de generar.</div>';
+
+const optionsAlpacaTrades=Object.values(OA.trades||{}).sort((a,b)=>String(b.local_entry_time||'').localeCompare(String(a.local_entry_time||'')));
+const optionsAlpacaClosed=optionsAlpacaTrades.filter(x=>x.status==='CLOSED_FILLED');
+const optionsAlpacaGross=optionsAlpacaClosed.reduce((s,x)=>s+Number(x.broker_gross_pnl||0),0);
+const optionsAlpacaOpen=optionsAlpacaTrades.filter(x=>['ENTRY_SUBMITTED','OPEN_FILLED','EXIT_SUBMITTED'].includes(x.status)).length;
+const OAA=OA.account||{};
+document.getElementById('optionsAlpacaCards').innerHTML=[
+ ['Broker equity',money(OAA.equity),'cuenta Alpaca Paper dedicada'],
+ ['Buying power',money(OAA.buying_power),'broker paper'],
+ ['Mirror P&L bruto',money(optionsAlpacaGross),optionsAlpacaClosed.length+' trades cerrados con fill'],
+ ['Posiciones espejo',optionsAlpacaOpen,optionsAlpacaTrades.length+' trades rastreados'],
+ ['Capital sombra',money(OA.shadow_capital||1000),'Options-System; no es saldo broker']
+].map(x=>'<div class="card"><div class="lab">'+x[0]+'</div><div class="val">'+x[1]+'</div><div class="hint">'+x[2]+'</div></div>').join('');
+document.getElementById('optionsAlpacaTrades').innerHTML=optionsAlpacaTrades.length
+?'<table><thead><tr><th>Entrada local</th><th>Hipótesis</th><th>Contrato</th><th>Estado</th><th>ASK local</th><th>Fill entrada</th><th>BID local salida</th><th>Fill salida</th><th>P&L local</th><th>P&L broker bruto</th><th>Delta bruto</th></tr></thead><tbody>'+optionsAlpacaTrades.map(x=>'<tr><td>'+esc(x.local_entry_time)+'</td><td>'+esc(x.hypothesis)+'</td><td>'+esc(x.contract)+'</td><td>'+esc(x.status)+'</td><td>'+money(x.local_entry_ask)+'</td><td>'+money(x.entry_order?.filled_avg_price)+'</td><td>'+money(x.local_exit_bid)+'</td><td>'+money(x.exit_order?.filled_avg_price)+'</td><td>'+money(x.local_net_pnl)+'</td><td>'+money(x.broker_gross_pnl)+'</td><td>'+money(x.gross_pnl_delta_vs_local)+'</td></tr>').join('')+'</tbody></table>'
+:'<div class="sub" style="padding:18px 0">Sin operaciones espejo todavía. El mirror comienza en '+esc(OA.mirror_start_utc||'--')+'.</div>';
+const optionsActions=OA.last_actions||[];
+document.getElementById('optionsAlpacaActions').innerHTML=optionsActions.length
+?'<table><thead><tr><th>Acción</th><th>Signal</th><th>Símbolo</th><th>Qty</th><th>Motivo</th></tr></thead><tbody>'+optionsActions.map(x=>'<tr><td>'+esc(x.action)+'</td><td>'+esc(x.signal_id)+'</td><td>'+esc(x.symbol)+'</td><td>'+esc(x.qty)+'</td><td>'+esc(x.reason||'--')+'</td></tr>').join('')+'</tbody></table>'
+:'<div class="sub" style="padding:18px 0">Sin acciones recientes del mirror.</div>';
+
+const JAS=JA.status||{},jevOrders=JA.orders||[];
+const jevPositions=Array.isArray(JAS.positions)?JAS.positions.length:Number(JAS.positions||0);
+const jevOpenOrders=Array.isArray(JAS.open_orders)?JAS.open_orders.length:Number(JAS.open_orders||0);
+document.getElementById('jevAlpacaCards').innerHTML=[
+ ['Broker equity',money(JAS.equity),JA.available?'estado persistido Jev':'estado no disponible'],
+ ['Buying power',money(JAS.buying_power),'cuenta Jev separada'],
+ ['Variación diaria',money(JAS.daily_equity_change),'equity vs inicio del día'],
+ ['P&L realizado bruto',money(JAS.realized_pnl_gross),esc(JAS.closed_trades??'--')+' cierres guardados'],
+ ['Abierto',money(JAS.unrealized_pnl),jevPositions+' posiciones · '+jevOpenOrders+' órdenes abiertas']
+].map(x=>'<div class="card"><div class="lab">'+x[0]+'</div><div class="val">'+x[1]+'</div><div class="hint">'+x[2]+'</div></div>').join('');
+document.getElementById('jevAlpacaOrders').innerHTML=jevOrders.length
+?'<table><thead><tr><th>Hora</th><th>Contrato</th><th>Acción</th><th>Estado local</th><th>Estado broker</th><th>Límite</th><th>Fill</th><th>Qty fill</th></tr></thead><tbody>'+jevOrders.map(x=>'<tr><td>'+esc(x.created_at)+'</td><td>'+esc(x.symbol)+'</td><td>'+esc(x.position_intent)+'</td><td>'+esc(x.state)+'</td><td>'+esc(x.broker_status)+'</td><td>'+money(x.limit_price)+'</td><td>'+money(x.filled_avg_price)+'</td><td>'+esc(x.filled_qty)+'</td></tr>').join('')+'</tbody></table>'
+:'<div class="sub" style="padding:18px 0">No hay órdenes Jev disponibles en paper.sqlite.</div>';
 
 const riskAnalysis=M.entry_controls_analysis||{},calibration=M.jev_calibration_analysis||{};
 document.getElementById('p2analysis').innerHTML='<div class="explain">'+esc(riskAnalysis.status)+' · '+(riskAnalysis.prospective_signal_days?.length||0)+' días. Escenarios comparativos; no activan límites nuevos. Un contrato por entrada.</div><table><tr><th>Escenario</th><th>Cerradas</th><th>Bloqueadas</th><th>Pendientes</th><th>P&L realizado</th><th>Máximo DD diario</th></tr>'+Object.entries(riskAnalysis.scenarios||{}).map(([k,x])=>'<tr><td>'+esc(k)+'</td><td>'+esc(x.closed_trades)+'</td><td>'+esc(x.blocked_signals)+'</td><td>'+esc(x.pending_reconciliation_positions)+'</td><td>'+money(x.realized_net_pnl)+'</td><td>'+pct(Math.max(0,...Object.values(x.daily||{}).map(d=>d.max_drawdown_fraction)))+'</td></tr>').join('')+'</table>';
