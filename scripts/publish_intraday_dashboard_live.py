@@ -24,6 +24,7 @@ TASKS = [
     "scripts/build_prospective_risk_gate.py",
     "scripts/build_prospective_execution_gate.py",
     "scripts/run_live_paper_trader.py",
+    "scripts/run_options_alpaca_mirror.py",
     "scripts/build_paper_risk_replay_comparison.py",
     "scripts/analyze_entry_controls.py",
     "scripts/build_jev_calibration_analysis.py",
