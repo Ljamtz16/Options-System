@@ -3,6 +3,9 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
+import time
+from contextlib import contextmanager
 from pathlib import Path
 
 from options_system.options_alpaca_mirror import (
@@ -16,6 +19,35 @@ from options_system.options_alpaca_mirror import (
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_LOCAL = ROOT / "artifacts/intraday/PAPER_TRADING_LIVE_STATE_V01.json"
 DEFAULT_MIRROR = ROOT / "artifacts/intraday/OPTIONS_ALPACA_PAPER_STATE_V01.json"
+DEFAULT_LOCK = ROOT / "artifacts/intraday/.options_alpaca_mirror.lock"
+
+
+class MirrorBusy(RuntimeError):
+    pass
+
+
+@contextmanager
+def _single_instance_lock(path: Path = DEFAULT_LOCK, stale_seconds: float = 120.0):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    for attempt in range(2):
+        try:
+            fd = os.open(path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+            os.write(fd, f"pid={os.getpid()} created={time.time()}\n".encode("utf-8"))
+            os.close(fd)
+            break
+        except FileExistsError:
+            try:
+                stale = time.time() - path.stat().st_mtime > stale_seconds
+            except FileNotFoundError:
+                stale = False
+            if stale and attempt == 0:
+                path.unlink(missing_ok=True)
+                continue
+            raise MirrorBusy(f"Mirror already running; lock exists: {path}")
+    try:
+        yield
+    finally:
+        path.unlink(missing_ok=True)
 
 
 def _safe_account(a: dict) -> dict:
@@ -27,30 +59,7 @@ def _safe_account(a: dict) -> dict:
     return {k: a.get(k) for k in keep if k in a}
 
 
-def main() -> int:
-    ap = argparse.ArgumentParser(description="Mirror Options-System LIVE PAPER decisions into a dedicated Alpaca Paper account")
-    ap.add_argument("--env-file", help="Secret env file; defaults to ~/.config/options-system/options-alpaca-paper.env")
-    ap.add_argument("--local-state", default=str(DEFAULT_LOCAL))
-    ap.add_argument("--mirror-state", default=str(DEFAULT_MIRROR))
-    ap.add_argument("--check-account", action="store_true", help="Validate dedicated Alpaca Paper credentials only")
-    args = ap.parse_args()
-
-    env_path = load_env_file(args.env_file)
-    cfg = MirrorConfig.from_env()
-
-    if args.check_account:
-        cfg.validate(require_start=False)
-        account = AlpacaPaperClient(cfg.key_id, cfg.secret_key).account()
-        print("OPTIONS_ALPACA_ACCOUNT_OK")
-        print(json.dumps(_safe_account(account), indent=2))
-        if env_path:
-            print(f"ENV_FILE {env_path}")
-        return 0
-
-    if not cfg.enabled:
-        print("OPTIONS_ALPACA_MIRROR_DISABLED")
-        return 0
-
+def _run_enabled(args, cfg: MirrorConfig) -> int:
     cfg.validate(require_start=True)
     local_path = Path(args.local_state)
     mirror_path = Path(args.mirror_state)
@@ -83,6 +92,38 @@ def main() -> int:
         print("ACTION", json.dumps(action, sort_keys=True))
     print(f"STATE {mirror_path.resolve()}")
     return 0
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description="Mirror Options-System LIVE PAPER decisions into a dedicated Alpaca Paper account")
+    ap.add_argument("--env-file", help="Secret env file; defaults to ~/.config/options-system/options-alpaca-paper.env")
+    ap.add_argument("--local-state", default=str(DEFAULT_LOCAL))
+    ap.add_argument("--mirror-state", default=str(DEFAULT_MIRROR))
+    ap.add_argument("--check-account", action="store_true", help="Validate dedicated Alpaca Paper credentials only")
+    args = ap.parse_args()
+
+    env_path = load_env_file(args.env_file)
+    cfg = MirrorConfig.from_env()
+
+    if args.check_account:
+        cfg.validate(require_start=False)
+        account = AlpacaPaperClient(cfg.key_id, cfg.secret_key).account()
+        print("OPTIONS_ALPACA_ACCOUNT_OK")
+        print(json.dumps(_safe_account(account), indent=2))
+        if env_path:
+            print(f"ENV_FILE {env_path}")
+        return 0
+
+    if not cfg.enabled:
+        print("OPTIONS_ALPACA_MIRROR_DISABLED")
+        return 0
+
+    try:
+        with _single_instance_lock():
+            return _run_enabled(args, cfg)
+    except MirrorBusy as exc:
+        print("OPTIONS_ALPACA_MIRROR_BUSY", str(exc))
+        return 0
 
 
 if __name__ == "__main__":

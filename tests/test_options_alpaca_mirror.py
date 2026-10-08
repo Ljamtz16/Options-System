@@ -27,6 +27,8 @@ class FakeClient:
         return deepcopy(order)
 
     def order_by_client_id(self, client_order_id):
+        if client_order_id not in self.orders:
+            raise RuntimeError("order not found")
         return deepcopy(self.orders[client_order_id])
 
     def cancel_order(self, order_id):
@@ -111,6 +113,31 @@ def test_live_open_then_close_is_idempotently_mirrored():
     assert actions2 == []
     assert len(client.submissions) == 2
     assert mirror2["trades"][t["signal_id"]]["status"] == "CLOSED_FILLED"
+
+
+def test_existing_broker_entry_is_recovered_after_local_state_restart():
+    client = FakeClient()
+    t = open_trade()
+    cid = "optsys_entry_" + __import__("hashlib").sha1(t["signal_id"].encode("utf-8")).hexdigest()[:24]
+    client.orders[cid] = {
+        "id": f"id-{cid}",
+        "client_order_id": cid,
+        "status": "filled",
+        "symbol": t["contract"],
+        "qty": "1",
+        "filled_qty": "1",
+        "filled_avg_price": "2.05",
+        "filled_at": "2026-10-09T13:31:00Z",
+    }
+    mirror, actions = run_mirror(
+        {"open_positions": [t], "live_ledger": []},
+        {"trades": {}},
+        cfg(submit=True),
+        client=client,
+    )
+    assert actions[0]["action"] == "BUY_TO_OPEN"
+    assert mirror["trades"][t["signal_id"]]["status"] == "OPEN_FILLED"
+    assert client.submissions == []
 
 
 def test_pending_entry_is_canceled_if_local_trade_closes_first():

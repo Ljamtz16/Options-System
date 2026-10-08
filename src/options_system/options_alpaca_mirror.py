@@ -183,6 +183,21 @@ def _refresh_order(client: AlpacaPaperClient, saved: dict[str, Any] | None) -> d
         return saved
 
 
+def _recover_or_submit(client: AlpacaPaperClient, *, signal_id: str, action: str,
+                       symbol: str, qty: int, side: str, position_intent: str) -> dict[str, Any]:
+    client_order_id = _client_id(signal_id, action)
+    try:
+        return client.order_by_client_id(client_order_id)
+    except RuntimeError:
+        return client.submit_option_market(
+            symbol=symbol,
+            qty=qty,
+            side=side,
+            position_intent=position_intent,
+            client_order_id=client_order_id,
+        )
+
+
 def run_mirror(local_state: dict[str, Any], mirror_state: dict[str, Any], config: MirrorConfig,
                client: AlpacaPaperClient | None = None) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     config.validate(require_start=True)
@@ -218,12 +233,14 @@ def run_mirror(local_state: dict[str, Any], mirror_state: dict[str, Any], config
             actions.append(plan)
             if not config.submit_orders:
                 continue
-            order = client.submit_option_market(
+            order = _recover_or_submit(
+                client,
+                signal_id=sid,
+                action="entry",
                 symbol=str(local["contract"]),
                 qty=int(local.get("quantity") or 1),
                 side="buy",
                 position_intent="buy_to_open",
-                client_order_id=_client_id(sid, "entry"),
             )
             mirrored = {
                 "signal_id": sid,
@@ -284,12 +301,14 @@ def run_mirror(local_state: dict[str, Any], mirror_state: dict[str, Any], config
                 }
                 actions.append(plan)
                 if config.submit_orders:
-                    order = client.submit_option_market(
+                    order = _recover_or_submit(
+                        client,
+                        signal_id=sid,
+                        action="exit",
                         symbol=str(local["contract"]),
                         qty=int(local.get("quantity") or 1),
                         side="sell",
                         position_intent="sell_to_close",
-                        client_order_id=_client_id(sid, "exit"),
                     )
                     mirrored["exit_order"] = _order_summary(order)
                     mirrored["status"] = "EXIT_SUBMITTED"

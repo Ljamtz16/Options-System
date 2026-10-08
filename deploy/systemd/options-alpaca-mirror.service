@@ -1,0 +1,17 @@
+[Unit]
+Description=Options-System Alpaca Paper mirror watcher
+After=network-online.target options-fast-paper-tracker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ljamtz
+WorkingDirectory=/home/ljamtz/options-system
+Environment=PYTHONPATH=/home/ljamtz/options-system:/home/ljamtz/options-system/src
+ExecStart=/home/ljamtz/options-system/.venv/bin/python scripts/run_options_alpaca_mirror_loop.py
+Restart=always
+RestartSec=5
+Nice=5
+
+[Install]
+WantedBy=multi-user.target
