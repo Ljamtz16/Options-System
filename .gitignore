@@ -26,3 +26,6 @@ artifacts/options-system-code-vps.tar.gz
 Thumbs.db
 .vscode/
 .idea/
+# Dashboard session views are generated runtime artifacts.
+# Keep the loader/source code in Git, but not per-session JSON archives/caches.
+artifacts/intraday/sessions/

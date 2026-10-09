@@ -1,3 +1,5 @@
+from options_system.dashboard_sessions import publish_meta_views
+import os
 import json
 import sqlite3
 from options_system.prospective_readiness import build_health
@@ -132,3 +134,6 @@ raw=json.dumps(meta,separators=(',',':'))
 (A/'research_dashboard_meta.json').write_text(raw,encoding='utf-8')
 (A/'research_dashboard_meta.js').write_text('window.RESEARCH_META='+raw+';',encoding='utf-8')
 print('RESEARCH_META_OK',len(hypotheses),'prospective_episodes',len(daily.get('prospective_episodes',[])))
+
+
+publish_meta_views(A/'sessions',meta,refresh_closed=os.getenv('OPTIONS_BUILD_SCOPE')!='today')

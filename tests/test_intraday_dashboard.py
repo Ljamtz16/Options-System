@@ -2,33 +2,23 @@ import json
 from pathlib import Path
 def test_dashboard_artifacts_exist_and_bind_h03():
  r=Path(__file__).resolve().parents[1]
- d=json.loads((r/'artifacts/intraday/intraday_dashboard_data.json').read_text(encoding='utf-8'))
+ a=r/'artifacts/intraday'
 
- # Frozen discovery session remains intact.
- discovery=[
-  x for x in d
-  if x.get('decision_date')=='2026-10-02'
-  and x.get('session_kind')=='DISCOVERY'
-  and x.get('symbol')=='SPY'
- ]
+ # Discovery evidence remains an explicit immutable seed, not part of every Today payload.
+ discovery=json.loads((a/'DISCOVERY_DASHBOARD_2026-10-02.json').read_text(encoding='utf-8'))
  assert len(discovery)==60
  assert sum(bool(x.get('h03')) for x in discovery)==9
+ assert all((x.get('symbol') or 'SPY')=='SPY' for x in discovery)
 
- # Prospective observations coexist with discovery observations.
- prospective=[x for x in d if x.get('session_kind')=='PROSPECTIVE']
- assert prospective
-
- # H03 is frozen for SPY only.
- assert all(
-  not x.get('h03')
-  for x in d
-  if x.get('symbol')!='SPY'
- )
-
- h=(r/'artifacts/intraday/intraday_research_dashboard.html').read_text(encoding='utf-8')
+ h=(a/'intraday_research_dashboard.html').read_text(encoding='utf-8')
+ loader=(a/'dashboard_loader.js').read_text(encoding='utf-8')
  assert 'Options Research Lab' in h
- assert 'research_dashboard_meta.js' in h
- assert 'research_dashboard_tabs.js' in h
+ assert 'src="dashboard_loader.js"' in h
+ assert 'src="intraday_dashboard_data.js"' not in h
+ assert 'sessions/index.json' in loader
+ assert "sessions/'+day+'.json" in loader
+ assert "sessions/'+day+'.meta.json" in loader
+ assert "if(historical)Object.assign(meta,await get('sessions/analysis.json'))" in loader
 
 def test_episode_comparator_asset_is_loadable():
  r=Path(__file__).resolve().parents[1]
@@ -46,11 +36,15 @@ def test_research_dashboard_tabs_and_meta_exist():
  r=Path(__file__).resolve().parents[1]
  a=r/'artifacts/intraday'
  html=(a/'intraday_research_dashboard.html').read_text(encoding='utf-8')
- assert 'research_dashboard_meta.js' in html
- assert 'research_dashboard_tabs.js' in html
+ loader=(a/'dashboard_loader.js').read_text(encoding='utf-8')
+ assert 'dashboard_loader.js' in html
+ assert "loadDashboardScript('research_dashboard_tabs.js')" in html
+ assert "get('sessions/'+day+'.meta.json')" in loader
  tabs=(a/'research_dashboard_tabs.js').read_text(encoding='utf-8')
  for label in ('Sesion intradia','Episodios','Hipotesis','Validacion prospectiva','Execution Gate','Discovery Lab'):
   assert label in tabs
+ builder=(r/'scripts/build_research_dashboard_meta.py').read_text(encoding='utf-8')
+ assert 'publish_meta_views' in builder
  meta=(a/'research_dashboard_meta.js').read_text(encoding='utf-8')
  for hid in ('CALL_FLOW_REVERSAL_V01','PUT_SKEW_SHORT_V01','H03_CALL_RELATIVE_WEAKNESS_REVERSAL_CANDIDATE','H04_CALL_CROSSMARKET_WEAKNESS_CANDIDATE','H05_PUT_CROSSMARKET_MOMENTUM_CANDIDATE'):
   assert hid in meta

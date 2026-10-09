@@ -1,3 +1,6 @@
+from options_system.session_cache import atomic_text,today
+import hashlib
+from datetime import datetime,timezone
 import csv
 import json
 from pathlib import Path
@@ -42,11 +45,11 @@ def discovery_rows():
     return rows
 
 
-def prospective_rows():
-    if not CURRENT.exists():
+def prospective_rows(source=CURRENT):
+    if not source.exists():
         return []
 
-    with CURRENT.open(encoding="utf-8", newline="") as fh:
+    with source.open(encoding="utf-8", newline="") as fh:
         rows = list(csv.DictReader(fh))
 
     data = []
@@ -98,19 +101,44 @@ def prospective_rows():
     return data
 
 
-data = discovery_rows() + prospective_rows()
-data.sort(key=lambda x: (
-    x.get("decision_date") or "",
-    x.get("symbol") or "",
-    x.get("captured_at_utc") or "",
-))
 
-out = A / "intraday_dashboard_data.json"
-js = A / "intraday_dashboard_data.js"
-raw = json.dumps(data, separators=(",", ":"))
-out.write_text(raw, encoding="utf-8")
-js.write_text("window.DASHBOARD_DATA=" + raw + ";", encoding="utf-8")
+def build():
+    directory=A/'sessions';directory.mkdir(parents=True,exist_ok=True)
+    cache_path=directory/'views-cache.json'
+    try:cache=json.loads(cache_path.read_text())
+    except (OSError,ValueError):cache={}
+    algorithm=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+    descriptors={}
+    try:
+        previous=json.loads((directory/'index.json').read_text())
+        descriptors={r['day']:r for r in previous['sessions']}
+    except (OSError,ValueError):pass
+    sources=sorted((CURRENT.parent/'sessions').glob('????-??-??.csv'))
+    if not sources and CURRENT.exists():sources=[CURRENT]
+    for source in [*([DISCOVERY] if DISCOVERY.exists() else []),*sources]:
+        stat=source.stat();signature=[stat.st_size,stat.st_mtime_ns,algorithm]
+        key=str(source.relative_to(ROOT))
+        cached=cache.get(key,{})
+        if cached.get('signature')==signature and all((directory/(day+'.json')).exists() for day in cached.get('days',[])):continue
+        rows=discovery_rows() if source==DISCOVERY else prospective_rows(source)
+        groups={}
+        for row in rows:groups.setdefault(row['decision_date'],[]).append(row)
+        for day,items in groups.items():
+            items.sort(key=lambda x:(x.get('symbol') or '',x.get('captured_at_utc') or ''))
+            atomic_text(directory/(day+'.json'),json.dumps(items,separators=(',',':')))
+            descriptors[day]=dict(day=day,rows=len(items),symbols=sorted({r.get('symbol','SPY') for r in items}),latest_capture=max((r.get('captured_at_utc') or '' for r in items),default=None))
+        cache[key]=dict(signature=signature,days=sorted(groups))
+    day=today()
+    if day not in descriptors:
+        atomic_text(directory/(day+'.json'),'[]')
+        descriptors[day]=dict(day=day,rows=0,symbols=[],latest_capture=None)
+    current=(directory/(day+'.json')).read_text()
+    atomic_text(A/'intraday_dashboard_data.json',current)
+    atomic_text(A/'intraday_dashboard_data.js','window.DASHBOARD_DATA='+current+';')
+    manifest=dict(version=1,today=day,generated_at_utc=datetime.now(timezone.utc).isoformat(),sessions=[descriptors[d] for d in sorted(descriptors)])
+    atomic_text(directory/'index.json',json.dumps(manifest,separators=(',',':')))
+    atomic_text(cache_path,json.dumps(cache,separators=(',',':')))
+    print('DASHBOARD_DATA_OK today',day,'rows',descriptors[day]['rows'],'sessions',len(descriptors))
 
-dates = sorted({x.get("decision_date") for x in data if x.get("decision_date")})
-symbols = sorted({x.get("symbol") for x in data if x.get("symbol")})
-print("DASHBOARD_DATA_OK", "rows", len(data), "dates", dates, "symbols", symbols)
+
+if __name__=='__main__':build()

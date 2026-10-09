@@ -1,6 +1,7 @@
-from options_system.intraday_dataset_v2 import build_intraday_dataset_v2
-
-n=build_intraday_dataset_v2(
-    "data/raw/intraday",
-    "data/processed/intraday/intraday_options_v2.csv")
-print(f"BUILT_INTRADAY_V2 rows={n}")
+from pathlib import Path
+import os
+from options_system.session_cache import build_intraday_sessions, today
+root=Path(__file__).resolve().parents[1]
+day=today() if os.getenv("OPTIONS_BUILD_SCOPE")=="today" else None
+n=build_intraday_sessions(root,day)
+print(f"BUILT_INTRADAY_V2 rows={n} scope={day or 'changed_sessions'}")

@@ -185,6 +185,7 @@ function paintPaperRisk(v){
 paintPaperRisk(PC.risk_fraction??P.paper_risk_fraction??0.2);
 
 window.setPaperRisk=async function(v){
+ if(window.DASHBOARD_VIEW?.mode==='history')return;
  const status=document.getElementById('paperControlStatus');
  status.textContent='Guardando...';
 
@@ -210,6 +211,7 @@ window.setPaperRisk=async function(v){
 };
 
 document.querySelectorAll('#paperRiskButtons button').forEach(b=>{
+ b.disabled=window.DASHBOARD_VIEW?.mode==='history';
  b.addEventListener('click',()=>window.setPaperRisk(Number(b.dataset.risk)));
 });
 
@@ -332,7 +334,12 @@ if(riskScenarios.length){
 
 document.getElementById('labgrid').innerHTML=Object.entries(M.discovery||{}).map(([name,v])=>'<div class="discovery"><h3>'+esc(name.replace('label_','').replaceAll('_',' '))+'</h3><table><thead><tr><th>#</th><th>Reglas</th><th>n</th><th>Tasa</th><th>Baseline</th><th>Lift</th><th>1a mitad</th><th>2a mitad</th></tr></thead><tbody>'+v.top_stable.map((z,i)=>'<tr><td>'+(i+1)+'</td><td>'+z.rules.map(ruleText).join('<br>')+'</td><td>'+z.n+'</td><td>'+pct(z.rate)+'</td><td>'+pct(z.baseline)+'</td><td>'+Number(z.lift).toFixed(2)+'x</td><td>'+pct(z.first_half?.rate)+'</td><td>'+pct(z.second_half?.rate)+'</td></tr>').join('')+'</tbody></table></div>').join('');
 function show(id){document.querySelectorAll('[data-tabgroup]').forEach(x=>x.style.display=x.dataset.tabgroup===id?(x.classList.contains('tabpage')?'block':''):'none');tabs.querySelectorAll('button').forEach(x=>x.classList.toggle('active',x.dataset.tab===id));}
-tabs.addEventListener('click',e=>{let b=e.target.closest('button');if(b)show(b.dataset.tab)});show('session');
+tabs.addEventListener('click',e=>{let b=e.target.closest('button');if(b)show(b.dataset.tab)});if(window.DASHBOARD_VIEW?.mode==='today'){
+ ['controls','lab','pros'].forEach(id=>{const button=tabs.querySelector('[data-tab="'+id+'"]');if(button)button.hidden=true});
+ ['paperReplay','paperRiskComparison','paperRiskDetail'].forEach(id=>{const el=document.getElementById(id);if(el)el.closest('.panel').hidden=true});
+ banner.textContent='Vista del día actual · tablas de esta sesión. La evidencia acumulada, el replay y P2–P3 se consultan en modo Histórico.';
+}
+show('session');
 })();
 
 
@@ -356,6 +363,7 @@ tabs.addEventListener('click',e=>{let b=e.target.closest('button');if(b)show(b.d
   }
 
   function renderAllFrozenHypothesesMonitor() {
+    if(window.DASHBOARD_VIEW?.mode==='today')return;
     const meta = window.RESEARCH_META || {};
     const tracker = meta.tracker_summary || {};
     const prospective = tracker.prospective_only || {};

@@ -35,6 +35,7 @@ Market State -> event/direction probabilities -> contract selection -> conservat
 - `docs/INTRADAY_OPTIONS_ENGINE_V1.md`
 - `docs/INTRADAY_DECISION_ENGINE_V1.md`
 - `docs/VPS_DEPLOYMENT_AND_AUTOMATION.md`
+- `docs/DASHBOARD_SESSION_VIEWS.md`
 - `docs/TODAY_SPY_BOOTSTRAP_2026-10-02.md`
 
 ## Reproduce on VPS

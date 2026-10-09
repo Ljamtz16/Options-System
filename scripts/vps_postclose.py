@@ -1,4 +1,4 @@
-import subprocess,sys
+import os,shutil,subprocess,sys
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -33,6 +33,7 @@ OPTIONAL_INPUTS={
     "scripts/intraday_daily_report.py": ROOT/"data/processed/intraday/intraday_options_v2.csv",
 }
 
+os.environ.pop("OPTIONS_BUILD_SCOPE",None)
 for task in TASKS:
     p=ROOT/task
     if not p.exists():
@@ -53,14 +54,12 @@ DASHBOARD_FILES = (
     "research_dashboard_meta.js",
     "intraday_episode_compare.js",
     "research_dashboard_tabs.js",
+    "dashboard_loader.js",
 )
 
 if WEB_DIR.is_dir():
-    for name in DASHBOARD_FILES:
-        src = ROOT / "artifacts/intraday" / name
-        if not src.exists():
-            raise FileNotFoundError(f"Dashboard asset missing: {src}")
-        (WEB_DIR / name).write_bytes(src.read_bytes())
+    from options_system.dashboard_sessions import publish_web
+    publish_web(ROOT/'artifacts/intraday',WEB_DIR,DASHBOARD_FILES)
     print(f"DASHBOARD_PUBLISHED {WEB_DIR}")
 else:
     print(f"SKIP_DASHBOARD_PUBLISH missing={WEB_DIR}")

@@ -59,9 +59,9 @@ def _decorate_eod(row,symbol,entry_spot,reps,same_day,base_ts):
                 if pnl:path.append(pnl["return"])
         row.update(option_trade_targets(path,f"{side}_eod"))
         row.update(direct_profit_targets(co.get("terminal_return") if co else None,f"{side}_eod"))
-def build_intraday_dataset_v2(snapshot_dir,out_csv):
+def build_intraday_dataset_v2(snapshot_dir,out_csv,snapshot_files=None):
     # Keep option chains for only one market session in memory.
-    files=sorted(Path(snapshot_dir).glob("intraday_options_*.json"))
+    files=sorted(Path(snapshot_dir).glob("intraday_options_*.json") if snapshot_files is None else snapshot_files)
     groups={}
     for f in files:
         obj,p=_load(f)

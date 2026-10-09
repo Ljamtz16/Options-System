@@ -1,3 +1,4 @@
+import os
 import shutil
 import subprocess
 import sys
@@ -38,21 +39,24 @@ PUBLISH = [
     "research_dashboard_meta.js",
     "intraday_episode_compare.js",
     "research_dashboard_tabs.js",
+    "dashboard_loader.js",
 ]
 
+# Counterfactual reports are prepared by the postclose pipeline.
+HISTORICAL_TASKS={"scripts/build_paper_risk_replay_comparison.py",
+                  "scripts/analyze_entry_controls.py",
+                  "scripts/build_jev_calibration_analysis.py"}
+os.environ["OPTIONS_BUILD_SCOPE"]="today"
 for task in TASKS:
+    if task in HISTORICAL_TASKS:
+        print(f"CACHED_POSTCLOSE {task}",flush=True)
+        continue
     print(f"RUN {task}", flush=True)
     subprocess.run([PYTHON, str(ROOT / task)], cwd=ROOT, check=True)
 
 if not WEB_DIR.is_dir():
     raise SystemExit(f"WEB_DIR_MISSING {WEB_DIR}")
 
-for name in PUBLISH:
-    src = A / name
-    if src.exists():
-        shutil.copy2(src, WEB_DIR / name)
-        print(f"PUBLISHED {name}", flush=True)
-    else:
-        print(f"SKIP_MISSING {name}", flush=True)
-
+from options_system.dashboard_sessions import publish_web
+publish_web(A,WEB_DIR,PUBLISH)
 print(f"INTRADAY_DASHBOARD_LIVE_PUBLISHED {WEB_DIR}", flush=True)
