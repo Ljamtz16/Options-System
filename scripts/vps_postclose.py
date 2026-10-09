@@ -24,6 +24,7 @@ TASKS=(
     "scripts/build_paper_risk_replay_comparison.py",
     "scripts/build_prospective_governance.py",
     "scripts/analyze_entry_controls.py",
+    "scripts/build_execution_funnel_report.py",
     "scripts/build_jev_calibration_analysis.py",
     "scripts/build_research_dashboard_meta.py",
 )

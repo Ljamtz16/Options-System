@@ -5,6 +5,7 @@ import json
 import os
 from dataclasses import dataclass
 from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError
@@ -13,6 +14,8 @@ from urllib.request import Request, urlopen
 
 PAPER_BASE_URL = "https://paper-api.alpaca.markets"
 TERMINAL_ORDER_STATES = {"filled", "canceled", "expired", "rejected", "replaced"}
+NY = ZoneInfo("America/New_York")
+BROKER_EXIT_BUFFER_MINUTES = 3.0
 
 
 def _truthy(value: str | None) -> bool:
@@ -114,6 +117,12 @@ class AlpacaPaperClient:
     def account(self) -> dict[str, Any]:
         return self._request("GET", "/v2/account")
 
+    def positions(self) -> list[dict[str, Any]]:
+        return self._request("GET", "/v2/positions")
+
+    def clock(self) -> dict[str, Any]:
+        return self._request("GET", "/v2/clock")
+
     def submit_option_market(self, symbol: str, qty: int, side: str,
                              position_intent: str, client_order_id: str) -> dict[str, Any]:
         payload = {
@@ -198,19 +207,66 @@ def _recover_or_submit(client: AlpacaPaperClient, *, signal_id: str, action: str
         )
 
 
+def _broker_position_symbols(positions: list[dict[str, Any]] | None) -> set[str] | None:
+    if positions is None:
+        return None
+    result = set()
+    for pos in positions:
+        try:
+            qty = float(pos.get("qty") or 0)
+        except (TypeError, ValueError):
+            qty = 0
+        if qty:
+            result.add(str(pos.get("symbol") or ""))
+    return result
+
+
+def _clock_window(clock: dict[str, Any] | None) -> tuple[bool, float | None]:
+    if clock is None:
+        return True, None
+    is_open = bool(clock.get("is_open"))
+    try:
+        now = _dt(clock.get("timestamp"))
+        close = _dt(clock.get("next_close"))
+        minutes = None if now is None or close is None else (close - now).total_seconds() / 60.0
+    except (TypeError, ValueError):
+        minutes = None
+    return is_open, minutes
+
+
+def _finish_broker_trade(mirrored: dict[str, Any], local_closed: bool) -> None:
+    entry_fill = float((mirrored.get("entry_order") or {}).get("filled_avg_price") or 0)
+    exit_fill = float((mirrored.get("exit_order") or {}).get("filled_avg_price") or 0)
+    qty = int(mirrored.get("quantity") or 1)
+    broker_gross = (exit_fill - entry_fill) * 100.0 * qty
+    mirrored["broker_gross_pnl"] = broker_gross
+    if mirrored.get("local_entry_ask") is not None:
+        mirrored["entry_slippage_vs_local_ask"] = entry_fill - float(mirrored["local_entry_ask"])
+    if mirrored.get("local_exit_bid") is not None:
+        mirrored["exit_slippage_vs_local_bid"] = exit_fill - float(mirrored["local_exit_bid"])
+    if mirrored.get("local_gross_pnl") is not None:
+        mirrored["gross_pnl_delta_vs_local"] = broker_gross - float(mirrored["local_gross_pnl"])
+    mirrored["status"] = "CLOSED_FILLED" if local_closed else "BROKER_CLOSED_EOD_LOCAL_OPEN"
+
+
 def run_mirror(local_state: dict[str, Any], mirror_state: dict[str, Any], config: MirrorConfig,
-               client: AlpacaPaperClient | None = None) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+               client: AlpacaPaperClient | None = None, *,
+               broker_positions: list[dict[str, Any]] | None = None,
+               broker_clock: dict[str, Any] | None = None) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     config.validate(require_start=True)
     client = client or AlpacaPaperClient(config.key_id, config.secret_key)
     records = mirror_state.setdefault("trades", {})
     actions: list[dict[str, Any]] = []
+    position_symbols = _broker_position_symbols(broker_positions)
+    market_open, minutes_left = _clock_window(broker_clock)
 
     for local in _local_records(local_state, config.mirror_start_utc):
         sid = str(local["signal_id"])
-        status = local.get("status")
+        local_status = str(local.get("status") or "")
+        symbol = str(local.get("contract") or "")
         mirrored = records.get(sid)
 
-        if mirrored is None and status == "CLOSED":
+        if mirrored is None and local_status == "CLOSED":
             records[sid] = {
                 "signal_id": sid,
                 "contract": local.get("contract"),
@@ -222,7 +278,16 @@ def run_mirror(local_state: dict[str, Any], mirror_state: dict[str, Any], config
             actions.append({"action": "SKIP_MISSED_ENTRY", "signal_id": sid})
             continue
 
-        if mirrored is None and status == "OPEN":
+        if mirrored is None and local_status == "OPEN":
+            if position_symbols:
+                actions.append({"action": "BLOCK_ENTRY_BROKER_RECONCILIATION", "signal_id": sid,
+                                "broker_positions": sorted(position_symbols)})
+                continue
+            if broker_clock is not None and (not market_open or
+                    (minutes_left is not None and minutes_left <= BROKER_EXIT_BUFFER_MINUTES)):
+                actions.append({"action": "BLOCK_ENTRY_CLOSING_WINDOW", "signal_id": sid,
+                                "minutes_to_close": minutes_left})
+                continue
             plan = {
                 "action": "BUY_TO_OPEN",
                 "signal_id": sid,
@@ -234,14 +299,8 @@ def run_mirror(local_state: dict[str, Any], mirror_state: dict[str, Any], config
             if not config.submit_orders:
                 continue
             order = _recover_or_submit(
-                client,
-                signal_id=sid,
-                action="entry",
-                symbol=str(local["contract"]),
-                qty=int(local.get("quantity") or 1),
-                side="buy",
-                position_intent="buy_to_open",
-            )
+                client, signal_id=sid, action="entry", symbol=symbol,
+                qty=int(local.get("quantity") or 1), side="buy", position_intent="buy_to_open")
             mirrored = {
                 "signal_id": sid,
                 "hypothesis": local.get("hypothesis"),
@@ -254,6 +313,8 @@ def run_mirror(local_state: dict[str, Any], mirror_state: dict[str, Any], config
                 "local_net_pnl": None,
                 "entry_order": _order_summary(order),
                 "exit_order": None,
+                "exit_history": [],
+                "exit_retry_count": 0,
                 "status": "ENTRY_SUBMITTED",
             }
             records[sid] = mirrored
@@ -264,19 +325,16 @@ def run_mirror(local_state: dict[str, Any], mirror_state: dict[str, Any], config
         if config.submit_orders and mirrored.get("entry_order"):
             mirrored["entry_order"] = _refresh_order(client, mirrored.get("entry_order"))
         entry_status = str((mirrored.get("entry_order") or {}).get("status") or "")
-        if entry_status == "filled":
-            mirrored["status"] = "OPEN_FILLED"
-        elif entry_status in TERMINAL_ORDER_STATES and entry_status != "filled":
-            mirrored["status"] = f"ENTRY_{entry_status.upper()}"
 
-        if status == "CLOSED":
+        if local_status == "CLOSED":
             mirrored["local_exit_time"] = local.get("exit_time")
             mirrored["local_exit_bid"] = local.get("exit_bid")
             mirrored["local_gross_pnl"] = local.get("gross_pnl")
             mirrored["local_net_pnl"] = local.get("net_pnl")
             mirrored["local_exit_reason"] = local.get("exit_reason")
 
-            if entry_status != "filled":
+        if entry_status != "filled":
+            if local_status == "CLOSED":
                 entry_order = mirrored.get("entry_order") or {}
                 if config.submit_orders and entry_order.get("id") and entry_status not in TERMINAL_ORDER_STATES:
                     actions.append({"action": "CANCEL_ENTRY", "signal_id": sid, "order_id": entry_order.get("id")})
@@ -289,54 +347,103 @@ def run_mirror(local_state: dict[str, Any], mirror_state: dict[str, Any], config
                 if entry_status != "filled":
                     mirrored["status"] = "LOCAL_CLOSED_WITHOUT_BROKER_ENTRY_FILL"
                     continue
+            if entry_status in TERMINAL_ORDER_STATES:
+                mirrored["status"] = f"ENTRY_{entry_status.upper()}"
+            else:
+                mirrored["status"] = "ENTRY_SUBMITTED"
+            continue
 
-            if not mirrored.get("exit_order"):
-                plan = {
-                    "action": "SELL_TO_CLOSE",
-                    "signal_id": sid,
-                    "symbol": local.get("contract"),
-                    "qty": int(local.get("quantity") or 1),
-                    "local_reference_bid": float(local.get("exit_bid") or 0),
-                    "reason": local.get("exit_reason"),
-                }
-                actions.append(plan)
-                if config.submit_orders:
-                    order = _recover_or_submit(
-                        client,
-                        signal_id=sid,
-                        action="exit",
-                        symbol=str(local["contract"]),
-                        qty=int(local.get("quantity") or 1),
-                        side="sell",
-                        position_intent="sell_to_close",
-                    )
-                    mirrored["exit_order"] = _order_summary(order)
-                    mirrored["status"] = "EXIT_SUBMITTED"
+        broker_has_position = True if position_symbols is None else symbol in position_symbols
 
-            if config.submit_orders and mirrored.get("exit_order"):
-                mirrored["exit_order"] = _refresh_order(client, mirrored.get("exit_order"))
-                exit_status = str((mirrored.get("exit_order") or {}).get("status") or "")
-                if exit_status == "filled":
-                    mirrored["status"] = "CLOSED_FILLED"
-                    entry_fill = float(mirrored["entry_order"].get("filled_avg_price") or 0)
-                    exit_fill = float(mirrored["exit_order"].get("filled_avg_price") or 0)
-                    qty = int(mirrored.get("quantity") or 1)
-                    broker_gross = (exit_fill - entry_fill) * 100.0 * qty
-                    mirrored["broker_gross_pnl"] = broker_gross
-                    mirrored["entry_slippage_vs_local_ask"] = entry_fill - float(mirrored.get("local_entry_ask") or 0)
-                    mirrored["exit_slippage_vs_local_bid"] = exit_fill - float(mirrored.get("local_exit_bid") or 0)
-                    mirrored["gross_pnl_delta_vs_local"] = broker_gross - float(mirrored.get("local_gross_pnl") or 0)
-                elif exit_status in TERMINAL_ORDER_STATES:
-                    mirrored["status"] = f"EXIT_{exit_status.upper()}"
+        if config.submit_orders and mirrored.get("exit_order"):
+            mirrored["exit_order"] = _refresh_order(client, mirrored.get("exit_order"))
+        exit_status = str((mirrored.get("exit_order") or {}).get("status") or "")
+
+        if exit_status == "filled":
+            _finish_broker_trade(mirrored, local_status == "CLOSED")
+            continue
+
+        if position_symbols is not None and not broker_has_position and mirrored.get("exit_order"):
+            mirrored["status"] = "BROKER_POSITION_CLOSED_EXTERNALLY"
+            mirrored["manual_reconciliation_required"] = True
+            mirrored["reconciliation_reason"] = "Broker no longer reports the filled entry position"
+            continue
+
+        safety_exit = (
+            local_status == "OPEN" and broker_has_position and broker_clock is not None
+            and market_open and minutes_left is not None
+            and minutes_left <= BROKER_EXIT_BUFFER_MINUTES
+        )
+        desired_exit = local_status == "CLOSED" or safety_exit
+        if not desired_exit:
+            mirrored["status"] = "OPEN_FILLED"
+            continue
+
+        if position_symbols is not None and not broker_has_position:
+            mirrored["status"] = "BROKER_POSITION_CLOSED_EXTERNALLY"
+            mirrored["manual_reconciliation_required"] = True
+            mirrored["reconciliation_reason"] = "Local wants exit but broker position is absent"
+            continue
+
+        if broker_clock is not None and not market_open:
+            mirrored["status"] = "EXIT_WAITING_MARKET_OPEN"
+            mirrored["reconciliation_reason"] = "Exit required while broker market is closed"
+            continue
+
+        terminal_unfilled = bool(exit_status and exit_status in TERMINAL_ORDER_STATES and exit_status != "filled")
+        needs_order = not mirrored.get("exit_order") or terminal_unfilled
+        if needs_order:
+            retry_count = int(mirrored.get("exit_retry_count") or 0)
+            retry = mirrored.get("exit_order") is not None
+            if retry:
+                history = mirrored.setdefault("exit_history", [])
+                prior = dict(mirrored["exit_order"])
+                if not history or history[-1].get("client_order_id") != prior.get("client_order_id"):
+                    history.append(prior)
+                retry_count += 1
+                mirrored["exit_retry_count"] = retry_count
+            action_key = "exit" if not retry else f"exit_r{retry_count}"
+            reason = local.get("exit_reason") if local_status == "CLOSED" else "BROKER_EOD_SAFETY"
+            actions.append({
+                "action": "RETRY_SELL_TO_CLOSE" if retry else "SELL_TO_CLOSE",
+                "signal_id": sid, "symbol": symbol,
+                "qty": int(local.get("quantity") or mirrored.get("quantity") or 1),
+                "local_reference_bid": local.get("exit_bid"), "reason": reason,
+                "retry": retry_count,
+            })
+            if config.submit_orders:
+                order = _recover_or_submit(
+                    client, signal_id=sid, action=action_key, symbol=symbol,
+                    qty=int(local.get("quantity") or mirrored.get("quantity") or 1),
+                    side="sell", position_intent="sell_to_close")
+                mirrored["exit_order"] = _order_summary(order)
+                mirrored["broker_exit_reason"] = reason
+                mirrored["status"] = "EXIT_RETRY_SUBMITTED" if retry else "EXIT_SUBMITTED"
+
+        if config.submit_orders and mirrored.get("exit_order"):
+            mirrored["exit_order"] = _refresh_order(client, mirrored.get("exit_order"))
+            exit_status = str((mirrored.get("exit_order") or {}).get("status") or "")
+            if exit_status == "filled":
+                _finish_broker_trade(mirrored, local_status == "CLOSED")
+            elif exit_status in TERMINAL_ORDER_STATES:
+                mirrored["status"] = f"EXIT_{exit_status.upper()}"
 
     mirror_state.update({
-        "version": "options_alpaca_mirror_v0.1",
+        "version": "options_alpaca_mirror_v0.2",
         "mode": "ALPACA_PAPER_MIRROR",
         "paper_only": True,
         "base_url": PAPER_BASE_URL,
         "mirror_start_utc": config.mirror_start_utc,
         "shadow_capital": config.shadow_capital,
         "submit_orders": config.submit_orders,
+        "broker_market_open": market_open if broker_clock is not None else None,
+        "broker_minutes_to_close": minutes_left,
+        "broker_position_symbols": sorted(position_symbols or []),
+        "reconciliation_required": any(
+            t.get("status") in {"EXIT_WAITING_MARKET_OPEN", "BROKER_POSITION_CLOSED_EXTERNALLY"}
+            or t.get("status", "").startswith("EXIT_") and t.get("status") != "EXIT_SUBMITTED"
+            for t in records.values()
+        ),
         "updated_at_utc": _now(),
     })
     return mirror_state, actions

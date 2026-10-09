@@ -71,9 +71,18 @@ def _run_enabled(args, cfg: MirrorConfig) -> int:
 
     client = AlpacaPaperClient(cfg.key_id, cfg.secret_key)
     account = client.account()
+    positions = client.positions()
+    clock = client.clock()
     mirror["account"] = _safe_account(account)
+    mirror["broker_positions"] = [
+        {k: p.get(k) for k in ("symbol", "qty", "side", "avg_entry_price", "market_value", "unrealized_pl")}
+        for p in positions
+    ]
+    mirror["broker_clock"] = {k: clock.get(k) for k in ("timestamp", "is_open", "next_open", "next_close")}
 
-    mirror, actions = run_mirror(local, mirror, cfg, client=client)
+    mirror, actions = run_mirror(
+        local, mirror, cfg, client=client, broker_positions=positions, broker_clock=clock
+    )
     mirror["last_actions"] = actions
     atomic_write_json(mirror_path, mirror)
 

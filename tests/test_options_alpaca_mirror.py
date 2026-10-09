@@ -169,3 +169,53 @@ def test_pending_entry_is_canceled_if_local_trade_closes_first():
     assert any(a["action"] == "CANCEL_ENTRY" for a in actions)
     assert mirror["trades"][t["signal_id"]]["status"] == "LOCAL_CLOSED_WITHOUT_BROKER_ENTRY_FILL"
     assert len(client.submissions) == 1
+
+
+def open_clock(minutes=60):
+    return {"is_open": True, "timestamp": "2026-10-09T15:00:00-04:00", "next_close": "2026-10-09T16:00:00-04:00"} if minutes == 60 else {"is_open": True, "timestamp": "2026-10-09T15:58:00-04:00", "next_close": "2026-10-09T16:00:00-04:00"}
+
+
+def test_expired_exit_retries_when_broker_position_still_exists():
+    client = FakeClient(); t = open_trade()
+    mirror, _ = run_mirror({"open_positions": [t], "live_ledger": []}, {"trades": {}}, cfg(submit=True), client=client)
+    closed = deepcopy(t); closed.update(status="CLOSED", exit_time="2026-10-09T13:40:00Z", exit_bid=2.40, gross_pnl=40.0, net_pnl=39.89, exit_reason="TP10")
+    sid=t["signal_id"]; row=mirror["trades"][sid]
+    expired={"id":"old-exit","client_order_id":"old-exit-cid","status":"expired","symbol":t["contract"],"qty":"1","filled_qty":"0","filled_avg_price":None}
+    row["exit_order"]=expired
+    client.orders["old-exit-cid"]=deepcopy(expired)
+    positions=[{"symbol":t["contract"],"qty":"1"}]
+    mirror, actions = run_mirror({"open_positions": [], "live_ledger": [closed]}, mirror, cfg(submit=True), client=client, broker_positions=positions, broker_clock=open_clock())
+    assert any(a["action"] == "RETRY_SELL_TO_CLOSE" for a in actions)
+    assert mirror["trades"][sid]["status"] == "CLOSED_FILLED"
+    assert mirror["trades"][sid]["exit_retry_count"] == 1
+    assert len(mirror["trades"][sid]["exit_history"]) == 1
+
+
+def test_expired_exit_waits_for_market_open():
+    client = FakeClient(); t=open_trade()
+    cid="optsys_entry_"+__import__("hashlib").sha1(t["signal_id"].encode()).hexdigest()[:24]
+    entry={"id":"entry","client_order_id":cid,"status":"filled","symbol":t["contract"],"qty":"1","filled_qty":"1","filled_avg_price":"2.05"}
+    expired={"id":"exit","client_order_id":"exit-old","status":"expired","symbol":t["contract"],"qty":"1","filled_qty":"0","filled_avg_price":None}
+    client.orders[cid]=deepcopy(entry);client.orders["exit-old"]=deepcopy(expired)
+    row={"signal_id":t["signal_id"],"contract":t["contract"],"quantity":1,"local_entry_time":t["entry_time"],"local_entry_ask":2.0,"entry_order":entry,"exit_order":expired,"status":"EXIT_EXPIRED"}
+    closed=deepcopy(t);closed.update(status="CLOSED",exit_time="2026-10-09T19:59:00Z",exit_bid=2.0,gross_pnl=0,net_pnl=-.11,exit_reason="SESSION_CLOSE")
+    clock={"is_open":False,"timestamp":"2026-10-09T17:00:00-04:00","next_close":"2026-10-12T16:00:00-04:00"}
+    mirror, actions=run_mirror({"open_positions":[],"live_ledger":[closed]},{"trades":{t["signal_id"]:row}},cfg(submit=True),client=client,broker_positions=[{"symbol":t["contract"],"qty":"1"}],broker_clock=clock)
+    assert actions == []
+    assert mirror["trades"][t["signal_id"]]["status"] == "EXIT_WAITING_MARKET_OPEN"
+
+
+def test_broker_eod_safety_closes_before_local_session_close():
+    client=FakeClient();t=open_trade()
+    mirror,_=run_mirror({"open_positions":[t],"live_ledger":[]},{"trades":{}},cfg(submit=True),client=client)
+    mirror,actions=run_mirror({"open_positions":[t],"live_ledger":[]},mirror,cfg(submit=True),client=client,broker_positions=[{"symbol":t["contract"],"qty":"1"}],broker_clock=open_clock(minutes=2))
+    assert any(a["reason"] == "BROKER_EOD_SAFETY" for a in actions if a["action"] == "SELL_TO_CLOSE")
+    assert mirror["trades"][t["signal_id"]]["status"] == "BROKER_CLOSED_EOD_LOCAL_OPEN"
+
+
+def test_residual_broker_position_blocks_new_entry():
+    t=open_trade();client=FakeClient()
+    mirror,actions=run_mirror({"open_positions":[t],"live_ledger":[]},{"trades":{}},cfg(submit=True),client=client,broker_positions=[{"symbol":"SPY261019C00780000","qty":"1"}],broker_clock=open_clock())
+    assert mirror["trades"] == {}
+    assert actions[0]["action"] == "BLOCK_ENTRY_BROKER_RECONCILIATION"
+    assert client.submissions == []

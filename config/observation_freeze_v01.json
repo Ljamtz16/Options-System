@@ -1,0 +1,21 @@
+{
+  "version": "observation_freeze_v01",
+  "effective_session": "2026-10-12",
+  "minimum_additional_sessions": 5,
+  "target_additional_sessions": 10,
+  "scientific_rules_frozen": true,
+  "execution_repairs_allowed": true,
+  "frozen_hypotheses": ["CALL_FLOW_REVERSAL_V01", "PUT_SKEW_SHORT_V01", "H03_CALL_RELATIVE_WEAKNESS_REVERSAL_V01"],
+  "rules": {
+    "do_not_promote_h03_from_small_sample": true,
+    "do_not_remove_put_from_weak_short_sample": true,
+    "jev_runs_independently": true,
+    "evaluate_by": ["pnl", "drawdown", "fill_rate", "slippage", "stability"]
+  },
+  "sha256": {
+    "artifacts/intraday/FROZEN_HYPOTHESES_V02.json": "4a9909dff1ef757394db4c5924fc97c0a963c35f5232507b85d557014afef48d",
+    "src/options_system/entry_controls.py": "12e0c948766098568ce06ca59fe1812625b40f2646371169e2ffafca0412e1c4",
+    "src/options_system/executable_contracts.py": "8bd2d9dc115707d13b9bff155ca4e5ba32c937ec2e89b3dee46a2d176e4694f6",
+    "src/options_system/prospective_execution_gate.py": "2b1588de8b699ca2814911e7437bb1232d0085e8aa68509ca9119d53d61b4f06"
+  }
+}
