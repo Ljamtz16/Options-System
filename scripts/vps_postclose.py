@@ -3,6 +3,11 @@ from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
 PY=sys.executable
+TASK_TIMEOUT_SECONDS=int(os.getenv('OPTIONS_POSTCLOSE_TASK_TIMEOUT_SECONDS','1200'))
+try:
+    os.nice(int(os.getenv('OPTIONS_POSTCLOSE_NICE','10')))
+except (AttributeError, OSError, ValueError):
+    pass
 
 TASKS=(
     "scripts/build_prospective_market_state.py",
@@ -45,7 +50,11 @@ for task in TASKS:
         print(f"SKIP_NO_INPUT {task} input={required.relative_to(ROOT)}")
         continue
     print(f"RUN {task}")
-    subprocess.run([PY,str(p)],cwd=ROOT,check=True)
+    try:
+        subprocess.run([PY,str(p)],cwd=ROOT,check=True,timeout=TASK_TIMEOUT_SECONDS)
+    except subprocess.TimeoutExpired:
+        print(f"TIMEOUT {task} after {TASK_TIMEOUT_SECONDS}s", flush=True)
+        raise
 # Publish the refreshed static dashboard when a web directory is available.
 WEB_DIR = Path("/var/www/options-dashboard")
 DASHBOARD_FILES = (
