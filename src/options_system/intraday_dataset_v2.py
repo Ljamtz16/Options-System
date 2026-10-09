@@ -60,10 +60,29 @@ def _decorate_eod(row,symbol,entry_spot,reps,same_day,base_ts):
         row.update(option_trade_targets(path,f"{side}_eod"))
         row.update(direct_profit_targets(co.get("terminal_return") if co else None,f"{side}_eod"))
 def build_intraday_dataset_v2(snapshot_dir,out_csv):
-    raw=[]
-    for f in sorted(Path(snapshot_dir).glob("intraday_options_*.json")):
-        obj,p=_load(f);raw.append({"file":f,"obj":obj,"payload":p,
-                                  "ts":datetime.fromisoformat(obj["captured_at_utc"])})
+    # Keep option chains for only one market session in memory.
+    files=sorted(Path(snapshot_dir).glob("intraday_options_*.json"))
+    groups={}
+    for f in files:
+        obj,p=_load(f)
+        groups.setdefault(p["market_date"],[]).append(f)
+        del obj,p
+    rows_by_file={}
+    for day_files in groups.values():
+        raw=[]
+        for f in day_files:
+            obj,p=_load(f)
+            raw.append({"file":f,"obj":obj,"payload":p,
+                        "ts":datetime.fromisoformat(obj["captured_at_utc"])})
+        del obj,p
+        for row in _build_day_rows(raw):
+            rows_by_file.setdefault(row["source_file"],[]).append(row)
+        del raw
+    # Preserve the original file/symbol order and column discovery order.
+    rows=[row for f in files for row in rows_by_file.get(f.name,[])]
+    return _write(rows,out_csv)
+
+def _build_day_rows(raw):
     rows=[]
     for base in raw:
         p=base["payload"];md=date.fromisoformat(p["market_date"])
@@ -87,7 +106,7 @@ def build_intraday_dataset_v2(snapshot_dir,out_csv):
                 _decorate_horizon(row,h,symbol,spot,reps,_window(same_day,base["ts"],h,symbol))
             _decorate_eod(row,symbol,spot,reps,same_day,base["ts"])
             rows.append(row)
-    return _write(rows,out_csv)
+    return rows
 
 def _write(rows,out_csv):
     if not rows:return 0
