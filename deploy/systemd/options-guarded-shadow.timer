@@ -1,0 +1,10 @@
+[Unit]
+Description=Run guarded shadow each minute during US market window
+
+[Timer]
+OnCalendar=Mon..Fri *-*-* 13..21:*:20
+AccuracySec=5s
+Unit=options-guarded-shadow.service
+
+[Install]
+WantedBy=timers.target

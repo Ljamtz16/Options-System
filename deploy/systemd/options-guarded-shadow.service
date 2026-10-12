@@ -1,0 +1,10 @@
+[Unit]
+Description=Options System guarded shadow evaluator
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/ljamtz/options-system
+ExecStart=/home/ljamtz/options-system/.venv/bin/python /home/ljamtz/options-system/scripts/run_guarded_shadow.py
+Nice=10
+CPUQuota=10%
+MemoryMax=128M

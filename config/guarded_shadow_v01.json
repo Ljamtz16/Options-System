@@ -1,0 +1,16 @@
+{
+  "version": "v0.1",
+  "mode": "SHADOW_ONLY",
+  "target_hypotheses": ["CALL_FLOW_REVERSAL_V01"],
+  "halt_after_consecutive_losses": 4,
+  "minimum_halt_minutes": 30,
+  "spy_momentum_minutes": 10,
+  "spy_momentum_gt": 0.0,
+  "no_new_low_lookback_minutes": 15,
+  "scientific_frozen_unchanged": true,
+  "notes": [
+    "Does not block or modify the frozen Local Paper account.",
+    "Only shadow-entered trades update the shadow loss streak.",
+    "Rearm is evaluated only when a new target-hypothesis signal arrives."
+  ]
+}
