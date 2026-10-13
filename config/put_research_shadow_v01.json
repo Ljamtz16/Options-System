@@ -1,0 +1,17 @@
+{
+  "min_history_points": 4,
+  "episode_gap_minutes": 6,
+  "max_spread_fraction": 0.08,
+  "min_quote_size": 1,
+  "horizon_minutes": 15,
+  "h06_break_below_prior_low_fraction": 0.00015,
+  "h06_max_5m_return": -0.0008,
+  "h07_min_prior_bounce_fraction": 0.0007,
+  "h07_min_rejection_fraction": 0.0007,
+  "h07_max_3m_return": -0.0005,
+  "h07_max_20m_return": -0.0005,
+  "h08_max_15m_return": -0.0015,
+  "h08_max_5m_return": -0.0005,
+  "h08_max_spy_from_open": -0.001,
+  "h08_max_distance_from_low": 0.0005
+}
