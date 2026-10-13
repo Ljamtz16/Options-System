@@ -19,6 +19,7 @@ TASKS=(
     "scripts/intraday_daily_report.py",
     "scripts/build_spy_intraday_outcomes_all_days.py",
     "scripts/track_frozen_hypotheses.py",
+    "scripts/track_put_confirmation_shadow_v02.py",
     "scripts/hypothesis_daily_report.py",
     "scripts/build_prospective_sizing_comparison.py",
     "scripts/build_prospective_stress_test.py",
