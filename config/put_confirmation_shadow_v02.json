@@ -1,0 +1,59 @@
+{
+  "version": "PUT_CONFIRM_SHADOW_V02",
+  "status": "FROZEN_EXPLORATORY_PROSPECTIVE_ONLY",
+  "mode": "SHADOW_ONLY_NO_ORDERS",
+
+  "discovery_sessions": [
+    "2026-10-02",
+    "2026-10-05",
+    "2026-10-06",
+    "2026-10-07",
+    "2026-10-08",
+    "2026-10-09",
+    "2026-10-12",
+    "2026-10-13"
+  ],
+
+  "prospective_start_after": "2026-10-13",
+
+  "base_signal": "H06_PUT_BREAKDOWN",
+
+  "state_machine": {
+    "arm_on_first_h06": true,
+    "confirmation_min_minutes": 6,
+    "confirmation_max_minutes": 15,
+    "confirmation_requires_h06": true,
+
+    "confirmation_requires": [
+      "spy_from_open < arm.spy_from_open",
+      "qqq_from_open < arm.qqq_from_open",
+      "iwm_from_open < arm.iwm_from_open"
+    ],
+
+    "post_signal_lock_minutes": 15,
+    "max_signals_per_arm": 1
+  },
+
+  "execution_evaluation": {
+    "side": "PUT",
+    "horizon_minutes": 15,
+    "take_profit_pct": 0.10,
+    "stop_loss_pct": 0.10
+  },
+
+  "scientific_rules": {
+    "retrospectively_discovered": true,
+    "do_not_optimize_on_discovery_sessions": true,
+    "do_not_promote_without_prospective_sample": true,
+    "minimum_target_sessions": 5,
+    "preferred_target_sessions": 10
+  },
+
+  "discovery_diagnostic": {
+    "all3_confirm_signals": 1,
+    "tp_first": 1,
+    "sl_first": 0,
+    "diagnostic_gross_pnl_usd": 18.8,
+    "warning": "One historical signal only. Not evidence of profitability."
+  }
+}
