@@ -1,0 +1,57 @@
+{
+  "version": "MULTISYMBOL_SHADOW_V01",
+  "mode": "SHADOW_ONLY_NO_ORDERS",
+  "discovery_cutoff": "2026-10-14",
+  "prospective_start_after": "2026-10-14",
+  "episode_gap_minutes": 6,
+  "lookback_minutes": 5,
+  "symbols": ["SPY", "QQQ", "IWM", "AAPL", "NVDA", "MSFT", "AMZN", "META", "TSLA"],
+  "evaluation_horizons_minutes": [15, 30, 60],
+  "candidates": [
+    {
+      "id": "MS01_PUT_BREAKDOWN_RISKOFF_V01",
+      "side": "PUT",
+      "rules": [
+        {"feature": "own_from_first", "op": "<=", "value": -0.003},
+        {"feature": "own_return_5m", "op": "<=", "value": -0.001},
+        {"feature": "market_spy_from_first", "op": "<", "value": 0.0},
+        {"feature": "market_qqq_from_first", "op": "<", "value": 0.0},
+        {"feature": "vix_change_pct", "op": ">", "value": 0.0}
+      ]
+    },
+    {
+      "id": "MS02_CALL_BREAKOUT_RISKON_V01",
+      "side": "CALL",
+      "rules": [
+        {"feature": "own_from_first", "op": ">=", "value": 0.003},
+        {"feature": "own_return_5m", "op": ">=", "value": 0.001},
+        {"feature": "market_spy_from_first", "op": ">", "value": 0.0},
+        {"feature": "market_qqq_from_first", "op": ">", "value": 0.0}
+      ]
+    },
+    {
+      "id": "MS03_PUT_RELATIVE_WEAKNESS_V01",
+      "side": "PUT",
+      "rules": [
+        {"feature": "relative_to_spy", "op": "<=", "value": -0.003},
+        {"feature": "own_return_5m", "op": "<=", "value": -0.001},
+        {"feature": "market_spy_from_first", "op": "<=", "value": 0.0}
+      ]
+    },
+    {
+      "id": "MS04_CALL_RELATIVE_STRENGTH_V01",
+      "side": "CALL",
+      "rules": [
+        {"feature": "relative_to_spy", "op": ">=", "value": 0.003},
+        {"feature": "own_return_5m", "op": ">=", "value": 0.001},
+        {"feature": "market_spy_from_first", "op": ">=", "value": 0.0}
+      ]
+    }
+  ],
+  "scientific_notes": {
+    "rules_are_prespecified_families_not_optimized_grid_search": true,
+    "discovery_data_is_not_validation": true,
+    "shadow_only_until_prospective_review": true,
+    "no_parameter_tuning_during_prospective_window": true
+  }
+}

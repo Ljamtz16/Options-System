@@ -39,6 +39,7 @@ PUBLISH = [
     "research_dashboard_tabs.js",
     "dashboard_loader.js",
     "collector_coverage_widget.js",
+    "shadow_labs_widget.js",
 ]
 
 # Counterfactual reports are prepared by the postclose pipeline.

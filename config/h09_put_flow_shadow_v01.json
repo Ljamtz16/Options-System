@@ -1,0 +1,36 @@
+{
+  "version": "H09_PUT_FLOW_SHADOW_V01",
+  "mode": "SHADOW_ONLY_NO_ORDERS",
+  "discovery_cutoff": "2026-10-14",
+  "prospective_start_after": "2026-10-14",
+  "episode_gap_minutes": 6,
+  "side": "PUT",
+  "evaluation_horizons_minutes": [15, 30, 60],
+  "candidates": [
+    {
+      "id": "H09A_PUT_FLOW_MIRROR_V01",
+      "rules": [
+        {"feature": "d_atm_iv_prev", "op": ">", "value": 0.0},
+        {"feature": "d_put_call_iv_skew_prev", "op": ">", "value": 0.0},
+        {"feature": "d_put_call_volume_ratio_1pct_prev", "op": "<", "value": 0.0}
+      ]
+    },
+    {
+      "id": "H09B_PUT_FLOW_MIRROR_RISKOFF_V01",
+      "rules": [
+        {"feature": "d_atm_iv_prev", "op": ">", "value": 0.0},
+        {"feature": "d_put_call_iv_skew_prev", "op": ">", "value": 0.0},
+        {"feature": "d_put_call_volume_ratio_1pct_prev", "op": "<", "value": 0.0},
+        {"feature": "spy_from_open", "op": "<", "value": 0.0},
+        {"feature": "qqq_from_open", "op": "<", "value": 0.0},
+        {"feature": "iwm_from_open", "op": "<", "value": 0.0}
+      ]
+    }
+  ],
+  "scientific_notes": {
+    "frozen_h01_unchanged": true,
+    "not_a_replacement_for_h01": true,
+    "discovery_data_is_not_validation": true,
+    "no_parameter_tuning_during_prospective_window": true
+  }
+}

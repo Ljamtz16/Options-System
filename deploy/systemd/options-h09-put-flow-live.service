@@ -1,0 +1,16 @@
+[Unit]
+Description=Options System H09 PUT flow live shadow
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/ljamtz/options-system
+Environment=PYTHONPATH=/home/ljamtz/options-system:/home/ljamtz/options-system/src
+ExecStart=/home/ljamtz/options-system/.venv/bin/python scripts/run_h09_put_flow_live.py
+Restart=always
+RestartSec=5
+Nice=8
+
+[Install]
+WantedBy=default.target

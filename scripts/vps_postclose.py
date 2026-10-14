@@ -21,6 +21,8 @@ TASKS=(
     "scripts/track_frozen_hypotheses.py",
     "scripts/track_put_confirmation_shadow_v02.py",
     "scripts/analyze_put_execution_diagnostics.py",
+    "scripts/run_h09_put_flow_shadow.py",
+    "scripts/build_multisymbol_discovery.py",
     "scripts/hypothesis_daily_report.py",
     "scripts/build_prospective_sizing_comparison.py",
     "scripts/build_prospective_stress_test.py",
@@ -67,6 +69,8 @@ DASHBOARD_FILES = (
     "intraday_episode_compare.js",
     "research_dashboard_tabs.js",
     "dashboard_loader.js",
+    "collector_coverage_widget.js",
+    "shadow_labs_widget.js",
 )
 
 if WEB_DIR.is_dir():

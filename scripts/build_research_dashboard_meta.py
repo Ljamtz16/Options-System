@@ -102,6 +102,11 @@ entry_controls_analysis=analysis_report(A/'ENTRY_CONTROLS_ANALYSIS_V01.json')
 jev_calibration_analysis=analysis_report(R.parent/'jev-lab/data/calibration-analysis.json')
 collector_coverage=analysis_report(A/'COLLECTOR_COVERAGE_V01.json')
 put_execution_diagnostics=analysis_report(A/'PUT_EXECUTION_DIAGNOSTICS_V01.json')
+h09_put_flow=analysis_report(A/'H09_PUT_FLOW_PROSPECTIVE_V01.json')
+h09_live=analysis_report(A/'H09_PUT_FLOW_LIVE_STATE_V01.json')
+multisymbol_discovery=analysis_report(A/'MULTISYMBOL_DISCOVERY_V01.json')
+multisymbol_prospective=analysis_report(A/'MULTISYMBOL_PROSPECTIVE_V01.json')
+multisymbol_live=analysis_report(A/'MULTISYMBOL_LIVE_STATE_V01.json')
 
 health=build_health(R)
 (A/'SYSTEM_HEALTH_V01.json').write_text(json.dumps(health,indent=2),encoding='utf-8')
@@ -122,6 +127,8 @@ for label,payload in combos['labels'].items():
     discovery[label]={'top_stable':payload.get('top_stable',[])[:5]}
 meta={'entry_controls_analysis':entry_controls_analysis,'jev_calibration_analysis':jev_calibration_analysis,
       'collector_coverage':collector_coverage,'put_execution_diagnostics':put_execution_diagnostics,
+      'h09_put_flow':h09_put_flow,'h09_live':h09_live,
+      'multisymbol_discovery':multisymbol_discovery,'multisymbol_prospective':multisymbol_prospective,'multisymbol_live':multisymbol_live,
       'execution_modes':{'JEV_SHADOW':'Simulaciones independientes por snapshot; no cuenta',
        'COMPARATOR_SHADOW':'Hipótesis con reglas comunes; no cuenta',
        'LIVE_PAPER':'Options-System cuenta virtual local; sin órdenes de broker',
