@@ -1,0 +1,17 @@
+[Unit]
+Description=Options System PUT confirmation v0.2 live shadow and paper state machine
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/ljamtz/options-system
+EnvironmentFile=/home/ljamtz/options-system/.env
+Environment=PYTHONPATH=/home/ljamtz/options-system:/home/ljamtz/options-system/src
+ExecStart=/home/ljamtz/options-system/.venv/bin/python scripts/run_put_confirmation_live_v02.py
+Restart=always
+RestartSec=5
+Nice=8
+
+[Install]
+WantedBy=default.target
