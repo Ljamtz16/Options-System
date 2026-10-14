@@ -221,6 +221,70 @@ def _broker_position_symbols(positions: list[dict[str, Any]] | None) -> set[str]
     return result
 
 
+def _broker_position_quantities(positions: list[dict[str, Any]] | None) -> dict[str, float] | None:
+    if positions is None:
+        return None
+    result: dict[str, float] = {}
+    for pos in positions:
+        symbol = str(pos.get("symbol") or "")
+        try:
+            qty = abs(float(pos.get("qty") or 0))
+        except (TypeError, ValueError):
+            qty = 0.0
+        if symbol and qty:
+            result[symbol] = result.get(symbol, 0.0) + qty
+    return result
+
+
+def _expected_mirror_position_quantities(records: dict[str, dict[str, Any]]) -> dict[str, float]:
+    result: dict[str, float] = {}
+    closed_statuses = {
+        "CLOSED_FILLED", "BROKER_CLOSED_EOD_LOCAL_OPEN",
+        "BROKER_POSITION_CLOSED_EXTERNALLY", "LOCAL_CLOSED_WITHOUT_BROKER_ENTRY_FILL",
+        "SKIPPED_MISSED_LIVE_ENTRY",
+    }
+    for row in records.values():
+        if str(row.get("status") or "") in closed_statuses:
+            continue
+        entry_status = str((row.get("entry_order") or {}).get("status") or "")
+        exit_status = str((row.get("exit_order") or {}).get("status") or "")
+        if entry_status != "filled" or exit_status == "filled":
+            continue
+        symbol = str(row.get("contract") or "")
+        try:
+            qty = abs(float(row.get("quantity") or 1))
+        except (TypeError, ValueError):
+            qty = 0.0
+        if symbol and qty:
+            result[symbol] = result.get(symbol, 0.0) + qty
+    return result
+
+
+def _position_reconciliation(records: dict[str, dict[str, Any]],
+                             positions: list[dict[str, Any]] | None) -> dict[str, Any]:
+    actual = _broker_position_quantities(positions)
+    expected = _expected_mirror_position_quantities(records)
+    if actual is None:
+        return {"ok": True, "available": False, "expected": expected, "actual": None,
+                "unexpected": {}, "missing": {}, "quantity_mismatch": {}}
+    unexpected = {k: v for k, v in actual.items() if k not in expected}
+    missing = {k: v for k, v in expected.items() if k not in actual}
+    mismatch = {
+        k: {"expected": expected[k], "actual": actual[k]}
+        for k in expected.keys() & actual.keys()
+        if abs(expected[k] - actual[k]) > 1e-9
+    }
+    return {
+        "ok": not unexpected and not missing and not mismatch,
+        "available": True,
+        "expected": expected,
+        "actual": actual,
+        "unexpected": unexpected,
+        "missing": missing,
+        "quantity_mismatch": mismatch,
+    }
+
+
 def _clock_window(clock: dict[str, Any] | None) -> tuple[bool, float | None]:
     if clock is None:
         return True, None
@@ -258,6 +322,7 @@ def run_mirror(local_state: dict[str, Any], mirror_state: dict[str, Any], config
     records = mirror_state.setdefault("trades", {})
     actions: list[dict[str, Any]] = []
     position_symbols = _broker_position_symbols(broker_positions)
+    position_reconciliation = _position_reconciliation(records, broker_positions)
     market_open, minutes_left = _clock_window(broker_clock)
 
     for local in _local_records(local_state, config.mirror_start_utc):
@@ -279,9 +344,14 @@ def run_mirror(local_state: dict[str, Any], mirror_state: dict[str, Any], config
             continue
 
         if mirrored is None and local_status == "OPEN":
-            if position_symbols:
-                actions.append({"action": "BLOCK_ENTRY_BROKER_RECONCILIATION", "signal_id": sid,
-                                "broker_positions": sorted(position_symbols)})
+            current_reconciliation = _position_reconciliation(records, broker_positions)
+            if broker_positions is not None and not current_reconciliation["ok"]:
+                actions.append({
+                    "action": "BLOCK_ENTRY_BROKER_RECONCILIATION",
+                    "signal_id": sid,
+                    "broker_positions": sorted(position_symbols or []),
+                    "reconciliation": current_reconciliation,
+                })
                 continue
             if broker_clock is not None and (not market_open or
                     (minutes_left is not None and minutes_left <= BROKER_EXIT_BUFFER_MINUTES)):
@@ -428,8 +498,9 @@ def run_mirror(local_state: dict[str, Any], mirror_state: dict[str, Any], config
             elif exit_status in TERMINAL_ORDER_STATES:
                 mirrored["status"] = f"EXIT_{exit_status.upper()}"
 
+    position_reconciliation = _position_reconciliation(records, broker_positions)
     mirror_state.update({
-        "version": "options_alpaca_mirror_v0.2",
+        "version": "options_alpaca_mirror_v0.3",
         "mode": "ALPACA_PAPER_MIRROR",
         "paper_only": True,
         "base_url": PAPER_BASE_URL,
@@ -439,7 +510,8 @@ def run_mirror(local_state: dict[str, Any], mirror_state: dict[str, Any], config
         "broker_market_open": market_open if broker_clock is not None else None,
         "broker_minutes_to_close": minutes_left,
         "broker_position_symbols": sorted(position_symbols or []),
-        "reconciliation_required": any(
+        "broker_position_reconciliation": position_reconciliation,
+        "reconciliation_required": (not position_reconciliation["ok"]) or any(
             t.get("status") in {"EXIT_WAITING_MARKET_OPEN", "BROKER_POSITION_CLOSED_EXTERNALLY"}
             or t.get("status", "").startswith("EXIT_") and t.get("status") != "EXIT_SUBMITTED"
             for t in records.values()

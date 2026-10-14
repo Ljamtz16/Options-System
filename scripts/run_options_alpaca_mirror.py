@@ -18,6 +18,7 @@ from options_system.options_alpaca_mirror import (
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_LOCAL = ROOT / "artifacts/intraday/PAPER_TRADING_LIVE_STATE_V01.json"
+DEFAULT_EXTRA_LOCAL = ROOT / "artifacts/intraday/PUT_CONFIRM_LIVE_STATE_V02.json"
 DEFAULT_MIRROR = ROOT / "artifacts/intraday/OPTIONS_ALPACA_PAPER_STATE_V01.json"
 DEFAULT_LOCK = ROOT / "artifacts/intraday/.options_alpaca_mirror.lock"
 
@@ -59,15 +60,44 @@ def _safe_account(a: dict) -> dict:
     return {k: a.get(k) for k in keep if k in a}
 
 
+def _merge_local_states(states: list[dict]) -> dict:
+    open_by_id = {}
+    ledger_by_id = {}
+    for state in states:
+        for row in state.get("live_ledger") or []:
+            sid = str(row.get("signal_id") or "")
+            if sid:
+                ledger_by_id[sid] = dict(row)
+        for row in state.get("open_positions") or []:
+            sid = str(row.get("signal_id") or "")
+            if sid:
+                open_by_id[sid] = dict(row)
+    for sid in list(open_by_id):
+        if sid in ledger_by_id and ledger_by_id[sid].get("status") == "CLOSED":
+            open_by_id.pop(sid, None)
+    return {
+        "mode": "MERGED_LOCAL_PAPER_SOURCES",
+        "open_positions": list(open_by_id.values()),
+        "live_ledger": list(ledger_by_id.values()),
+    }
+
+
 def _run_enabled(args, cfg: MirrorConfig) -> int:
     cfg.validate(require_start=True)
-    local_path = Path(args.local_state)
-    mirror_path = Path(args.mirror_state)
+    local_path = Path(args.local_state).resolve()
+    mirror_path = Path(args.mirror_state).resolve()
     if not local_path.exists():
         raise SystemExit(f"Local LIVE PAPER state not found: {local_path}")
 
-    local = json.loads(local_path.read_text(encoding="utf-8"))
+    local_paths = [local_path]
+    for raw in args.extra_local_state or []:
+        p = Path(raw).resolve()
+        if p.exists() and p not in local_paths:
+            local_paths.append(p)
+    local_states = [json.loads(p.read_text(encoding="utf-8")) for p in local_paths]
+    local = _merge_local_states(local_states)
     mirror = json.loads(mirror_path.read_text(encoding="utf-8")) if mirror_path.exists() else {"trades": {}}
+    mirror["local_sources"] = [str(p) for p in local_paths]
 
     client = AlpacaPaperClient(cfg.key_id, cfg.secret_key)
     account = client.account()
@@ -107,6 +137,7 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="Mirror Options-System LIVE PAPER decisions into a dedicated Alpaca Paper account")
     ap.add_argument("--env-file", help="Secret env file; defaults to ~/.config/options-system/options-alpaca-paper.env")
     ap.add_argument("--local-state", default=str(DEFAULT_LOCAL))
+    ap.add_argument("--extra-local-state", action="append", default=[str(DEFAULT_EXTRA_LOCAL)])
     ap.add_argument("--mirror-state", default=str(DEFAULT_MIRROR))
     ap.add_argument("--check-account", action="store_true", help="Validate dedicated Alpaca Paper credentials only")
     args = ap.parse_args()

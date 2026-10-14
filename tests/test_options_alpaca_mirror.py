@@ -219,3 +219,69 @@ def test_residual_broker_position_blocks_new_entry():
     assert mirror["trades"] == {}
     assert actions[0]["action"] == "BLOCK_ENTRY_BROKER_RECONCILIATION"
     assert client.submissions == []
+
+
+
+def _filled_mirror_row(local):
+    return {
+        "signal_id": local["signal_id"],
+        "hypothesis": local.get("hypothesis"),
+        "contract": local["contract"],
+        "quantity": 1,
+        "local_entry_time": local["entry_time"],
+        "local_entry_ask": local["entry_ask"],
+        "entry_order": {
+            "id": "existing-entry",
+            "client_order_id": "existing-entry-client",
+            "status": "filled",
+            "symbol": local["contract"],
+            "qty": "1",
+            "filled_qty": "1",
+            "filled_avg_price": "2.05",
+        },
+        "exit_order": None,
+        "status": "OPEN_FILLED",
+    }
+
+
+def test_known_mirrored_position_allows_another_entry():
+    first = open_trade()
+    second = deepcopy(first)
+    second.update(
+        signal_id="PUT_CONFIRM_V02:2026-10-09T13:40:05Z",
+        hypothesis="PUT_CONFIRM_SHADOW_V02",
+        contract="SPY261012P00774000",
+        entry_time="2026-10-09T13:40:05Z",
+    )
+    mirror_state = {"trades": {first["signal_id"]: _filled_mirror_row(first)}}
+    local = {"open_positions": [first, second], "live_ledger": []}
+    positions = [{"symbol": first["contract"], "qty": "1"}]
+    mirror, actions = run_mirror(
+        local, mirror_state, cfg(submit=False), client=FakeClient(),
+        broker_positions=positions, broker_clock=open_clock(),
+    )
+    assert any(a["action"] == "BUY_TO_OPEN" and a["signal_id"] == second["signal_id"] for a in actions)
+    assert not any(a["action"] == "BLOCK_ENTRY_BROKER_RECONCILIATION" and a["signal_id"] == second["signal_id"] for a in actions)
+    assert mirror["broker_position_reconciliation"]["ok"] is True
+
+
+def test_known_symbol_with_wrong_broker_quantity_blocks_new_entry():
+    first = open_trade()
+    second = deepcopy(first)
+    second.update(
+        signal_id="PUT_CONFIRM_V02:2026-10-09T13:40:05Z",
+        hypothesis="PUT_CONFIRM_SHADOW_V02",
+        contract="SPY261012P00774000",
+        entry_time="2026-10-09T13:40:05Z",
+    )
+    mirror_state = {"trades": {first["signal_id"]: _filled_mirror_row(first)}}
+    local = {"open_positions": [first, second], "live_ledger": []}
+    positions = [{"symbol": first["contract"], "qty": "2"}]
+    mirror, actions = run_mirror(
+        local, mirror_state, cfg(submit=False), client=FakeClient(),
+        broker_positions=positions, broker_clock=open_clock(),
+    )
+    blocked = [a for a in actions if a["action"] == "BLOCK_ENTRY_BROKER_RECONCILIATION"]
+    assert blocked and blocked[0]["signal_id"] == second["signal_id"]
+    assert blocked[0]["reconciliation"]["quantity_mismatch"]
+    assert mirror["broker_position_reconciliation"]["ok"] is False
