@@ -39,7 +39,7 @@ def test_frozen_configuration():
     assert ev["stop_loss_pct"] == 0.10
 
 
-def test_tracker_replays_discovery_once_and_has_no_past_prospective():
+def test_tracker_preserves_discovery_and_allows_prospective_growth():
     subprocess.run(
         [sys.executable, str(SCRIPT)],
         cwd=ROOT,
@@ -56,9 +56,10 @@ def test_tracker_replays_discovery_once_and_has_no_past_prospective():
     assert result["mode"] == "SHADOW_ONLY_NO_ORDERS"
     assert result["prospective_start_after"] == "2026-10-13"
 
-    assert result["h06_activations_total"] == 15
+    assert result["h06_activations_total"] >= 15
     assert result["discovery_replay"]["signals"] == 1
-    assert result["prospective"]["signals"] == 0
+    assert all(x["decision_date"] <= "2026-10-13" for x in result["discovery_replay"]["rows"])
+    assert all(x["decision_date"] > "2026-10-13" for x in result["prospective"]["rows"])
 
 
 def test_discovery_signal_is_all3_confirmation():
