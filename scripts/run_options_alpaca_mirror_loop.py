@@ -57,8 +57,11 @@ def main() -> int:
     print("OPTIONS_ALPACA_WATCHER_STARTED interval=15s window=09:25-16:05 America/New_York", flush=True)
     while True:
         if in_session_window():
+            cycle_started = time.monotonic()
             run_once()
-            time.sleep(INTERVAL_SECONDS)
+            elapsed = time.monotonic() - cycle_started
+            # Keep start-to-start cadence near 15s rather than 15s + API work.
+            time.sleep(max(1.0, INTERVAL_SECONDS - elapsed))
         else:
             time.sleep(OUTSIDE_WINDOW_SLEEP)
 

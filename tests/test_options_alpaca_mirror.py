@@ -285,3 +285,44 @@ def test_known_symbol_with_wrong_broker_quantity_blocks_new_entry():
     assert blocked and blocked[0]["signal_id"] == second["signal_id"]
     assert blocked[0]["reconciliation"]["quantity_mismatch"]
     assert mirror["broker_position_reconciliation"]["ok"] is False
+
+
+def test_final_mirror_trade_is_not_refreshed_again():
+    class CountingClient(FakeClient):
+        def __init__(self):
+            super().__init__()
+            self.lookups = 0
+
+        def order_by_client_id(self, client_order_id):
+            self.lookups += 1
+            return super().order_by_client_id(client_order_id)
+
+    client = CountingClient()
+    t = open_trade()
+    closed = deepcopy(t)
+    closed.update(status="CLOSED", exit_time="2026-10-09T13:40:00Z", exit_bid=2.40,
+                  gross_pnl=40.0, net_pnl=39.89, exit_reason="TP10")
+    mirror_row = {
+        "signal_id": t["signal_id"], "hypothesis": t["hypothesis"],
+        "contract": t["contract"], "quantity": 1,
+        "local_entry_time": t["entry_time"], "local_entry_ask": t["entry_ask"],
+        "local_exit_time": closed["exit_time"], "local_exit_bid": closed["exit_bid"],
+        "local_gross_pnl": closed["gross_pnl"], "local_net_pnl": closed["net_pnl"],
+        "entry_order": {"id": "entry", "client_order_id": "entry-client", "status": "filled",
+                        "symbol": t["contract"], "qty": "1", "filled_qty": "1", "filled_avg_price": "2.05"},
+        "exit_order": {"id": "exit", "client_order_id": "exit-client", "status": "filled",
+                       "symbol": t["contract"], "qty": "1", "filled_qty": "1", "filled_avg_price": "2.45"},
+        "status": "CLOSED_FILLED", "broker_gross_pnl": 40.0,
+    }
+    client.orders["entry-client"] = deepcopy(mirror_row["entry_order"])
+    client.orders["exit-client"] = deepcopy(mirror_row["exit_order"])
+
+    mirror, actions = run_mirror(
+        {"open_positions": [], "live_ledger": [closed]},
+        {"trades": {t["signal_id"]: mirror_row}}, cfg(submit=True), client=client,
+        broker_positions=[], broker_clock=open_clock(),
+    )
+    assert actions == []
+    assert client.lookups == 0
+    assert mirror["trades"][t["signal_id"]]["status"] == "CLOSED_FILLED"
+    assert mirror["terminal_records_skipped"] == 1

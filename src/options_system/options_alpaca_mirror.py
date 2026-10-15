@@ -14,6 +14,11 @@ from urllib.request import Request, urlopen
 
 PAPER_BASE_URL = "https://paper-api.alpaca.markets"
 TERMINAL_ORDER_STATES = {"filled", "canceled", "expired", "rejected", "replaced"}
+FINAL_MIRROR_STATES = {
+    "CLOSED_FILLED",
+    "LOCAL_CLOSED_WITHOUT_BROKER_ENTRY_FILL",
+    "SKIPPED_MISSED_LIVE_ENTRY",
+}
 NY = ZoneInfo("America/New_York")
 BROKER_EXIT_BUFFER_MINUTES = 3.0
 
@@ -321,6 +326,7 @@ def run_mirror(local_state: dict[str, Any], mirror_state: dict[str, Any], config
     client = client or AlpacaPaperClient(config.key_id, config.secret_key)
     records = mirror_state.setdefault("trades", {})
     actions: list[dict[str, Any]] = []
+    terminal_records_skipped = 0
     position_symbols = _broker_position_symbols(broker_positions)
     position_reconciliation = _position_reconciliation(records, broker_positions)
     market_open, minutes_left = _clock_window(broker_clock)
@@ -330,6 +336,12 @@ def run_mirror(local_state: dict[str, Any], mirror_state: dict[str, Any], config
         local_status = str(local.get("status") or "")
         symbol = str(local.get("contract") or "")
         mirrored = records.get(sid)
+
+        # Final mirror records are immutable. Re-querying their filled broker
+        # orders on every watcher cycle adds API latency without changing state.
+        if mirrored is not None and str(mirrored.get("status") or "") in FINAL_MIRROR_STATES:
+            terminal_records_skipped += 1
+            continue
 
         if mirrored is None and local_status == "CLOSED":
             records[sid] = {
@@ -500,7 +512,7 @@ def run_mirror(local_state: dict[str, Any], mirror_state: dict[str, Any], config
 
     position_reconciliation = _position_reconciliation(records, broker_positions)
     mirror_state.update({
-        "version": "options_alpaca_mirror_v0.3",
+        "version": "options_alpaca_mirror_v0.4",
         "mode": "ALPACA_PAPER_MIRROR",
         "paper_only": True,
         "base_url": PAPER_BASE_URL,
@@ -510,6 +522,7 @@ def run_mirror(local_state: dict[str, Any], mirror_state: dict[str, Any], config
         "broker_market_open": market_open if broker_clock is not None else None,
         "broker_minutes_to_close": minutes_left,
         "broker_position_symbols": sorted(position_symbols or []),
+        "terminal_records_skipped": terminal_records_skipped,
         "broker_position_reconciliation": position_reconciliation,
         "reconciliation_required": (not position_reconciliation["ok"]) or any(
             t.get("status") in {"EXIT_WAITING_MARKET_OPEN", "BROKER_POSITION_CLOSED_EXTERNALLY"}
