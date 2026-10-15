@@ -22,6 +22,7 @@ from options_system.frozen_live_engine import (
 )
 from options_system.intraday_session import snapshot_close
 from options_system.option_costs import daily_regulatory_fees, one_contract_trade
+from options_system.h01_path_telemetry import record_path_checkpoints
 from options_system.paper_epochs import acquire_state_lock
 from options_system.prospective_collector import option_latest_quotes
 from options_system.prospective_dataset import snapshot_to_row
@@ -284,7 +285,8 @@ def mark_positions(account, engine):
         bid = float(bid)
         entry = float(pos["entry_ask"])
         ret = bid / entry - 1.0
-        elapsed = (now - stamp(pos["entry_time"])).total_seconds() / 60.0
+        elapsed_seconds = (now - stamp(pos["entry_time"])).total_seconds()
+        elapsed = elapsed_seconds / 60.0
         pos["last_bid"] = bid
         pos["last_quote_time"] = q.get("t")
         pos["last_mark_time"] = now.isoformat()
@@ -292,6 +294,10 @@ def mark_positions(account, engine):
         pos["mfe"] = max(float(pos.get("mfe") or 0.0), ret)
         pos["mae"] = min(float(pos.get("mae") or 0.0), ret)
         pos["marks"] = int(pos.get("marks") or 0) + 1
+        record_path_checkpoints(
+            pos, elapsed_seconds=elapsed_seconds, bid=bid, return_pct=ret,
+            quote_time=q.get("t"), mark_time=now.isoformat(),
+        )
 
         reason = None
         if ret >= TP:

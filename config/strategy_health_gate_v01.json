@@ -1,0 +1,27 @@
+{
+  "version": "STRATEGY_HEALTH_GATE_SHADOW_V01",
+  "mode": "SHADOW_ONLY",
+  "discovery_cutoff": "2026-10-15",
+  "prospective_start_after": "2026-10-15",
+  "auto_apply": false,
+  "broker_orders_enabled": false,
+  "candidates": [
+    {
+      "id": "SHG01_CORE",
+      "block_if_any": ["loss_streak_4", "rolling5_winrate_below_20pct"]
+    },
+    {
+      "id": "SHG02_CORE_VIX",
+      "block_if_any": ["loss_streak_4", "rolling5_winrate_below_20pct", "vix_up_5pct"]
+    },
+    {
+      "id": "SHG03_CORE_VIX_MFE",
+      "block_if_any": ["loss_streak_4", "rolling5_winrate_below_20pct", "vix_up_5pct", "mfe_decreasing_30pct"]
+    },
+    {
+      "id": "SHG04_CORE_VIX_MFE_DD",
+      "block_if_any": ["loss_streak_4", "rolling5_winrate_below_20pct", "vix_up_5pct", "mfe_decreasing_30pct", "daily_drawdown_15pct"]
+    }
+  ],
+  "monitor_only_flags": ["loss_streak_2", "daily_drawdown_5pct", "daily_drawdown_10pct", "winrate_degraded_33pp", "mae_worsening_30pct", "risk_off_regime"]
+}

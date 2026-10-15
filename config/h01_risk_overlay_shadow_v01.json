@@ -1,0 +1,15 @@
+{
+  "version": "H01_RISK_OVERLAY_SHADOW_V01",
+  "mode": "SHADOW_ONLY",
+  "discovery_cutoff": "2026-10-15",
+  "prospective_start_after": "2026-10-15",
+  "auto_apply": false,
+  "broker_orders_enabled": false,
+  "candidates": [
+    {"id": "RO01_COOLDOWN15", "health_gate": null, "cooldown_minutes": 15},
+    {"id": "RO02_SHG02", "health_gate": "SHG02_CORE_VIX", "cooldown_minutes": 0},
+    {"id": "RO03_SHG02_COOLDOWN15", "health_gate": "SHG02_CORE_VIX", "cooldown_minutes": 15}
+  ],
+  "comparators": ["H01_FROZEN", "GUARDED_SHADOW_V01"],
+  "note": "Candidates were selected after diagnostics through 2026-10-15. Only later sessions are prospective evidence."
+}
