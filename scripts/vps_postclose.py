@@ -25,6 +25,7 @@ TASKS=(
     "scripts/build_multisymbol_discovery.py",
     "scripts/build_multisymbol_signal_arbitration.py",
     "scripts/hypothesis_daily_report.py",
+    "scripts/analyze_h01_execution_diagnostics.py",
     "scripts/build_prospective_sizing_comparison.py",
     "scripts/build_prospective_stress_test.py",
     "scripts/build_prospective_risk_gate.py",
