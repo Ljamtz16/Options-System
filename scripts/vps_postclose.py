@@ -23,6 +23,7 @@ TASKS=(
     "scripts/analyze_put_execution_diagnostics.py",
     "scripts/run_h09_put_flow_shadow.py",
     "scripts/build_multisymbol_discovery.py",
+    "scripts/build_multisymbol_signal_arbitration.py",
     "scripts/hypothesis_daily_report.py",
     "scripts/build_prospective_sizing_comparison.py",
     "scripts/build_prospective_stress_test.py",
