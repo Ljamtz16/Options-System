@@ -52,10 +52,13 @@ def test_episode_gap():
 
 def test_summary_adds_one_contract_pnl():
     rows=[
-        {"candidate_id":"X","put_entry_ask":2.0,"put_ret_60m":0.10,"put_60m_tp10_sl10":"TP_FIRST"},
-        {"candidate_id":"X","put_entry_ask":1.5,"put_ret_60m":-0.20,"put_60m_tp10_sl10":"SL_FIRST"},
+        {"candidate_id":"X","captured_at_utc":"2026-10-16T14:00:00+00:00","put_entry_ask":2.0,"put_ret_60m":0.10,"put_mfe_60m":0.20,"put_mae_60m":-0.05,"put_60m_tp10_sl10":"TP_FIRST"},
+        {"candidate_id":"X","captured_at_utc":"2026-10-16T14:10:00+00:00","put_entry_ask":1.5,"put_ret_60m":-0.20,"put_mfe_60m":0.05,"put_mae_60m":-0.30,"put_60m_tp10_sl10":"SL_FIRST"},
     ]
     out=summarize(rows,"X",(60,))["horizons"]["60"]
     assert out["pnl_1_contract_n"] == 2
     assert abs(out["total_pnl_1_contract"] + 10.0) < 1e-9
     assert abs(out["mean_pnl_1_contract"] + 5.0) < 1e-9
+    assert abs(out["mean_mfe_pnl_1_contract"] - 23.75) < 1e-9
+    assert abs(out["mean_mae_pnl_1_contract"] + 27.5) < 1e-9
+    assert abs(out["max_drawdown_pnl_1_contract"] + 30.0) < 1e-9

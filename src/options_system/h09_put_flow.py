@@ -62,18 +62,45 @@ def is_new_episode(last_signal_utc: str | None, now_utc: str, gap_minutes: float
     return gap > float(gap_minutes)
 
 
+def _max_drawdown_pnl(pnls: list[float]) -> float | None:
+    if not pnls:
+        return None
+    equity = 0.0
+    peak = 0.0
+    worst = 0.0
+    for pnl in pnls:
+        equity += pnl
+        peak = max(peak, equity)
+        worst = min(worst, equity - peak)
+    return worst
+
+
 def summarize(rows: list[dict[str, Any]], candidate_id: str, horizons=(15, 30, 60)) -> dict[str, Any]:
-    picked = [r for r in rows if r.get("candidate_id") == candidate_id]
+    picked = sorted([r for r in rows if r.get("candidate_id") == candidate_id], key=lambda r: r.get("captured_at_utc") or "")
     out: dict[str, Any] = {"episodes": len(picked), "horizons": {}}
     for h in horizons:
         vals = [number(r.get(f"put_ret_{h}m")) for r in picked]
         vals = [v for v in vals if v is not None]
         pnl_1c = []
+        mfe_pnl_1c = []
+        mae_pnl_1c = []
+        mfe_vals = []
+        mae_vals = []
         for r in picked:
             entry = number(r.get("put_entry_ask"))
             ret = number(r.get(f"put_ret_{h}m"))
+            mfe = number(r.get(f"put_mfe_{h}m"))
+            mae = number(r.get(f"put_mae_{h}m"))
             if entry is not None and entry > 0 and ret is not None:
                 pnl_1c.append(entry * 100.0 * ret)
+            if mfe is not None:
+                mfe_vals.append(mfe)
+                if entry is not None and entry > 0:
+                    mfe_pnl_1c.append(entry * 100.0 * mfe)
+            if mae is not None:
+                mae_vals.append(mae)
+                if entry is not None and entry > 0:
+                    mae_pnl_1c.append(entry * 100.0 * mae)
         paths = [r.get(f"put_{h}m_tp10_sl10") for r in picked]
         decided = [p for p in paths if p in {"TP_FIRST", "SL_FIRST"}]
         out["horizons"][str(h)] = {
@@ -83,6 +110,11 @@ def summarize(rows: list[dict[str, Any]], candidate_id: str, horizons=(15, 30, 6
             "pnl_1_contract_n": len(pnl_1c),
             "total_pnl_1_contract": sum(pnl_1c) if pnl_1c else None,
             "mean_pnl_1_contract": sum(pnl_1c) / len(pnl_1c) if pnl_1c else None,
+            "mean_mfe": sum(mfe_vals) / len(mfe_vals) if mfe_vals else None,
+            "mean_mae": sum(mae_vals) / len(mae_vals) if mae_vals else None,
+            "mean_mfe_pnl_1_contract": sum(mfe_pnl_1c) / len(mfe_pnl_1c) if mfe_pnl_1c else None,
+            "mean_mae_pnl_1_contract": sum(mae_pnl_1c) / len(mae_pnl_1c) if mae_pnl_1c else None,
+            "max_drawdown_pnl_1_contract": _max_drawdown_pnl(pnl_1c),
             "tp10_before_sl10_rate": sum(p == "TP_FIRST" for p in decided) / len(decided) if decided else None,
             "decided_n": len(decided),
         }

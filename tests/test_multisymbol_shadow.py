@@ -56,10 +56,13 @@ def test_episode_gap_is_strictly_greater_than_six_minutes():
 def test_summary_adds_one_contract_pnl():
     candidate={"id":"MSX","side":"PUT"}
     rows=[
-        {"candidate_id":"MSX","entry_put_ask":2.0,"put_terminal_return_30m":0.10,"put_best_return_30m":0.2,"put_worst_return_30m":-0.05,"put_30m_tp10_sl10":"TP_FIRST"},
-        {"candidate_id":"MSX","entry_put_ask":1.5,"put_terminal_return_30m":-0.20,"put_best_return_30m":0.02,"put_worst_return_30m":-0.25,"put_30m_tp10_sl10":"SL_FIRST"},
+        {"candidate_id":"MSX","captured_at_utc":"2026-10-16T14:00:00+00:00","entry_put_ask":2.0,"put_terminal_return_30m":0.10,"put_best_return_30m":0.2,"put_worst_return_30m":-0.05,"put_30m_tp10_sl10":"TP_FIRST"},
+        {"candidate_id":"MSX","captured_at_utc":"2026-10-16T14:10:00+00:00","entry_put_ask":1.5,"put_terminal_return_30m":-0.20,"put_best_return_30m":0.02,"put_worst_return_30m":-0.25,"put_30m_tp10_sl10":"SL_FIRST"},
     ]
     out=summarize_episodes(rows,candidate,(30,))["horizons"]["30"]
     assert out["pnl_1_contract_n"] == 2
     assert abs(out["total_pnl_1_contract"] + 10.0) < 1e-9
     assert abs(out["mean_pnl_1_contract"] + 5.0) < 1e-9
+    assert abs(out["mean_mfe_pnl_1_contract"] - 21.5) < 1e-9
+    assert abs(out["mean_mae_pnl_1_contract"] + 23.75) < 1e-9
+    assert abs(out["max_drawdown_pnl_1_contract"] + 30.0) < 1e-9
