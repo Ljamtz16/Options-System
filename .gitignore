@@ -29,3 +29,59 @@ Thumbs.db
 # Dashboard session views are generated runtime artifacts.
 # Keep the loader/source code in Git, but not per-session JSON archives/caches.
 artifacts/intraday/sessions/
+
+# BEGIN VPS RUNTIME/GENERATED OUTPUTS
+# Volatile live state/event streams. These are local VPS runtime data, not source.
+artifacts/intraday/.*.lock
+artifacts/intraday/*_LIVE_STATE_*.json
+artifacts/intraday/*_LIVE_EVENTS_*.jsonl
+artifacts/intraday/*_LIVE_ENGINE_*.json
+artifacts/intraday/PAPER_TRADING_LIVE_STATE_*.json
+artifacts/intraday/PAPER_TRADING_LIVE_STATE_*.lock
+artifacts/intraday/PAPER_TRADING_CONTROL_*.json
+artifacts/intraday/OPTIONS_ALPACA_PAPER_STATE_*.json
+artifacts/intraday/COLLECTOR_COVERAGE_*
+artifacts/intraday/live_paper_audits/
+artifacts/intraday/paper_epochs/
+artifacts/intraday/session_manifests/*.json
+
+# Current generated reports/dashboard payloads. Builders regenerate these locally.
+artifacts/intraday/HYPOTHESIS_DAILY_REPORT_V02.json
+artifacts/intraday/INTRADAY_DAILY_REPORT.json
+artifacts/intraday/PROSPECTIVE_EXECUTION_GATE_V01.json
+artifacts/intraday/PROSPECTIVE_HYPOTHESIS_REPORT_V02.json
+artifacts/intraday/PROSPECTIVE_RISK_GATE_V01.json
+artifacts/intraday/PROSPECTIVE_SCOREBOARD_V02.json
+artifacts/intraday/PROSPECTIVE_SIZING_COMPARISON_V01.json
+artifacts/intraday/SYSTEM_HEALTH_V01.json
+artifacts/intraday/intraday_dashboard_data.js
+artifacts/intraday/intraday_dashboard_data.json
+artifacts/intraday/intraday_episode_compare.js
+artifacts/intraday/intraday_session_multisymbol.js
+artifacts/intraday/research_dashboard_meta.js
+artifacts/intraday/research_dashboard_meta.json
+artifacts/intraday/research_dashboard_tabs.js
+artifacts/market_state/MARKET_STATE_V1_READINESS.json
+
+# Derived research outputs. Keep rules/config/code in Git; regenerate evidence on the VPS.
+artifacts/intraday/ENTRY_CONTROLS_ANALYSIS_V01.json
+artifacts/intraday/EXECUTION_FUNNEL_V01.json
+artifacts/intraday/GUARDED_SHADOW_V01.json
+artifacts/intraday/H01_EXECUTION_DIAGNOSTICS_V01.json
+artifacts/intraday/H01_PATH_POLICY_RESEARCH_V01.json
+artifacts/intraday/H01_RISK_OVERLAY_SHADOW_V01.json
+artifacts/intraday/H09_PUT_FLOW_PROSPECTIVE_V01.json
+artifacts/intraday/LIVE_PAPER_AUDIT_DISCOVERY_*.txt
+artifacts/intraday/META_DECISION_LAYER_V01.json
+artifacts/intraday/MULTISYMBOL_DISCOVERY_V01.json
+artifacts/intraday/MULTISYMBOL_PROSPECTIVE_V01.json
+artifacts/intraday/MULTISYMBOL_SIGNAL_ARBITRATION_V01.json
+artifacts/intraday/PAPER_RISK_REPLAY_COMPARISON_V01.json
+artifacts/intraday/PAPER_TRADING_REPLAY_V01.json
+artifacts/intraday/PUT_CONFIRM_SHADOW_V02_PROSPECTIVE.json
+artifacts/intraday/PUT_EXECUTION_DIAGNOSTICS_V01.json
+artifacts/intraday/PUT_RESEARCH_SHADOW_V01.json
+artifacts/intraday/STRATEGY_HEALTH_GATE_SHADOW_V01.json
+artifacts/intraday/SYSTEM_RESEARCH_DIAGNOSTICS_V01.json
+artifacts/intraday/intraday_scoreboard_v1.json
+# END VPS RUNTIME/GENERATED OUTPUTS
