@@ -79,6 +79,30 @@ def test_audit_fails_on_corrupted_trade_pnl():
     assert result["diagnostics"]["pnl_errors"]
 
 
+
+def test_blocked_signals_are_not_treated_as_executed_trades():
+    state = state_fixture()
+    state["live_ledger"].append({
+        "signal_id": "H01:BLOCKED",
+        "hypothesis": "CALL_FLOW_REVERSAL_V01",
+        "decision_date": "2026-10-07",
+        "signal_time": "2026-10-07T13:37:00+00:00",
+        "status": "BLOCKED",
+        "quantity": None,
+        "net_pnl": 0.0,
+        "reason": "NO_EXECUTABLE_CONTRACT",
+    })
+    result = audit(state, "2026-10-07")
+    checks = {c["name"]: c for c in result["checks"]}
+
+    assert result["status"] == "PASS_WITH_WARNINGS"
+    assert result["summary"]["trades"] == 2
+    assert result["summary"]["blocked_signals"] == 1
+    assert checks["blocked_signals_are_nontrades"]["status"] == "PASS"
+    assert checks["one_contract_per_entry"]["status"] == "PASS"
+    assert checks["all_session_trades_closed"]["status"] == "PASS"
+    assert not result["diagnostics"]["event_cash_errors"]
+
 def test_latest_session_date_uses_latest_ledger_day():
     state = state_fixture()
     later = deepcopy(state["live_ledger"][0])

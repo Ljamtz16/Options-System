@@ -64,6 +64,14 @@ def audit(state: dict[str, Any], date: str) -> dict[str, Any]:
         add_check(checks, "session_has_trades", "FAIL", f"No LIVE PAPER trades found for {date}")
         return {"date": date, "checks": checks, "status": "FAIL", "trade_count": 0}
 
+    blocked = [t for t in ledger if t.get("status") == "BLOCKED"]
+    executed = [t for t in ledger if t.get("status") != "BLOCKED" and t.get("entry_time") and int(t.get("quantity") or 0) > 0]
+    add_check(checks, "blocked_signals_are_nontrades", "PASS",
+              f"Excluded {len(blocked)} BLOCKED signal(s) from trade/cash checks")
+    if not executed:
+        add_check(checks, "session_has_executed_trades", "FAIL", f"No executed LIVE PAPER trades found for {date}")
+        return {"date": date, "checks": checks, "status": "FAIL", "trade_count": 0, "blocked_signals": len(blocked)}
+
     duplicate_ids = [sid for sid, n in Counter(str(t.get("signal_id")) for t in ledger).items() if n > 1]
     add_check(checks, "unique_signal_ids", "PASS" if not duplicate_ids else "FAIL",
               "All signal_id values are unique" if not duplicate_ids else f"Duplicates: {duplicate_ids}")
@@ -72,7 +80,7 @@ def audit(state: dict[str, Any], date: str) -> dict[str, Any]:
     entry_cash_errors = []
     budget_errors = []
     quantity_errors = []
-    for i, t in enumerate(ledger, 1):
+    for i, t in enumerate(executed, 1):
         qty = int(t.get("quantity") or 0)
         if qty != 1:
             quantity_errors.append({"trade": i, "signal_id": t.get("signal_id"), "quantity": qty})
@@ -82,11 +90,12 @@ def audit(state: dict[str, Any], date: str) -> dict[str, Any]:
         fees = fnum(t.get("fees"))
         gross = fnum(t.get("gross_pnl"))
         net = fnum(t.get("net_pnl"))
-        expected_gross = (exit_bid - entry_ask) * 100 * qty
-        expected_net = expected_gross - fees
-        if not (close(gross, expected_gross) and close(net, expected_net)):
-            pnl_errors.append({"trade": i, "signal_id": t.get("signal_id"), "expected_gross": expected_gross,
-                               "recorded_gross": gross, "expected_net": expected_net, "recorded_net": net})
+        if t.get("status") == "CLOSED":
+            expected_gross = (exit_bid - entry_ask) * 100 * qty
+            expected_net = expected_gross - fees
+            if not (close(gross, expected_gross) and close(net, expected_net)):
+                pnl_errors.append({"trade": i, "signal_id": t.get("signal_id"), "expected_gross": expected_gross,
+                                   "recorded_gross": gross, "expected_net": expected_net, "recorded_net": net})
 
         cash_before = fnum(t.get("cash_before"))
         cash_after_entry = fnum(t.get("cash_after_entry"))
@@ -102,8 +111,9 @@ def audit(state: dict[str, Any], date: str) -> dict[str, Any]:
             budget_errors.append({"trade": i, "signal_id": t.get("signal_id"), "cash": sel_cash,
                                   "risk_fraction": risk_fraction, "budget": budget, "capital": capital})
 
+    closed = [t for t in executed if t.get("status") == "CLOSED"]
     add_check(checks, "trade_pnl_formula", "PASS" if not pnl_errors else "FAIL",
-              f"All {len(ledger)} closed trades reconcile ASK→BID gross P&L and fees" if not pnl_errors else f"{len(pnl_errors)} trade(s) mismatch")
+              f"All {len(closed)} closed trades reconcile ASK→BID gross P&L and fees" if not pnl_errors else f"{len(pnl_errors)} trade(s) mismatch")
     add_check(checks, "entry_cash_reconciliation", "PASS" if not entry_cash_errors else "FAIL",
               "Every entry satisfies cash_after_entry = cash_before - capital_required" if not entry_cash_errors else f"{len(entry_cash_errors)} mismatch(es)")
     add_check(checks, "per_entry_budget", "PASS" if not budget_errors else "FAIL",
@@ -112,7 +122,7 @@ def audit(state: dict[str, Any], date: str) -> dict[str, Any]:
               "All entries use quantity=1" if not quantity_errors else f"{len(quantity_errors)} entry/entries use quantity != 1")
 
     events: list[Event] = []
-    for idx, t in enumerate(ledger):
+    for idx, t in enumerate(executed):
         events.append(Event(parse_ts(t.get("entry_time") or t.get("signal_time")), 1, "ENTRY", idx, t))
         if t.get("exit_time"):
             events.append(Event(parse_ts(t.get("exit_time")), 0, "EXIT", idx, t))
@@ -174,8 +184,7 @@ def audit(state: dict[str, Any], date: str) -> dict[str, Any]:
     add_check(checks, "event_cash_timeline", "PASS" if not event_errors else "FAIL",
               "Entry/exit event timeline reconciles exactly" if not event_errors else f"{len(event_errors)} event cash mismatch(es)")
 
-    closed = [t for t in ledger if t.get("status") == "CLOSED"]
-    open_for_date = [t for t in ledger if t.get("status") != "CLOSED"]
+    open_for_date = [t for t in executed if t.get("status") != "CLOSED"]
     add_check(checks, "all_session_trades_closed", "PASS" if not open_for_date else "FAIL",
               f"All {len(closed)} session trades are CLOSED" if not open_for_date else f"{len(open_for_date)} trade(s) not CLOSED")
 
@@ -242,7 +251,7 @@ def audit(state: dict[str, Any], date: str) -> dict[str, Any]:
             "daily_end_cash": final_event_cash,
             "net_pnl": pnl,
             "return_fraction": pnl / daily_start_cash if daily_start_cash else None,
-            "trades": len(closed), "wins": wins, "losses": losses,
+            "trades": len(closed), "blocked_signals": len(blocked), "wins": wins, "losses": losses,
             "win_rate": wins / len(closed) if closed else None,
             "gross_profit": gross_profit, "gross_loss": gross_loss,
             "profit_factor": gross_profit / gross_loss if gross_loss else None,
