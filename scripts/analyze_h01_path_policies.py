@@ -140,6 +140,40 @@ for sec in (60,120,180,300):
         winner_loser[f"{sec//60}m"][reason]={"n":len(rs),"return_mean":avg([x["last_return"] for x in rs]),"return_median":med([x["last_return"] for x in rs]),
                                                 "mfe_mean":avg([x["mfe"] for x in rs]),"mae_mean":avg([x["mae"] for x in rs]),"spot_return_mean":avg([x["spot_return"] for x in rs])}
 
+# Live checkpoints are captured by the 15-second Frozen engine and are not interpolated.
+live_checkpoint_trades=[t for t in trades if t.get("path_checkpoints")]
+live_checkpoint_summary={}
+for checkpoint in ("15s","30s","60s","120s","180s","300s"):
+    groups={"TP10":[],"SL10":[]}
+    elapsed={"TP10":[],"SL10":[]}
+    for t in live_checkpoint_trades:
+        reason=t.get("exit_reason")
+        point=(t.get("path_checkpoints") or {}).get(checkpoint)
+        if reason not in groups or not point or point.get("return") is None:
+            continue
+        groups[reason].append(num(point.get("return")))
+        elapsed[reason].append(num(point.get("observed_elapsed_seconds")))
+    live_checkpoint_summary[checkpoint]={}
+    for reason,vals in groups.items():
+        vals=[v for v in vals if v is not None]
+        obs=[v for v in elapsed[reason] if v is not None]
+        live_checkpoint_summary[checkpoint][reason]={
+            "n":len(vals),
+            "return_mean":avg(vals),
+            "return_median":med(vals),
+            "positive_rate":sum(v>0 for v in vals)/len(vals) if vals else None,
+            "observed_elapsed_seconds_median":med(obs),
+        }
+
+live_days=sorted({str(t.get("decision_date")) for t in live_checkpoint_trades if t.get("decision_date")})
+live_telemetry={
+    "status":"ACTIVE" if live_checkpoint_trades else "NO_CHECKPOINTS_YET",
+    "first_observed_day":live_days[0] if live_days else None,
+    "latest_observed_day":live_days[-1] if live_days else None,
+    "trades_with_checkpoints":len(live_checkpoint_trades),
+    "by_checkpoint":live_checkpoint_summary,
+}
+
 result={
     "version":"H01_PATH_POLICY_RESEARCH_V01",
     "generated_at_utc":datetime.now(timezone.utc).isoformat(),
@@ -149,7 +183,7 @@ result={
     "frozen_h01_unchanged":True,
     "historical_resolution":"approximately_1_minute",
     "thirty_second_historical_analysis":"UNAVAILABLE_RELIABLY",
-    "live_15s_30s_telemetry":"ENABLED_FROM_NEXT_SESSION",
+    "live_15s_30s_telemetry":live_telemetry,
     "trades":len(trades),
     "paths_with_quotes":sum(bool(x["path"]) for x in paths),
     "policy_results":policy_results,
