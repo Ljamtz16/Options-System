@@ -1,0 +1,15 @@
+[Unit]
+Description=Meta portfolio dedicated Alpaca Paper mirror
+After=network-online.target options-meta-portfolio-live.service
+
+[Service]
+Type=simple
+WorkingDirectory=/home/ljamtz/options-system
+Environment=PYTHONPATH=/home/ljamtz/options-system:/home/ljamtz/options-system/src
+ExecStart=/home/ljamtz/options-system/.venv/bin/python /home/ljamtz/options-system/scripts/run_meta_alpaca_mirror_loop.py
+Restart=always
+RestartSec=15
+NoNewPrivileges=true
+
+[Install]
+WantedBy=default.target

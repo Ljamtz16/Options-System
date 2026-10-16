@@ -4,9 +4,13 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import sys
 import time
 from contextlib import contextmanager
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / 'src'))
 
 from options_system.options_alpaca_mirror import (
     AlpacaPaperClient,
@@ -16,7 +20,6 @@ from options_system.options_alpaca_mirror import (
     run_mirror,
 )
 
-ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_LOCAL = ROOT / "artifacts/intraday/PAPER_TRADING_LIVE_STATE_V01.json"
 DEFAULT_EXTRA_LOCAL = ROOT / "artifacts/intraday/PUT_CONFIRM_LIVE_STATE_V02.json"
 DEFAULT_MIRROR = ROOT / "artifacts/intraday/OPTIONS_ALPACA_PAPER_STATE_V01.json"
@@ -137,11 +140,15 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="Mirror Options-System LIVE PAPER decisions into a dedicated Alpaca Paper account")
     ap.add_argument("--env-file", help="Secret env file; defaults to ~/.config/options-system/options-alpaca-paper.env")
     ap.add_argument("--local-state", default=str(DEFAULT_LOCAL))
-    ap.add_argument("--extra-local-state", action="append", default=[str(DEFAULT_EXTRA_LOCAL)])
+    ap.add_argument("--extra-local-state", action="append", default=[])
+    ap.add_argument("--no-default-put-confirm", action="store_true")
+    ap.add_argument("--lock-file", default=str(DEFAULT_LOCK))
     ap.add_argument("--mirror-state", default=str(DEFAULT_MIRROR))
     ap.add_argument("--check-account", action="store_true", help="Validate dedicated Alpaca Paper credentials only")
     args = ap.parse_args()
 
+    if not args.no_default_put_confirm and str(DEFAULT_EXTRA_LOCAL) not in args.extra_local_state:
+        args.extra_local_state.insert(0, str(DEFAULT_EXTRA_LOCAL))
     env_path = load_env_file(args.env_file)
     cfg = MirrorConfig.from_env()
 
@@ -159,7 +166,7 @@ def main() -> int:
         return 0
 
     try:
-        with _single_instance_lock():
+        with _single_instance_lock(Path(args.lock_file)):
             return _run_enabled(args, cfg)
     except MirrorBusy as exc:
         print("OPTIONS_ALPACA_MIRROR_BUSY", str(exc))
