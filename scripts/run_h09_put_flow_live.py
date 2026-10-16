@@ -106,6 +106,13 @@ def process_snapshot(state, envelope, cfg):
     state["previous_features"] = {k: row.get(k) for k in ("atm_iv", "put_call_iv_skew", "put_call_volume_ratio_1pct")}
     for cid in active_candidates(cfg, row):
         state["counters"]["candidate_activations"] += 1
+        event({
+            "event": "H09_ACTIVATION", "candidate_id": cid, "side": "PUT",
+            "decision_date": day, "signal_time": row["captured_at_utc"],
+            "contract": row.get("put_contract"), "entry_bid": row.get("put_entry_bid"), "entry_ask": row.get("put_entry_ask"),
+            "spy_from_open": row.get("spy_from_open"), "qqq_from_open": row.get("qqq_from_open"), "iwm_from_open": row.get("iwm_from_open"),
+            "broker_order": False,
+        })
         last = state["last_signal_by_candidate"].get(cid)
         if not is_new_episode(last, row["captured_at_utc"], cfg["episode_gap_minutes"]):
             continue

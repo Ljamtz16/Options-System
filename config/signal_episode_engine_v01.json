@@ -1,0 +1,19 @@
+{
+  "version": "SIGNAL_EPISODE_ENGINE_V01",
+  "mode": "LIVE_SHADOW_NO_ORDERS",
+  "prospective_start_after": "2026-10-15",
+  "episode_gap_minutes": 15,
+  "flicker_window_minutes": 30,
+  "ttt": {
+    "H01": {"mode": "FIRST_CLEAN_META", "min_observations": 1, "window_minutes": 15, "max_flips": 0},
+    "H09": {"mode": "ACTIVATION_2_OF_3", "min_observations": 2, "window_minutes": 10, "max_flips": 0},
+    "MULTI": {"mode": "ACTIVATION_2_OF_3", "min_observations": 2, "window_minutes": 10, "max_flips": 0}
+  },
+  "hysteresis": {
+    "confirmation_memory_minutes": 15,
+    "never_override_block": true,
+    "never_override_meta_wait": true
+  },
+  "auto_apply": false,
+  "broker_orders_enabled": false
+}

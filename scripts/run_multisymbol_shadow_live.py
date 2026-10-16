@@ -74,6 +74,13 @@ def process_snapshot(state, envelope, cfg):
         row = derive_row(base_symbol_row(envelope, symbol, rec), float(state["first_spots"][symbol]), history, market_first)
         for cand in active_candidates(cfg, row):
             state["counters"]["candidate_activations"] += 1
+            event({
+                "event": "MULTISYMBOL_ACTIVATION", "candidate_id": cand["id"], "side": cand["side"],
+                "symbol": symbol, "market_date": day, "signal_time": row["captured_at_utc"],
+                "own_from_first": row.get("own_from_first"), "own_return_5m": row.get("own_return_5m"),
+                "market_spy_from_first": row.get("market_spy_from_first"), "market_qqq_from_first": row.get("market_qqq_from_first"),
+                "market_iwm_from_first": row.get("market_iwm_from_first"), "broker_order": False,
+            })
             key = signal_key(cand["id"], symbol); last = state["last_signal_by_candidate_symbol"].get(key)
             if not is_new_episode(last, row["captured_at_utc"], cfg["episode_gap_minutes"]): continue
             state["last_signal_by_candidate_symbol"][key] = row["captured_at_utc"]
