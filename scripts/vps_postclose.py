@@ -31,6 +31,8 @@ TASKS=(
     "scripts/analyze_strategy_health_gate.py",
     "scripts/analyze_h01_risk_overlay_shadow.py",
     "scripts/analyze_meta_decision_layer_v01.py",
+    "scripts/analyze_meta_ttt_outcomes.py",
+    "scripts/replay_meta_portfolio.py",
     "scripts/build_prospective_sizing_comparison.py",
     "scripts/build_prospective_stress_test.py",
     "scripts/build_prospective_risk_gate.py",

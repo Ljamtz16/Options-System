@@ -1,0 +1,15 @@
+[Unit]
+Description=Options Meta ranked portfolio live paper engine
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/ljamtz/options-system
+Environment=PYTHONPATH=/home/ljamtz/options-system:/home/ljamtz/options-system/src
+ExecStart=/home/ljamtz/options-system/.venv/bin/python /home/ljamtz/options-system/scripts/run_meta_portfolio_live.py --loop --interval 5
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+
+[Install]
+WantedBy=default.target
