@@ -83,4 +83,3 @@ def run(root=ROOT, as_of=None):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(); parser.add_argument('--root', type=Path, default=ROOT)
     args = parser.parse_args(); run(args.root)
-

@@ -128,4 +128,3 @@ for name, x in scenarios.items():
         "net", round(x["net_pnl"], 2),
         "equity", round(x["final_equity"], 2),
     )
-

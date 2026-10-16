@@ -89,4 +89,3 @@ def build_dataset(snapshot_dir,out_csv):
  with open(out_csv,"w",newline="",encoding="utf-8") as f:
   w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerows(rows)
  return len(rows)
-

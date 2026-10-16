@@ -117,4 +117,3 @@ def build():
     print(f'BUILT_SPY_INTRADAY_OUTCOMES rows={count}')
 
 if __name__=='__main__':build()
-

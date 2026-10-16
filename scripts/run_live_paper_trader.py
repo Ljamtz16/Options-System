@@ -458,4 +458,3 @@ print(
     "blocked", state["blocked_live_signals"],
     "net", round(state["net_account_pnl"], 2),
 )
-
