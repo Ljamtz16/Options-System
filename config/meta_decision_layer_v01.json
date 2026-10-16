@@ -1,0 +1,35 @@
+{
+  "version": "meta_decision_layer_v0.1",
+  "mode": "SHADOW_ONLY",
+  "discovery_cutoff": "2026-10-15",
+  "prospective_start_after": "2026-10-15",
+  "scientific_evidence": false,
+  "auto_apply": false,
+  "broker_orders_enabled": false,
+  "episode_window_minutes": 15,
+  "flicker_window_minutes": 30,
+  "h01": {
+    "health_block_flags": ["loss_streak_4", "rolling5_winrate_below_20pct", "vix_up_5pct"],
+    "regime_block_flags": ["risk_off_regime"],
+    "repeat_within_episode": "WAIT"
+  },
+  "h09": {
+    "h09a_without_riskoff": "WAIT",
+    "h09b_riskoff": "ACCEPT",
+    "max_contract_price": 5.0,
+    "max_spread_pct": 0.12
+  },
+  "multi": {
+    "require_all3_regime_alignment": true,
+    "redundant_support_count_ge": 2,
+    "redundant_support_decision": "WAIT",
+    "max_contract_price": 5.0,
+    "max_market_spread_pct": 0.12
+  },
+  "observe_only": [
+    "persistence_observations",
+    "persistence_minutes",
+    "signal_flip_count_30m",
+    "correlated_opportunity_count_2m"
+  ]
+}
