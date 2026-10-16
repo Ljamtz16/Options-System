@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from options_system.h09_put_flow import active_candidates, is_new_episode, live_delta_row
+from options_system.h09_put_flow import active_candidates, is_new_episode, live_delta_row, summarize
 
 ROOT = Path(__file__).resolve().parents[1]
 CFG = ROOT / "config/h09_put_flow_shadow_v01.json"
@@ -48,3 +48,14 @@ def test_live_deltas_are_causal():
 def test_episode_gap():
     assert not is_new_episode("2026-10-15T14:00:00+00:00", "2026-10-15T14:06:00+00:00", 6)
     assert is_new_episode("2026-10-15T14:00:00+00:00", "2026-10-15T14:06:01+00:00", 6)
+
+
+def test_summary_adds_one_contract_pnl():
+    rows=[
+        {"candidate_id":"X","put_entry_ask":2.0,"put_ret_60m":0.10,"put_60m_tp10_sl10":"TP_FIRST"},
+        {"candidate_id":"X","put_entry_ask":1.5,"put_ret_60m":-0.20,"put_60m_tp10_sl10":"SL_FIRST"},
+    ]
+    out=summarize(rows,"X",(60,))["horizons"]["60"]
+    assert out["pnl_1_contract_n"] == 2
+    assert abs(out["total_pnl_1_contract"] + 10.0) < 1e-9
+    assert abs(out["mean_pnl_1_contract"] + 5.0) < 1e-9

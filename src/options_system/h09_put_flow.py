@@ -68,12 +68,21 @@ def summarize(rows: list[dict[str, Any]], candidate_id: str, horizons=(15, 30, 6
     for h in horizons:
         vals = [number(r.get(f"put_ret_{h}m")) for r in picked]
         vals = [v for v in vals if v is not None]
+        pnl_1c = []
+        for r in picked:
+            entry = number(r.get("put_entry_ask"))
+            ret = number(r.get(f"put_ret_{h}m"))
+            if entry is not None and entry > 0 and ret is not None:
+                pnl_1c.append(entry * 100.0 * ret)
         paths = [r.get(f"put_{h}m_tp10_sl10") for r in picked]
         decided = [p for p in paths if p in {"TP_FIRST", "SL_FIRST"}]
         out["horizons"][str(h)] = {
             "n": len(vals),
             "mean_return": sum(vals) / len(vals) if vals else None,
             "win_rate": sum(v > 0 for v in vals) / len(vals) if vals else None,
+            "pnl_1_contract_n": len(pnl_1c),
+            "total_pnl_1_contract": sum(pnl_1c) if pnl_1c else None,
+            "mean_pnl_1_contract": sum(pnl_1c) / len(pnl_1c) if pnl_1c else None,
             "tp10_before_sl10_rate": sum(p == "TP_FIRST" for p in decided) / len(decided) if decided else None,
             "decided_n": len(decided),
         }

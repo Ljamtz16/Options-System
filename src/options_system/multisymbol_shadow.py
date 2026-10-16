@@ -92,6 +92,12 @@ def summarize_episodes(rows: list[dict[str, Any]], candidate: dict[str, Any], ho
     for h in horizons:
         vals = [number(r.get(f"{side}_terminal_return_{h}m")) for r in selected]
         vals = [v for v in vals if v is not None]
+        pnl_1c = []
+        for r in selected:
+            entry = number(r.get(f"entry_{side}_ask"))
+            ret = number(r.get(f"{side}_terminal_return_{h}m"))
+            if entry is not None and entry > 0 and ret is not None:
+                pnl_1c.append(entry * 100.0 * ret)
         best = [number(r.get(f"{side}_best_return_{h}m")) for r in selected]
         best = [v for v in best if v is not None]
         worst = [number(r.get(f"{side}_worst_return_{h}m")) for r in selected]
@@ -102,6 +108,9 @@ def summarize_episodes(rows: list[dict[str, Any]], candidate: dict[str, Any], ho
             "n": len(vals),
             "mean_return": sum(vals) / len(vals) if vals else None,
             "win_rate": sum(v > 0 for v in vals) / len(vals) if vals else None,
+            "pnl_1_contract_n": len(pnl_1c),
+            "total_pnl_1_contract": sum(pnl_1c) if pnl_1c else None,
+            "mean_pnl_1_contract": sum(pnl_1c) / len(pnl_1c) if pnl_1c else None,
             "mean_mfe": sum(best) / len(best) if best else None,
             "mean_mae": sum(worst) / len(worst) if worst else None,
             "tp10_before_sl10_rate": sum(p == "TP_FIRST" for p in decided) / len(decided) if decided else None,
