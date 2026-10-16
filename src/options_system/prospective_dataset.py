@@ -66,7 +66,20 @@ def add_snapshot_deltas(rows):
 
 def build_dataset(snapshot_dir,out_csv):
  files=sorted(Path(snapshot_dir).glob("spy_options_*.json"))
- rows=add_snapshot_deltas([snapshot_to_row(f) for f in files])
+ # Reuse features from immutable captures; deltas are recalculated from small rows.
+ from .session_cache import atomic_text
+ cache_path=Path(out_csv).with_suffix('.features-cache.json')
+ algorithm=hashlib.sha256((Path(__file__).read_bytes()+Path(__file__).with_name('chain_features.py').read_bytes()+Path(__file__).with_name('option_surface.py').read_bytes())).hexdigest()
+ try:cached=json.loads(cache_path.read_text())
+ except (OSError,ValueError):cached={}
+ cache={};base_rows=[]
+ for f in files:
+  st=f.stat();stamp=[st.st_size,st.st_mtime_ns,algorithm]
+  entry=cached.get(f.name)
+  if not entry or entry.get('stamp')!=stamp:entry={'stamp':stamp,'row':snapshot_to_row(f)}
+  cache[f.name]=entry;base_rows.append(dict(entry['row']))
+ atomic_text(cache_path,json.dumps(cache,separators=(',',':')))
+ rows=add_snapshot_deltas(base_rows)
  if not rows:return 0
  fields=[]
  for r in rows:
@@ -76,3 +89,4 @@ def build_dataset(snapshot_dir,out_csv):
  with open(out_csv,"w",newline="",encoding="utf-8") as f:
   w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerows(rows)
  return len(rows)
+

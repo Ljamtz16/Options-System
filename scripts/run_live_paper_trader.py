@@ -38,16 +38,8 @@ def dt(x):
 
 
 def load_snapshots():
-    out = []
-    for p in sorted((ROOT / "data/raw/prospective").glob("spy_options_*.json")):
-        try:
-            d = json.loads(p.read_text(encoding="utf-8"))
-        except Exception:
-            continue
-        if d.get("captured_at_utc"):
-            out.append(d)
-
-    return sorted(out, key=lambda x: x["captured_at_utc"])
+    from options_system.session_cache import snapshot_refs
+    return snapshot_refs(ROOT / "data/raw/prospective", "spy_options_*.json", skip_invalid=True)
 
 
 tracker_rows = (
@@ -466,3 +458,4 @@ print(
     "blocked", state["blocked_live_signals"],
     "net", round(state["net_account_pnl"], 2),
 )
+

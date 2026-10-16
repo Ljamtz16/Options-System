@@ -1,4 +1,5 @@
-import json,csv
+import json,csv,os
+from options_system.session_cache import snapshot_refs,fingerprint,write_csv,merge_csv,atomic_text,today
 from pathlib import Path
 from datetime import datetime,date,timedelta
 from options_system.intraday_contracts import representative_contracts,conservative_long_pnl
@@ -6,10 +7,12 @@ from options_system.intraday_targets import option_trade_targets
 
 ROOT=Path('data/raw/prospective');HORIZONS=(15,30,60)
 
-def load_rows():
+def load_rows(day=None,refs=None):
     rows=[]
-    for f in sorted(ROOT.glob('spy_options_*.json')):
-        obj=json.loads(f.read_text(encoding='utf-8'));p=obj['payload']
+    day_filter=day
+    for obj in (refs if refs is not None else snapshot_refs(ROOT,'spy_options_*.json')):
+        if day_filter is not None and obj.day!=day_filter:continue
+        p=obj['payload']
         rs=p.get('research_state') or {};day=(rs.get('features') or {}).get('decision_date')
         if not day: continue
         u=p['underlying']['snapshot'];t=u.get('latestTrade') or {};q=u.get('latestQuote') or {}
@@ -39,8 +42,8 @@ def contract_path(entry,day_rows,i,minutes):
             vals.append((r['ts'],float(bid)/float(entry['ask'])-1))
     return vals
 
-def build():
-    rows=load_rows();out=[]
+def records_for_day(day,refs):
+    rows=load_rows(day,refs);out=[]
     for day in sorted({r['day'] for r in rows}):
         dr=[r for r in rows if r['day']==day];md=date.fromisoformat(day)
         for i,r in enumerate(dr):
@@ -79,11 +82,39 @@ def build():
                         if f:
                             rec[f'{side}_mae_{h}m']=min(path)
             out.append(rec)
-    p=Path('data/processed/intraday/spy_intraday_outcomes_all_days.csv');p.parent.mkdir(parents=True,exist_ok=True)
-    fields=sorted({k for r in out for k in r}) if out else []
-    if fields:
-        with open(p,'w',newline='',encoding='utf-8') as f:
-            w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerows(out)
-    print(f'BUILT_SPY_INTRADAY_OUTCOMES rows={len(out)}')
+    return out
+
+def build():
+    refs=snapshot_refs(ROOT,'spy_options_*.json')
+    import hashlib
+    algorithm=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+    groups={}
+    for ref in refs:groups.setdefault(ref.day,[]).append(ref)
+    output=Path('data/processed/intraday/spy_intraday_outcomes_all_days.csv')
+    directory=output.parent/'spy_sessions';manifest=directory/'manifest.json'
+    try:known=json.loads(manifest.read_text())
+    except (OSError,ValueError):known={}
+    if output.exists() and not manifest.exists():
+        seeded={}
+        with output.open(newline='',encoding='utf-8') as f:
+            reader=csv.DictReader(f);fields=reader.fieldnames
+            for row in reader:seeded.setdefault(row['decision_date'],[]).append(row)
+        for day,rows in seeded.items():
+            write_csv(directory/(day+'.csv'),rows,fields)
+            if len(rows)==len(groups.get(day,[])):known[day]=fingerprint(groups[day],algorithm)
+    days=[today()] if os.getenv('OPTIONS_BUILD_SCOPE')=='today' else sorted(groups)
+    for day in days:
+        selected=groups.get(day,[])
+        if not selected:continue
+        digest=fingerprint(selected,algorithm)
+        target=directory/(day+'.csv')
+        if known.get(day)!=digest or not target.exists():
+            write_csv(target,records_for_day(day,selected))
+            known[day]=digest
+            print('SPY_SESSION_BUILT',day,flush=True)
+    atomic_text(manifest,json.dumps(known,sort_keys=True))
+    count=merge_csv(directory,output)
+    print(f'BUILT_SPY_INTRADAY_OUTCOMES rows={count}')
 
 if __name__=='__main__':build()
+

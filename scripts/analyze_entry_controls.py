@@ -7,6 +7,7 @@ from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 from options_system.prospective_paper_trader import build_paper_signals, replay_paper_account
+from options_system.session_cache import snapshot_refs
 
 ROOT = Path(__file__).resolve().parents[1]
 H01 = 'CALL_FLOW_REVERSAL_V01'
@@ -36,8 +37,8 @@ def run(root=ROOT, as_of=None):
         signals = build_paper_signals(list(csv.DictReader(f)), frozen['hypotheses'], frozen['frozen_at'])
     signals=[s for s in signals if datetime.fromisoformat(s['signal_time'].replace('Z','+00:00'))<=as_of]
     snapshots, inputs = [], []
-    for p in sorted((root / 'data/raw/prospective').glob('spy_options_*.json')):
-        obj = json.loads(p.read_text())
+    for obj in snapshot_refs(root / 'data/raw/prospective', 'spy_options_*.json'):
+        p = obj.path
         digest = hashlib.sha256(json.dumps(obj['payload'], sort_keys=True, separators=(',', ':'), ensure_ascii=False).encode()).hexdigest()
         if digest != obj['sha256']:
             raise ValueError('Snapshot checksum mismatch: ' + p.name)
@@ -82,3 +83,4 @@ def run(root=ROOT, as_of=None):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(); parser.add_argument('--root', type=Path, default=ROOT)
     args = parser.parse_args(); run(args.root)
+

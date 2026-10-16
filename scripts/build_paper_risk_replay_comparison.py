@@ -20,18 +20,8 @@ FRACTIONS = [0.0, 0.2, 0.4, 0.6, 0.8]
 
 
 def load_snapshots():
-    rows = []
-
-    for p in sorted((ROOT / "data/raw/prospective").glob("spy_options_*.json")):
-        try:
-            d = json.loads(p.read_text(encoding="utf-8"))
-        except Exception:
-            continue
-
-        if d.get("captured_at_utc"):
-            rows.append(d)
-
-    return sorted(rows, key=lambda x: x["captured_at_utc"])
+    from options_system.session_cache import snapshot_refs
+    return snapshot_refs(ROOT / "data/raw/prospective", "spy_options_*.json", skip_invalid=True)
 
 
 tracker_rows = (
@@ -138,3 +128,4 @@ for name, x in scenarios.items():
         "net", round(x["net_pnl"], 2),
         "equity", round(x["final_equity"], 2),
     )
+
