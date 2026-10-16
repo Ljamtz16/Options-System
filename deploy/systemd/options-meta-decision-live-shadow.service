@@ -1,0 +1,16 @@
+[Unit]
+Description=Options System Meta Decision Layer live shadow
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/ljamtz/options-system
+Environment=PYTHONPATH=/home/ljamtz/options-system:/home/ljamtz/options-system/src
+ExecStart=/home/ljamtz/options-system/.venv/bin/python scripts/run_meta_decision_live_shadow.py
+Restart=always
+RestartSec=5
+Nice=8
+
+[Install]
+WantedBy=default.target
