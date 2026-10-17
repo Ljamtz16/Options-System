@@ -75,6 +75,9 @@ def analyze_episode(
     end_time = signal_time.timestamp() + horizon_minutes * 60
     path = [p for p in sorted(points, key=lambda x: x["time"]) if signal_time <= p["time"] and p["time"].timestamp() <= end_time]
     path = [p for p in path if num(p.get("bid")) is not None and num(p.get("bid")) > 0]
+    tolerance = float(config.get("horizon_completion_tolerance_minutes", 6))
+    expected_end = signal_time.timestamp() + horizon_minutes * 60
+    horizon_complete = bool(path and path[-1]["time"].timestamp() >= expected_end - tolerance * 60)
     out = {
         "strategy": strategy,
         "source": source,
@@ -86,10 +89,12 @@ def analyze_episode(
         "initial_ask": initial_ask,
         "horizon_minutes": horizon_minutes,
         "path_points": len(path),
+        "path_available": bool(path),
+        "horizon_complete": horizon_complete,
         "evaluable": False,
         "variants": {},
     }
-    if initial_ask <= 0 or not path:
+    if initial_ask <= 0 or not path or not horizon_complete:
         return out
     refs = [num(p["bid"]) / initial_ask - 1.0 for p in path]
     out["evaluable"] = True

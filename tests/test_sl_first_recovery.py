@@ -6,6 +6,7 @@ from options_system.sl_first_recovery import analyze_episode, summarize
 CFG = {
     "sl_touch_return": -0.10,
     "post_sl_targets": [0.10, 0.20, 0.30],
+    "horizon_completion_tolerance_minutes": 6,
     "variants": {
         "RECLAIM8": {"reclaim_return": -0.08},
         "REBOUND5": {"rebound_points": 0.05},
@@ -63,3 +64,12 @@ def test_summary_reports_conditional_recovery_and_replay():
     assert s["sl10_then_10_rate"] == 1.0
     assert s["sl10_then_20_rate"] == 1.0
     assert s["variants"]["REBOUND5"]["entries"] == 1
+
+
+def test_incomplete_horizon_is_not_evaluable():
+    t0 = datetime(2026, 10, 16, 14, 0, tzinfo=timezone.utc)
+    pts = [point(t0,0,.98,1), point(t0,10,.85,.87)]
+    out = analyze_episode(strategy="X",source="T",evidence="T",symbol="SPY",side="PUT",signal_time=t0,contract="X",initial_ask=1,horizon_minutes=60,points=pts,config=CFG)
+    assert out["path_available"] is True
+    assert out["horizon_complete"] is False
+    assert out["evaluable"] is False
