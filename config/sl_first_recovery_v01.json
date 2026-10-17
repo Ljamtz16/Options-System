@@ -1,0 +1,25 @@
+{
+  "version": "SL_FIRST_RECOVERY_V01",
+  "mode": "RESEARCH_SHADOW_ONLY_NO_ORDERS",
+  "sl_touch_return": -0.10,
+  "post_sl_targets": [0.10, 0.20, 0.30],
+  "variants": {
+    "ORIGINAL": {"mode": "IMMEDIATE"},
+    "TOUCH10": {"mode": "TOUCH", "touch_return": -0.10},
+    "RECLAIM8": {"mode": "RECLAIM_REFERENCE", "reclaim_return": -0.08},
+    "REBOUND5": {"mode": "REBOUND_FROM_RUNNING_MIN", "rebound_points": 0.05}
+  },
+  "strategies": {
+    "CALL_FLOW_REVERSAL_V01": {"source": "H01", "side": "CALL", "horizon_minutes": 60},
+    "H09A_PUT_FLOW_MIRROR_V01": {"source": "H09", "side": "PUT", "horizon_minutes": 60},
+    "H09B_PUT_FLOW_MIRROR_RISKOFF_V01": {"source": "H09", "side": "PUT", "horizon_minutes": 60},
+    "MS01_PUT_BREAKDOWN_RISKOFF_V01": {"source": "Multi-Symbol", "side": "PUT", "horizon_minutes": 30},
+    "MS03_PUT_RELATIVE_WEAKNESS_V01": {"source": "Multi-Symbol", "side": "PUT", "horizon_minutes": 30}
+  },
+  "notes": [
+    "Research only; never routes orders.",
+    "Delayed-entry variants use only information observable at each snapshot.",
+    "All variants exit at the original signal horizon to isolate entry timing.",
+    "Entry uses contemporaneous ask; path valuation and exit use bid."
+  ]
+}

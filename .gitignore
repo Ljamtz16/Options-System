@@ -93,3 +93,4 @@ artifacts/intraday/META_PORTFOLIO_LIVE_STATE_V01.json
 artifacts/intraday/META_PORTFOLIO_LIVE_EVENTS_V01.jsonl
 artifacts/intraday/META_ALPACA_PAPER_STATE_V01.json
 artifacts/intraday/.meta_alpaca_mirror.lock
+artifacts/intraday/SL_FIRST_RECOVERY_STUDY_V01.json

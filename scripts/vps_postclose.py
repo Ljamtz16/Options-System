@@ -24,6 +24,7 @@ TASKS=(
     "scripts/run_h09_put_flow_shadow.py",
     "scripts/build_multisymbol_discovery.py",
     "scripts/build_multisymbol_signal_arbitration.py",
+    "scripts/analyze_sl_first_recovery.py",
     "scripts/hypothesis_daily_report.py",
     "scripts/analyze_h01_execution_diagnostics.py",
     "scripts/analyze_h01_path_policies.py",
