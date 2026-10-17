@@ -1,0 +1,24 @@
+{
+  "version": "H09B_DRE_V01",
+  "status": "FROZEN_SHADOW_ONLY",
+  "frozen_at_utc": "2026-10-17T13:42:00+00:00",
+  "prospective_start_after": "2026-10-17",
+  "source_candidate": "H09B_PUT_FLOW_MIRROR_RISKOFF_V01",
+  "side": "PUT",
+  "horizon_minutes": 60,
+  "buy_now_max_spread_pct": 0.005,
+  "arm_touch10_max_spread_pct": 0.0075,
+  "arm_trigger_return": -0.10,
+  "wide_spread_action": "BLOCK",
+  "primary_arm_policy": "TOUCH10",
+  "secondary_shadow_arm_policy": "REBOUND5",
+  "rebound_points": 0.05,
+  "auto_apply": false,
+  "broker_orders_enabled": false,
+  "notes": [
+    "Thresholds were discovered retrospectively using data available through 2026-10-16; historical replay is diagnostic, not out-of-sample validation.",
+    "First uncontaminated prospective session is 2026-10-19 or the next market session.",
+    "BUY_NOW uses the original H09B entry ask; ARM_TOUCH10 waits until the same contract bid is <= -10% versus original ask and records the contemporaneous ask as the shadow entry.",
+    "BLOCK means no DRE shadow entry. No rule in this config can submit broker orders."
+  ]
+}

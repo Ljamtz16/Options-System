@@ -1,0 +1,16 @@
+[Unit]
+Description=Options System H09B delayed-reclaim-entry live shadow
+After=network-online.target options-h09-put-flow-live.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/ljamtz/options-system
+Environment=PYTHONPATH=/home/ljamtz/options-system:/home/ljamtz/options-system/src
+ExecStart=/home/ljamtz/options-system/.venv/bin/python scripts/run_h09b_dre_live_shadow.py
+Restart=always
+RestartSec=5
+Nice=9
+
+[Install]
+WantedBy=default.target
